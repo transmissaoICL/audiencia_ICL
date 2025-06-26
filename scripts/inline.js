@@ -134,7 +134,7 @@ function atualizarTotal(data) {
     //ITERA OS ITEMS DOS RESULTADOS
     for (let res of data.resultados){
         //CHECA SE EXISTE UM RESULTADO JA NA LISTA HISTORICA
-        let encontrado = historico.find(h => h.link === res.link);
+        let encontrado = historico.find(h => h.link === res.link || h.canal === res.canal);
 
         //CASO NÃO ENCONTRE ELE ADICIONA UM NOVO OBJETO
         if (!encontrado){
@@ -145,12 +145,27 @@ function atualizarTotal(data) {
             historico.push(novoCanal);
         }
 
+        else if (encontrado && res.canal !== encontrado.canal){
+          encontrado.link = res.link;
+          encontrado.dadosHistoricos[timestamp] = res.viewers;
+        }
+
         //CASO ELE ENCONTRE ELE ATUALIZA O TIMESTAMP
         else {
             encontrado.dadosHistoricos[timestamp] = res.viewers;
         }
     }
-    handlers.jsonSave(historico);
+}
+
+async function mensagemWhatsapp(){
+  let status = '';
+  let message = await fetch('http://localhost:3000/enviar_mensagem',{
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ status })
+  }
+  );
+  console.log(status);
 }
 
 async function consultarAudiencias() {
