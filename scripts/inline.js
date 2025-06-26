@@ -159,13 +159,16 @@ function atualizarTotal(data) {
 
 async function mensagemWhatsapp(){
   let status = '';
-  let message = await fetch('http://localhost:3000/enviar_mensagem',{
+  let message = await fetch("http://localhost:3000/enviar_mensagem",{
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ status })
+        body: JSON.stringify({ 
+          grupo: "Status Audiência@broadcast",
+          mensagem: "Teste de Mensagem"
+         })
   }
   );
-  console.log(status);
+  console.log(message);
 }
 
 async function consultarAudiencias() {
