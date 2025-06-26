@@ -1,5 +1,10 @@
 let historico = [];
 
+//TODO: Organizar o projeto mais modularmente
+//TODO: Achar uma forma de pegar a audiencia do Instagram
+//TODO: Fazer com que o bot consiga mandar a audiencia no grupo do Zap
+//TODO: Fazer o bot uma imagem da audiencia e mandar no grupo do zap
+
 //import { json_save } from './utils/handlers.js';
 
 function audienciaTemporal() {
@@ -145,6 +150,7 @@ function atualizarTotal(data) {
             encontrado.dadosHistoricos[timestamp] = res.viewers;
         }
     }
+    handlers.jsonSave(historico);
 }
 
 async function consultarAudiencias() {

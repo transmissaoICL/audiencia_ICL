@@ -52,30 +52,37 @@ async function rasparFacebook(page, link) {
   let viewers = 0;
 
   try {
-    await page.goto(link, { waitUntil: 'domcontentloaded', timeout: 60000 });
+    await page.goto(link, { waitUntil: 'networkidle2', timeout: 60000 });
 
-    // Nome do canal (live)
+    // Obter nome do canal
     try {
+      await page.waitForSelector('h2 strong', { timeout: 10000 });
       canal = await page.$eval('h2 strong', el => el.textContent.trim());
     } catch {
-      console.warn('Canal Facebook não encontrado');
+      console.warn(`Nome do canal não encontrado no Facebook: ${link}`);
     }
 
-    // Viewers (live)
+    // Obter número de espectadores ao vivo
     try {
-      await page.waitForSelector('span[dir="auto"]', { timeout: 60000 });
-      const spans = await page.$$eval('span[dir="auto"]', spans =>
-        spans.map(span => span.textContent.trim())
+      await page.waitForTimeout(3000); // Pequena espera para garantir carregamento
+      const spans = await page.$$eval('span[dir="auto"]', elements =>
+        elements.map(span => span.textContent.trim())
       );
+
       const viewerText = spans.find(text =>
-        /[\d\.]+ (pessoas|visualizações|assistindo)/i.test(text)
+        /(ao vivo|assistindo|pessoas assistindo|visualizações)/i.test(text)
       );
+
       if (viewerText) {
-        const num = viewerText.match(/([\d\.,]+)/);
-        viewers = num ? parseInt(num[1].replace(/\./g, '').replace(',', '')) : 0;
+        const match = viewerText.match(/([\d\.,]+)/);
+        if (match) {
+          viewers = parseInt(match[1].replace(/\./g, '').replace(',', '')) || 0;
+        }
+      } else {
+        console.warn(`Texto de audiência não encontrado no Facebook: ${link}`);
       }
-    } catch {
-      console.warn('Viewers Facebook não encontrado');
+    } catch (err) {
+      console.warn(`Erro ao capturar viewers do Facebook: ${err.message}`);
     }
 
   } catch (err) {
@@ -157,7 +164,6 @@ app.post('/api/raspar', async (req, res) => {
 
   await browser.close();
   res.json({ resultados });
-  console.log(historico);
 });
 
 app.listen(3000, () => {
@@ -168,7 +174,6 @@ app.listen(3000, () => {
 process.on('SIGINT', async () => {
   console.log('\nEncerrando servidor...');
   server.close(() => {
-    json_save(historico);
     console.log('Servidor Express encerrado.');
     process.exit(0);
   });
