@@ -157,7 +157,6 @@ app.post('/api/raspar', async (req, res) => {
 
   await browser.close();
   res.json({ resultados });
-  console.log(historico);
 });
 
 app.listen(3000, () => {
