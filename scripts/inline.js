@@ -192,8 +192,8 @@ async function consultarAudiencias() {
         const canal = res.canal;
         const viewers = res.viewers;
 
-        detalhesHtml += `<tr>
-        <td>${plataforma}</td>
+        detalhesHtml += `<tr class=audiencia-line>
+        <td class=audiencia-cell>${plataforma}</td>
         <td>${canal}</td>
         <td>${viewers}</td>
         <td><button class='remove-btn' onclick='this.closest("tr").remove(); atualizarTotal();'>X</button></td>
