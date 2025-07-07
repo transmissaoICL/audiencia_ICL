@@ -1,0 +1,10 @@
+Date: 7/7/2025
+Time: 13:45
+Group ID: Mega Blasters
+Message: historico: [{"canal":"ICL Notícias","link":"https://www.youtube.com/watch?v=oZPX46MLp2Y","dadosHistoricos":{"13:45:24":463}}]
+--------------------
+Date: 7/7/2025
+Time: 13:46
+Group ID: Mega Blasters
+Message: historico: [{"canal":"ICL Notícias","link":"https://www.youtube.com/watch?v=oZPX46MLp2Y","dadosHistoricos":{"13:45:24":463,"13:46:24":447}}]
+--------------------

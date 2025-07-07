@@ -218,6 +218,18 @@ async function consultarAudiencias() {
     linhasManuais.forEach(tr => tbody.appendChild(tr));
 
     atualizarTotal(data);
+
+    let whatsapp = await fetch('http://localhost:8000/api/whatsapp', {
+      method: 'POST',
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ 
+        grupo: "Mega Blasters",
+        mensagem: `historico: ${ JSON.stringify(historico) }` })
+    })
+
+    let status = await whatsapp.json();
+    console.log(status.status);
+
     atualizarGraficoAudiencia();
     //atualizarGrafico(data);
     atualizaTabela(historico);
