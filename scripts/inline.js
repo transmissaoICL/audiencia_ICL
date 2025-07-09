@@ -10,6 +10,7 @@ let historico = [];
 function audienciaTemporal() {
     this.canal = '',
     this.link = '',
+    this.plataforma = '',
     this.dadosHistoricos = {}
 };
 
@@ -99,6 +100,7 @@ function atualizaTabela(data){
         }
     }
 
+    //TODO: Atualiza o nome na Tabela para o programa que está no ar no momento
     //COLOCA O VALOR DO ICL, ORDENA A LISTA E CRIA OS ITENS DA CABELA
     listaDesordenada.push(['ICL Notícias', totalICL]);
     listaDesordenada.sort((a, b) => b[1] - a[1]);
@@ -141,6 +143,7 @@ function atualizarTotal(data) {
             novoCanal = new audienciaTemporal();
             novoCanal.canal = res.canal;
             novoCanal.link = res.link;
+            novoCanal.plataforma = res.plataforma;
             novoCanal.dadosHistoricos[timestamp] = res.viewers;
             historico.push(novoCanal);
         }
@@ -157,18 +160,30 @@ function atualizarTotal(data) {
     }
 }
 
-async function mensagemWhatsapp(){
-  let status = '';
-  let message = await fetch("http://localhost:3000/enviar_mensagem",{
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ 
-          grupo: "Status Audiência@broadcast",
-          mensagem: "Teste de Mensagem"
-         })
+async function sendWhatsapp(data){
+  let textareaICL = document.getElementById("urlsICL");
+  let canaisICL = textareaICL.value.trim().split("\n").filter(Boolean);
+
+  let historicoICL = [];
+
+  for (let res of data){
+
+    let encontrado = canaisICL.find(a => a === res.link);
+    if (encontrado){
+      historicoICL.push(res);
+    }
   }
-  );
-  console.log(message);
+
+  let whatsapp = await fetch('http://localhost:8000/api/whatsapp', {
+  method: 'POST',
+  headers: { "Content-Type": "application/json" },
+  body: JSON.stringify({ 
+    grupo: "JEOSMN0MLKf50GPwhZ1DPO",
+    historico: `${ JSON.stringify(historicoICL) }` })
+  })
+
+  let status = await whatsapp.json();
+  console.log(status.status);
 }
 
 async function consultarAudiencias() {
@@ -218,20 +233,8 @@ async function consultarAudiencias() {
     linhasManuais.forEach(tr => tbody.appendChild(tr));
 
     atualizarTotal(data);
-
-    let whatsapp = await fetch('http://localhost:8000/api/whatsapp', {
-      method: 'POST',
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ 
-        grupo: "Mega Blasters",
-        mensagem: `historico: ${ JSON.stringify(historico) }` })
-    })
-
-    let status = await whatsapp.json();
-    console.log(status.status);
-
+    sendWhatsapp(historico);
     atualizarGraficoAudiencia();
-    //atualizarGrafico(data);
     atualizaTabela(historico);
 }
 

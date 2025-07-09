@@ -8,3 +8,108 @@ Time: 13:46
 Group ID: Mega Blasters
 Message: historico: [{"canal":"ICL Notícias","link":"https://www.youtube.com/watch?v=oZPX46MLp2Y","dadosHistoricos":{"13:45:24":463,"13:46:24":447}}]
 --------------------
+Date: 9/7/2025
+Time: 9:46
+Group ID: Mega Blasters
+Message: historico: [{"canal":"DCM TV","link":"https://www.youtube.com/watch?v=ezNXKeHzptc","dadosHistoricos":{"09:45:02":1696,"09:46:00":1709}}]
+--------------------
+Date: 9/7/2025
+Time: 9:47
+Group ID: Mega Blasters
+Message: historico: [{"canal":"DCM TV","link":"https://www.youtube.com/watch?v=ezNXKeHzptc","dadosHistoricos":{"09:45:02":1696,"09:46:00":1709,"09:47:01":1720}}]
+--------------------
+Date: 9/7/2025
+Time: 9:51
+Group ID: Mega Blasters
+Message: historico: [{"canal":"DCM TV","link":"https://www.youtube.com/watch?v=ezNXKeHzptc","dadosHistoricos":{"09:45:02":1696,"09:46:00":1709,"09:47:01":1720,"09:48:01":1782,"09:49:03":1793,"09:50:02":1832,"09:51:02":1849}}]
+--------------------
+Date: 9/7/2025
+Time: 9:57
+Group ID: Mega Blasters
+Message: historico: [{"canal":"DCM TV","link":"https://www.youtube.com/watch?v=ezNXKeHzptc","dadosHistoricos":{"09:45:02":1696,"09:46:00":1709,"09:47:01":1720,"09:48:01":1782,"09:49:03":1793,"09:50:02":1832,"09:51:02":1849,"09:52:02":1869,"09:53:04":1901,"09:54:03":1901,"09:54:59":1930,"09:55:59":1955,"09:56:59":2087}}]
+--------------------
+Date: 9/7/2025
+Time: 9:58
+Group ID: Mega Blasters
+Message: historico: [{"canal":"DCM TV","link":"https://www.youtube.com/watch?v=ezNXKeHzptc","dadosHistoricos":{"09:45:02":1696,"09:46:00":1709,"09:47:01":1720,"09:48:01":1782,"09:49:03":1793,"09:50:02":1832,"09:51:02":1849,"09:52:02":1869,"09:53:04":1901,"09:54:03":1901,"09:54:59":1930,"09:55:59":1955,"09:56:59":2087,"09:58:00":2152}}]
+--------------------
+Date: 9/7/2025
+Time: 10:8
+Group ID: JEOSMN0MLKf50GPwhZ1DPO
+Message: historico: [{"canal":"DCM TV","link":"https://www.youtube.com/watch?v=ezNXKeHzptc","dadosHistoricos":{"10:00:54":2204,"10:01:52":2173,"10:02:53":2182,"10:03:54":2169,"10:04:54":2219,"10:05:53":2195,"10:06:54":2228,"10:07:54":2236,"10:08:53":2228}}]
+--------------------
+Date: 9/7/2025
+Time: 10:10
+Group ID: JEOSMN0MLKf50GPwhZ1DPO
+Message: historico: [{"canal":"DCM TV","link":"https://www.youtube.com/watch?v=ezNXKeHzptc","dadosHistoricos":{"10:00:54":2204,"10:01:52":2173,"10:02:53":2182,"10:03:54":2169,"10:04:54":2219,"10:05:53":2195,"10:06:54":2228,"10:07:54":2236,"10:08:53":2228,"10:09:55":2208}}]
+--------------------
+Date: 9/7/2025
+Time: 10:12
+Group ID: JEOSMN0MLKf50GPwhZ1DPO
+Message: [{"canal":"DCM TV","link":"https://www.youtube.com/watch?v=ezNXKeHzptc","dadosHistoricos":{"10:12:24":2223}}]
+--------------------
+Date: 9/7/2025
+Time: 10:14
+Group ID: JEOSMN0MLKf50GPwhZ1DPO
+Message: Aqui vai a mensagem formatada para o ZAP e os veios ver!
+--------------------
+Date: 9/7/2025
+Time: 10:16
+Group ID: JEOSMN0MLKf50GPwhZ1DPO
+Message: Aqui vai a mensagem formatada para o ZAP e os veios ver!
+--------------------
+Date: 9/7/2025
+Time: 10:18
+Group ID: JEOSMN0MLKf50GPwhZ1DPO
+Message: Aqui vai a mensagem formatada para o ZAP e os veios ver!
+--------------------
+Date: 9/7/2025
+Time: 11:14
+Group ID: JEOSMN0MLKf50GPwhZ1DPO
+Message: *ICL NOTICIAS Audiência:* Facebook: 0 / Youtube: 0 / Instagram: 0 Total: 0
+--------------------
+Date: 9/7/2025
+Time: 11:21
+Group ID: JEOSMN0MLKf50GPwhZ1DPO
+Message: *ICL NOTICIAS - Audiência:* Facebook: 0 / Youtube: 0 / Instagram: 0 Total: 0
+--------------------
+Date: 9/7/2025
+Time: 11:29
+Group ID: JEOSMN0MLKf50GPwhZ1DPO
+Message: *ICL NOTICIAS - Audiência:* Facebook: 0 / Youtube: 0 / Instagram: 0 Total: 0
+--------------------
+Date: 9/7/2025
+Time: 11:34
+Group ID: JEOSMN0MLKf50GPwhZ1DPO
+Message: *ICL NOTICIAS - Audiência:* Facebook: 0 / Youtube: 0 / Instagram: 0 Total: 0
+--------------------
+Date: 9/7/2025
+Time: 11:35
+Group ID: JEOSMN0MLKf50GPwhZ1DPO
+Message: *ICL NOTICIAS - Audiência:* Facebook: 0 / Youtube: 0 / Instagram: 0 Total: 0
+--------------------
+Date: 9/7/2025
+Time: 11:40
+Group ID: JEOSMN0MLKf50GPwhZ1DPO
+Message: *ICL NOTICIAS - Audiencia:* Facebook: 0/Youtube: 0/Instagram: 0 Total: 0
+--------------------
+Date: 9/7/2025
+Time: 11:41
+Group ID: JEOSMN0MLKf50GPwhZ1DPO
+Message: *ICL NOTICIAS - Audiencia:* Facebook: 0/Youtube: 0/Instagram: 0 Total: 0
+--------------------
+Date: 9/7/2025
+Time: 11:45
+Group ID: JEOSMN0MLKf50GPwhZ1DPO
+Message: *ICL NOTICIAS - Audiencia:* Facebook: 0/Youtube: 0/Instagram: 0 Total: 0
+--------------------
+Date: 9/7/2025
+Time: 11:46
+Group ID: JEOSMN0MLKf50GPwhZ1DPO
+Message: *ICL NOTICIAS - Audiencia:* Facebook: 0/Youtube: 0/Instagram: 0 Total: 0
+--------------------
+Date: 9/7/2025
+Time: 11:47
+Group ID: JEOSMN0MLKf50GPwhZ1DPO
+Message: *ICL NOTICIAS - Audiencia:* Facebook: 0/Youtube: 1521/Instagram: 0 Total: 1521
+--------------------
