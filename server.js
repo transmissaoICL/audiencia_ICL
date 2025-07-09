@@ -160,7 +160,7 @@ async function rasparInstagram(page, link) {
     }
 
     // Acessa o link da live
-    await page.goto(link.replace(/\/$/, ''), { waitUntil: 'networkidle2' });
+    await page.goto(link, { waitUntil: 'networkidle2' });
 
     try{
       // Aguarda botão da live
@@ -188,10 +188,12 @@ async function rasparInstagram(page, link) {
 
     await sleep(1000)
 
-    await page.click(400, 500);
+    let button = await page.waitForSelector('button');
+
+    button.click('button');
 
     // Espera contador aparecer
-    await page.waitForSelector(`[aria-label=${instaElements.aria_label}]`, { timeout: 10000 });
+    // await page.waitForSelector(`[aria-label=${instaElements.aria_label}]`, { timeout: 10000 });
 
     // Garante que está na live
     const urlOk = await page.evaluate(() => location.href.includes('/live'));
