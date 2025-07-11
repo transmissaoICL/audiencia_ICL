@@ -136,7 +136,7 @@ function atualizarTotal(data) {
     //ITERA OS ITEMS DOS RESULTADOS
     for (let res of data.resultados){
         //CHECA SE EXISTE UM RESULTADO JA NA LISTA HISTORICA
-        let encontrado = historico.find(h => h.link === res.link || h.canal === res.canal);
+        let encontrado = historico.find(h => h.link === res.link);
 
         //CASO NÃO ENCONTRE ELE ADICIONA UM NOVO OBJETO
         if (!encontrado){
@@ -160,15 +160,12 @@ function atualizarTotal(data) {
     }
 }
 
-async function sendWhatsapp(data){
-  let textareaICL = document.getElementById("urlsICL");
-  let canaisICL = textareaICL.value.trim().split("\n").filter(Boolean);
-
+async function sendWhatsapp(data, linksICL){
   let historicoICL = [];
 
   for (let res of data){
 
-    let encontrado = canaisICL.find(a => a === res.link);
+    let encontrado = linksICL.find(a => a === res.link);
     if (encontrado){
       historicoICL.push(res);
     }
@@ -179,7 +176,7 @@ async function sendWhatsapp(data){
   headers: { "Content-Type": "application/json" },
   body: JSON.stringify({ 
     grupo: "JEOSMN0MLKf50GPwhZ1DPO",
-    historico: `${ JSON.stringify(historicoICL) }` })
+    audiencia: `${ JSON.stringify(historicoICL) }` })
   })
 
   let status = await whatsapp.json();
@@ -210,8 +207,8 @@ async function consultarAudiencias() {
         const canal = res.canal;
         const viewers = res.viewers;
 
-        detalhesHtml += `<tr>
-        <td>${plataforma}</td>
+        detalhesHtml += `<tr class=audiencia-line>
+        <td class=audiencia-cell>${plataforma}</td>
         <td>${canal}</td>
         <td>${viewers}</td>
         <td><button class='remove-btn' onclick='this.closest("tr").remove(); atualizarTotal();'>X</button></td>
@@ -233,11 +230,11 @@ async function consultarAudiencias() {
     linhasManuais.forEach(tr => tbody.appendChild(tr));
 
     atualizarTotal(data);
-    sendWhatsapp(historico);
     atualizarGraficoAudiencia();
     atualizaTabela(historico);
+    sendWhatsapp(historico, linksICL);
 }
 
 setInterval(() => {
 consultarAudiencias();
-}, 60000);
+}, 120000);
