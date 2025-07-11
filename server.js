@@ -1,6 +1,7 @@
 const puppeteer = require('puppeteer');
 const express = require('express');
 const cors = require('cors');
+const { timeout } = require('puppeteer');
 const app = express();
 
 app.use(cors());
@@ -62,7 +63,32 @@ async function rasparFacebook(page, link) {
   let viewers = 0;
 
   try {
-    await page.goto(link, { waitUntil: 'networkidle2', timeout: 60000 });
+    await page.goto('https://www.facebook.com/login', { waitUntil: 'networkidle2', timeout: 10000 });
+
+    try{
+
+      await page.waitForSelector('input[name="email"]', { timeout: 1000 });
+      await page.waitForSelector('input[name="pass"]', { timeout: 1000 });
+
+      await page.type('input[name="email"]', 'leonardo.salles@icl.com.br', { delay: 100 });
+      await page.type('input[name="pass"]', 'Lovisquok@33', { delay: 100 });
+
+      await Promise.all(
+        await page.click('#loginbutton'),
+        page.waitForNavigation({ waitUntil: 'networkidle2' })
+      );
+    } catch (err){
+      console.log(`Erro ao logar no Facebook: ${err.message}`);
+    }
+
+    await sleep(1000);
+    await page.goto(link, { waitUntil: 'networkidle2', timeout: 10000 });
+
+    await sleep(1000);
+
+    await page.click('video');
+
+    await sleep(5000);
 
     // Obter nome do canal
     try {
@@ -74,27 +100,30 @@ async function rasparFacebook(page, link) {
 
     // Obter número de espectadores ao vivo
     try {
-      await page.waitForTimeout(3000); // Pequena espera para garantir carregamento
-      const spans = await page.$$eval('span[dir="auto"]', elements =>
-        elements.map(span => span.textContent.trim())
+      await page.waitForFunction(() => {
+        return Array.from(document.querySelectorAll('span[dir="auto"]'))
+          .some(el => /assistindo|ao vivo|visualizações/i.test(el.innerText));
+      }, { timeout: 10000 });
+
+      const spans = await page.$$eval('span[dir="auto"]', els =>
+        els.map(el => el.textContent.trim())
       );
 
-      const viewerText = spans.find(text =>
-        /(ao vivo|assistindo|pessoas assistindo|visualizações)/i.test(text)
+      const viewerText = spans.find(t =>
+        /(assistindo|ao vivo|visualizações)/i.test(t)
       );
+
+      console.log('Texto identificado para audiência:', viewerText);
 
       if (viewerText) {
         const match = viewerText.match(/([\d\.,]+)/);
         if (match) {
           viewers = parseInt(match[1].replace(/\./g, '').replace(',', '')) || 0;
         }
-      } else {
-        console.warn(`Texto de audiência não encontrado no Facebook: ${link}`);
       }
     } catch (err) {
-      console.warn(`Erro ao capturar viewers do Facebook: ${err.message}`);
+      console.warn(`Falha ao capturar audiência do Facebook: ${err.message}`);
     }
-
   } catch (err) {
     throw new Error(`Falha ao acessar Facebook: ${err.message}`);
   }
@@ -141,80 +170,76 @@ async function rasparInstagram(page, link) {
   let canal = '-';
   let viewers = 0;
 
+  await page.goto('https://www.instagram.com/accounts/login/', { waitUntil: 'networkidle2' });
+
   try {
-    try{
-      // Login no Instagram
-      await page.goto('https://www.instagram.com/', { waitUntil: 'networkidle2' });
-      await page.waitForSelector('input', { timeout: 10000 });
+    // Aguarda especificamente os campos certos
+    await page.waitForSelector('input[name="username"]', { timeout: 1000 });
+    await page.waitForSelector('input[name="password"]', { timeout: 1000 });
 
-      await page.type('[type="text"]', account.username, { delay: 100 });
-      await page.type('[type="password"]', account.password, { delay: 100 });
+    await page.type('input[name="username"]', account.username, { delay: 100 });
+    await page.type('input[name="password"]', account.password, { delay: 100 });
 
-      await Promise.all([
-        page.click('[type="submit"]'),
-        page.waitForNavigation({ waitUntil: 'networkidle2' })
-      ]);
-    }
-    catch (err){
-      console.log(`Erro ao Logar no Instagram: ${err.message}`);
-    }
+    await Promise.all([
+      page.click('button[type="submit"]'),
+      page.waitForNavigation({ waitUntil: 'networkidle2' })
+    ]);
 
+    // Fecha popups se aparecerem
+    try {
+      await page.waitForSelector('button:has-text("Agora não")', { timeout: 5000 });
+      await page.click('button:has-text("Agora não")');
+    } catch {}
+
+    try {
+      await page.waitForSelector('button:has-text("Agora não")', { timeout: 5000 });
+      await page.click('button:has-text("Agora não")');
+    } catch {}
+
+  } catch (err) {
+    console.log("Erro durante login no Instagram:", err.message);
+  }
+
+  try {
     // Acessa o link da live
     await page.goto(link, { waitUntil: 'networkidle2' });
-
-    try{
-      // Aguarda botão da live
-      await page.waitForFunction(() =>
-        Array.from(document.querySelectorAll('span')).find(it => it.outerText === instaElements.ao_vivo), { timeout: 10000 });
-    }
-    catch (err){
-      console.log(`Erro ao Achar Live: ${err.message}`);
-    }
-    await sleep(1000);
-
-    `
-    try{
-      // Clica no botão LIVE
-      await page.evaluate(() => {
-        const liveBtn = Array.from(document.querySelectorAll('span')).find(it => it.outerText === instaElements.ao_vivo)?.parentNode?.parentNode;
-        if (liveBtn && liveBtn.querySelector('[role="link"]')) {
-          liveBtn.querySelector('[role="link"]').click();
-        }
-      });
-    }
-    catch (err){
-      console.log(Erro ao Clicar no Botão: {err.message});
-    }`
-
-    await sleep(1000)
-
-    let button = await page.waitForSelector('button');
-
-    button.click('button');
-
-    // Espera contador aparecer
-    // await page.waitForSelector(`[aria-label=${instaElements.aria_label}]`, { timeout: 10000 });
-
+   
+    
     // Garante que está na live
     const urlOk = await page.evaluate(() => location.href.includes('/live'));
-    if (!urlOk) throw new Error('Falha ao abrir live do Instagram.');
+    if (!urlOk) await page.goto(link, { waitUntil: 'networkidle2' });
+
+    await sleep(1000);
+
+    const buttons = await page.$$('button');
+    for (const btn of buttons) {
+      const text = await (await btn.getProperty('innerText')).jsonValue();
+      if (text.includes('Toque para reproduzir')) {
+        await btn.click();
+        break;
+      }
+    }
+
+    await sleep(1000);
+    // Espera contador aparecer
+    await page.waitForSelector(`svg[aria-label="${instaElements.aria_label}"]`, { timeout: 1000 });
 
     // Pega número de viewers
-    const rawViewers = await page.evaluate(() => {
-      const span = document.querySelector(`[aria-label=${instaElements.aria_label}]`)?.parentNode?.parentNode?.querySelector('span.html-span');
+    const rawViewers = await page.evaluate((ariaLabel) => {
+      const span = document.querySelector(`svg[aria-label="${ariaLabel}"]`)?.parentNode?.parentNode?.querySelector('span.html-span');
       return span?.outerText || '0';
-    });
+    }, instaElements.aria_label);
 
     viewers = parseInt(rawViewers.replace(/\./g, '').replace(',', '')) || 0;
 
     // Nome do canal (genérico)
     try {
       canal = await page.evaluate(() => {
-        const el = document.querySelector('header h2, header span');
+        const el = document.querySelector('div[dir="auto"]').outerText;
         return el ? el.textContent.trim() : '-';
       });
-    } catch {
-      console.warn('Nome do canal do Instagram não encontrado.');
+    } catch (err){
+      console.warn(`Nome do canal do Instagram não encontrado: ${err.message}`);
     }
 
   } catch (err) {
@@ -225,7 +250,6 @@ async function rasparInstagram(page, link) {
 }
 
 
-
 app.post('/api/raspar', async (req, res) => {
   let { links } = req.body;
   let resultados = [];
@@ -233,7 +257,8 @@ app.post('/api/raspar', async (req, res) => {
   const browser = await puppeteer.launch({
     headless: false,
     defaultViewport: null,
-    args: ['--start-maximized']
+    userDataDir: './tmp/session',
+    args: ['--start-maximized', '--no-sandbox', '--disable-setuid-sandbox']
     //'--no-sandbox', '--disable-setuid-sandbox'
   });
 

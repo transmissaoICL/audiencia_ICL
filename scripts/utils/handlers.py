@@ -21,11 +21,9 @@ app.add_middleware(
 async def enviar_mensagem(request: Request):
     data = await request.json()
     group_name = data.get("grupo")
-    mensagem = whatsappTextHandler(json.loads(data.get("historico")))
+    mensagem = whatsappTextHandler(json.loads(data.get("audiencia")))
     
     now = datetime.now() + timedelta(minutes=1)
-    hour = now.hour
-    minute = now.minute
 
     try:
         # Envia mensagem para o grupo
@@ -35,7 +33,7 @@ async def enviar_mensagem(request: Request):
         return {"status": f"erro: {e}"}
 
 def whatsappTextHandler(data):
-
+    print(data)
     audiencia_yt = 0
     audiencia_fb = 0
     audiencia_insta = 0
@@ -54,9 +52,8 @@ def whatsappTextHandler(data):
             case 'Instagram':
                 ultimo_dado = list(canal.get('dadosHistoricos').keys())[-1]
                 audiencia_insta += canal.get('dadosHistoricos')[ultimo_dado]
-
                 continue
     
     audiencia_total = audiencia_yt + audiencia_fb + audiencia_insta
-    mensagem = f'''*ICL NOTICIAS - Audiencia:* \n\n Facebook: {audiencia_fb}/Youtube: {audiencia_yt}/Instagram: {audiencia_insta}\n\n Total: {audiencia_total}'''
+    mensagem = f'*ICL NOTICIAS - Audiencia:* \n\n Facebook: {audiencia_fb} - Youtube: {audiencia_yt} - Instagram: {audiencia_insta}\n\n Total: {audiencia_total}'
     return mensagem
