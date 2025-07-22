@@ -57,7 +57,7 @@ function atualizarGraficoAudiencia() {
   chart.data.datasets = historico.map((canal, index) => {
     const dataPoints = timestamps.map(t => canal.dadosHistoricos[t] || 0);
     return {
-      label: canal.canal,
+      label: `${canal.canal} (${canal.plataforma})`,
       data: dataPoints,
       borderWidth: 2,
       fill: false,
@@ -70,11 +70,12 @@ function atualizarGraficoAudiencia() {
 }
 
 //ATUALIZA TABELA DE ACORDO COM OS DADOS HISTORICOS
-function atualizaTabela(data){
+function atualizaTabela(data, programa){
     let textareaICL = document.getElementById("urlsICL");
     let canaisICL = textareaICL.value.trim().split("\n").filter(Boolean);
     let tbody = document.getElementById('tabelaBody');
     tbody.innerHTML = `<tr style="background-color: #0056b3;">
+        <th style="color: #f0f0f0;">#</th>
         <th style="color: #f0f0f0;">Canal</th>
         <th style="color: #f0f0f0;">Audiencia</th>
         </tr>`;
@@ -95,19 +96,21 @@ function atualizaTabela(data){
         //CASO NÃO, ELE ADICIONA AUTOMATICAMENTE EM UMA LISTA DESORDENADA PARA SER ORDENADA E COLOCADO NA TABELA FUTURAMENTE
         else {
             let lastKeyConcorrencia = Object.keys(res.dadosHistoricos).at(-1);
-            listaDesordenada.push([res.canal, res.dadosHistoricos[lastKeyConcorrencia]]);
-
+            if (res.dadosHistoricos[lastKeyConcorrencia] != 0){
+              listaDesordenada.push([res.canal, res.dadosHistoricos[lastKeyConcorrencia]]);
+            }
         }
     }
 
     //TODO: Atualiza o nome na Tabela para o programa que está no ar no momento
     //COLOCA O VALOR DO ICL, ORDENA A LISTA E CRIA OS ITENS DA CABELA
-    listaDesordenada.push(['ICL Notícias', totalICL]);
+    listaDesordenada.push([programa, totalICL]);
     listaDesordenada.sort((a, b) => b[1] - a[1]);
 
     for (let entrie of listaDesordenada){
         let linha = document.createElement('tr');
         linha.innerHTML = `
+        <td>${listaDesordenada.indexOf(entrie) + 1}</td>
         <td>${entrie[0]}</td>
         <td>${entrie[1]}</td>`
         ;
@@ -160,7 +163,7 @@ function atualizarTotal(data) {
     }
 }
 
-async function sendWhatsapp(data, linksICL){
+async function sendWhatsapp(data, linksICL, programaICL){
   let historicoICL = [];
 
   for (let res of data){
@@ -176,7 +179,8 @@ async function sendWhatsapp(data, linksICL){
   headers: { "Content-Type": "application/json" },
   body: JSON.stringify({ 
     grupo: "JEOSMN0MLKf50GPwhZ1DPO",
-    audiencia: `${ JSON.stringify(historicoICL) }` })
+    audiencia: `${ JSON.stringify(historicoICL) }`,
+    programa: programaICL })
   })
 
   let status = await whatsapp.json();
@@ -184,6 +188,7 @@ async function sendWhatsapp(data, linksICL){
 }
 
 async function consultarAudiencias() {
+
     let textareaConcorrencia = document.getElementById("urlsConcorrencia");
     let textareaICL = document.getElementById("urlsICL");
 
@@ -217,6 +222,8 @@ async function consultarAudiencias() {
         total += viewers;
     }
 
+    let programa = data.programaAtual;
+
     const tbody = document.getElementById("auto");
 
     // Salva linhas manuais
@@ -231,8 +238,8 @@ async function consultarAudiencias() {
 
     atualizarTotal(data);
     atualizarGraficoAudiencia();
-    atualizaTabela(historico);
-    sendWhatsapp(historico, linksICL);
+    atualizaTabela(historico, programa);
+    sendWhatsapp(historico, linksICL, programa);
 }
 
 setInterval(() => {

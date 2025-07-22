@@ -12,9 +12,50 @@ const account = {
   password: "ICL@audiencia123456"
 }
 
+
+const facebookDict = {
+  'eduardomoreirabrasil': "Eduardo Moreira está ao vivo",
+  'institutoconhecimentoliberta': "Instituto Conhecimento Liberta está ao vivo",
+  'profile.php?id=100083958152654': "ICL Notícias está ao vivo"
+}
+
+let programaAtual;
+
 const instaElements = {
   aria_label: 'Ícone do Contador de visualizadores',
   ao_vivo: 'AO VIVO',
+}
+
+function tituloICL(title){
+
+  switch (true){
+    case title.includes('DESPERTA ICL AO VIVO'):
+      return 'DESPERTA';
+    case title.includes('ICL NOTÍCIAS AO VIVO'):
+      return 'N1';
+    case title.includes('EM DETALHES'):
+      return 'EM DETALHES';
+    case title.includes('ICL MERCADO E INVESTIMENTOS AO VIVO'):
+      return 'ICL MERCADO E INVESTIMENTO';
+    case title.includes('ICL NOTÍCIAS 2 AO VIVO'):
+      return 'N2';
+    case title.includes('ROLÊ ICL'):
+      return 'ROLE';
+    case title.includes('WEBCOMUNISTAS COM LAURA SABINO E IAN NEVES AO VIVO'):
+      return 'WEBCOMUNISTAS';
+    case title.includes('ESPIRITUALIDADE NA AÇÃO'):
+      return 'ESPIRITUALIDADE';
+    case title.includes('PROVOCAÇÃO HISTÓRICA'):
+      return 'PROVOCAÇÃO HISTÓRICA';
+    case title.includes('CHICO PINHEIRO ENTREVISTA'):
+      return 'CP ENTREVISTA';
+    case title.includes('ICL ENTREVISTA AO VIVO'):
+      return 'ICL ENTREVISTA';
+    case title.includes('ICL URGENTE  AO VIVO'):
+      return 'URGENTE';
+    default:
+      return 'ICL NOTÍCIAS';
+  }
 }
 
 async function rasparYouTube(page, link) {
@@ -31,6 +72,17 @@ async function rasparYouTube(page, link) {
       canal = await page.$eval(seletor, el => el.textContent.trim());
     } catch {
       console.warn(`Canal YouTube não encontrado via #channel-name. Link: ${link}`);
+    }
+
+    // Pega titulo para mudar na Tabela
+    try{
+      titleDiv = await page.waitForSelector('#title', { timeout: 1000 });
+      const title = await page.evaluate(el => el.textContent.trim(), titleDiv);
+      programaAtual = tituloICL(title);
+
+    }
+    catch (err){
+      console.warn(`Não foi possível pegar o titulo: ${err.message}`);
     }
 
     // Viewers (ao vivo)
@@ -62,74 +114,71 @@ async function rasparFacebook(page, link) {
   let canal = '-';
   let viewers = 0;
 
+  let url = link;
+  let result = url.split('facebook.com/')[1];
+
   try {
-    await page.goto('https://www.facebook.com/login', { waitUntil: 'networkidle2', timeout: 10000 });
+    // Checa se já está logado
+    await page.goto('https://www.facebook.com/', { waitUntil: 'networkidle2', timeout: 10000 });
+    const isLoggedIn = await page.evaluate(() => !document.querySelector('input[name="email"]'));
 
-    try{
-
-      await page.waitForSelector('input[name="email"]', { timeout: 1000 });
-      await page.waitForSelector('input[name="pass"]', { timeout: 1000 });
+    if (!isLoggedIn) {
+      console.log("Fazendo login no Facebook...");
+      await page.goto('https://www.facebook.com/login', { waitUntil: 'networkidle2', timeout: 10000 });
 
       await page.type('input[name="email"]', 'leonardo.salles@icl.com.br', { delay: 100 });
       await page.type('input[name="pass"]', 'Lovisquok@33', { delay: 100 });
 
-      await Promise.all(
-        await page.click('#loginbutton'),
+      await Promise.all([
+        page.click('#loginbutton'),
         page.waitForNavigation({ waitUntil: 'networkidle2' })
-      );
-    } catch (err){
-      console.log(`Erro ao logar no Facebook: ${err.message}`);
+      ]);
     }
 
-    await sleep(1000);
-    await page.goto(link, { waitUntil: 'networkidle2', timeout: 10000 });
+    await page.goto(link, { waitUntil: 'networkidle2', timeout: 5000 });
 
-    await sleep(1000);
-
-    await page.click('video');
-
-    await sleep(5000);
-
-    // Obter nome do canal
     try {
-      await page.waitForSelector('h2 strong', { timeout: 10000 });
+    await page.click(`a[role="link"][aria-label="${facebookDict[result]}"]`);
+    }
+    catch (err) { console.log(err.message) }
+
+    // Nome do canal
+    try {
+      await page.waitForSelector('h2 strong', { timeout: 5000 });
       canal = await page.$eval('h2 strong', el => el.textContent.trim());
     } catch {
-      console.warn(`Nome do canal não encontrado no Facebook: ${link}`);
+      console.warn(`Nome do canal não encontrado: ${link}`);
     }
 
-    // Obter número de espectadores ao vivo
+    // Audiência
     try {
       await page.waitForFunction(() => {
-        return Array.from(document.querySelectorAll('span[dir="auto"]'))
-          .some(el => /assistindo|ao vivo|visualizações/i.test(el.innerText));
+        const spans = document.querySelectorAll('div[role="img"] span[dir="auto"]');
+        return Array.from(spans).some(span => span.textContent && /^\d/.test(span.textContent.trim()));
       }, { timeout: 10000 });
 
-      const spans = await page.$$eval('span[dir="auto"]', els =>
-        els.map(el => el.textContent.trim())
-      );
-
-      const viewerText = spans.find(t =>
-        /(assistindo|ao vivo|visualizações)/i.test(t)
-      );
-
-      console.log('Texto identificado para audiência:', viewerText);
-
-      if (viewerText) {
-        const match = viewerText.match(/([\d\.,]+)/);
-        if (match) {
-          viewers = parseInt(match[1].replace(/\./g, '').replace(',', '')) || 0;
+      const rawViewers = await page.evaluate(() => {
+        const spans = Array.from(document.querySelectorAll('div[role="img"] span[dir="auto"]'));
+        for (const span of spans) {
+          const text = span.textContent.trim();
+          if (/^\d/.test(text)) return text;
         }
-      }
+        return '0';
+      });
+
+      viewers = parseInt(rawViewers.replace(/\./g, '').replace(',', '')) || 0;
     } catch (err) {
       console.warn(`Falha ao capturar audiência do Facebook: ${err.message}`);
     }
+
   } catch (err) {
-    throw new Error(`Falha ao acessar Facebook: ${err.message}`);
+    throw new Error(`Erro ao acessar Facebook: ${err.message}`);
   }
 
   return { plataforma: 'Facebook', canal, viewers, link };
 }
+
+
 
 async function rasparTwitch(page, link) {
   let canal = '-';
@@ -201,6 +250,7 @@ async function rasparInstagram(page, link) {
   }
 
   try {
+
     // Acessa o link da live
     await page.goto(link, { waitUntil: 'networkidle2' });
    
@@ -258,7 +308,7 @@ app.post('/api/raspar', async (req, res) => {
     headless: false,
     defaultViewport: null,
     userDataDir: './tmp/session',
-    args: ['--start-maximized', '--no-sandbox', '--disable-setuid-sandbox']
+    args: ['--start-maximized', '--no-sandbox', '--disable-setuid-sandbox', '--window-position=-32000,-32000',]
     //'--no-sandbox', '--disable-setuid-sandbox'
   });
 
@@ -288,14 +338,14 @@ app.post('/api/raspar', async (req, res) => {
       resultado = { plataforma: 'Desconhecida', canal: '-', viewers: 0 };
     }
 
-    resultados.push({ ...resultado, link });
+    resultados.push({ ...resultado, link});
     await page.close();
     
   }
 
   await browser.close();
 
-  res.json({ resultados });
+  res.json({ resultados, programaAtual });
 });
 
 app.listen(3000, () => {

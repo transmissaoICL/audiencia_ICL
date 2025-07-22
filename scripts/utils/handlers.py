@@ -21,7 +21,10 @@ app.add_middleware(
 async def enviar_mensagem(request: Request):
     data = await request.json()
     group_name = data.get("grupo")
-    mensagem = whatsappTextHandler(json.loads(data.get("audiencia")))
+    print(data.get("programa"))
+    programa = data.get("programa")
+    mensagem = whatsappTextHandler(json.loads(data.get("audiencia")), programa)
+    
     
     now = datetime.now() + timedelta(minutes=1)
 
@@ -32,8 +35,7 @@ async def enviar_mensagem(request: Request):
     except Exception as e:
         return {"status": f"erro: {e}"}
 
-def whatsappTextHandler(data):
-    print(data)
+def whatsappTextHandler(data, programa):
     audiencia_yt = 0
     audiencia_fb = 0
     audiencia_insta = 0
@@ -55,5 +57,5 @@ def whatsappTextHandler(data):
                 continue
     
     audiencia_total = audiencia_yt + audiencia_fb + audiencia_insta
-    mensagem = f'*ICL NOTICIAS - Audiencia:* \n\n Facebook: {audiencia_fb} - Youtube: {audiencia_yt} - Instagram: {audiencia_insta}\n\n Total: {audiencia_total}'
+    mensagem = f'*{programa} - Audiencia:* \n\n Facebook: {audiencia_fb} - Youtube: {audiencia_yt} - Instagram: {audiencia_insta}\n\n Total: {audiencia_total}'
     return mensagem
