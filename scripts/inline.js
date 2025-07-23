@@ -5,8 +5,6 @@ let historico = [];
 //TODO: Fazer com que o bot consiga mandar a audiencia no grupo do Zap
 //TODO: Fazer o bot uma imagem da audiencia e mandar no grupo do zap
 
-//import { json_save } from './utils/handlers.js';
-
 function audienciaTemporal() {
     this.canal = '',
     this.link = '',
@@ -71,10 +69,18 @@ function atualizarGraficoAudiencia() {
 
 //ATUALIZA TABELA DE ACORDO COM OS DADOS HISTORICOS
 function atualizaTabela(data, programa){
+
+    let timestamp = new Date();
     let textareaICL = document.getElementById("urlsICL");
     let canaisICL = textareaICL.value.trim().split("\n").filter(Boolean);
     let tbody = document.getElementById('tabelaBody');
-    tbody.innerHTML = `<tr style="background-color: #0056b3;">
+    tbody.innerHTML = `
+        <tr style="background-color: #0056b3;">
+        <th style="color: #f0f0f0;></th>
+        <th id="date" style="color: #f0f0f0;"></th>
+        <th id="time" style="color: #f0f0f0;"></th>
+        </tr>
+        <tr style="background-color: #0056b3;">
         <th style="color: #f0f0f0;">#</th>
         <th style="color: #f0f0f0;">Canal</th>
         <th style="color: #f0f0f0;">Audiencia</th>
@@ -82,6 +88,11 @@ function atualizaTabela(data, programa){
     let totalICL = 0;
     let listaDesordenada = [];
 
+    console.log(timestamp);
+    document.getElementById("date").innerHTML = ` Dia ${timestamp.getDate().toLocaleString()}/${timestamp.getMonth().toLocaleString()}/${timestamp.getFullYear().toLocaleString()}`;
+    document.getElementById("time").innerHTML = timestamp.toLocaleString();
+    
+    console.log(data);
     //ITERA SOBRE OS DADOS
     for (let res of data){
 
@@ -206,8 +217,8 @@ async function consultarAudiencias() {
     });
 
     const data = await resposta.json();
-    for (let i = 0; i < data.resultados.length; i++) {
-        const res = data.resultados[i];
+    for (let i = 0; i < data.length; i++) {
+        const res = data[i];
         const plataforma = res.plataforma;
         const canal = res.canal;
         const viewers = res.viewers;
@@ -236,12 +247,11 @@ async function consultarAudiencias() {
     // Reanexa linhas manuais
     linhasManuais.forEach(tr => tbody.appendChild(tr));
 
-    atualizarTotal(data);
     atualizarGraficoAudiencia();
-    atualizaTabela(historico, programa);
-    sendWhatsapp(historico, linksICL, programa);
+    atualizaTabela(data, programa);
+    sendWhatsapp(data, linksICL, programa);
 }
 
 setInterval(() => {
-consultarAudiencias();
+  consultarAudiencias();
 }, 120000);

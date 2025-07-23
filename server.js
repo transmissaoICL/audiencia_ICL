@@ -2,10 +2,13 @@ const puppeteer = require('puppeteer');
 const express = require('express');
 const cors = require('cors');
 const { timeout } = require('puppeteer');
+const { addHistorico } = require('./scripts/utils/dataHandler')
 const app = express();
 
 app.use(cors());
 app.use(express.json());
+
+let historico = [];
 
 const account = {
   username: "celioglicerio",
@@ -74,15 +77,17 @@ async function rasparYouTube(page, link) {
       console.warn(`Canal YouTube não encontrado via #channel-name. Link: ${link}`);
     }
 
-    // Pega titulo para mudar na Tabela
-    try{
-      titleDiv = await page.waitForSelector('#title', { timeout: 1000 });
-      const title = await page.evaluate(el => el.textContent.trim(), titleDiv);
-      programaAtual = tituloICL(title);
+    if (canal == 'Eduardo Moreira' || canal == 'Instituto Conhecimento Liberta' || canal == 'ICL Notícias'){
+      // Pega titulo para mudar na Tabela
+      try{
+        titleDiv = await page.waitForSelector('#title', { timeout: 1000 });
+        const title = await page.evaluate(el => el.textContent.trim(), titleDiv);
+        programaAtual = tituloICL(title);
 
-    }
-    catch (err){
-      console.warn(`Não foi possível pegar o titulo: ${err.message}`);
+      }
+      catch (err){
+        console.warn(`Não foi possível pegar o titulo: ${err.message}`);
+      }
     }
 
     // Viewers (ao vivo)
@@ -342,10 +347,11 @@ app.post('/api/raspar', async (req, res) => {
     await page.close();
     
   }
-
+  
+  final = addHistorico(resultados);
   await browser.close();
 
-  res.json({ resultados, programaAtual });
+  res.json({ final, programaAtual });
 });
 
 app.listen(3000, () => {
