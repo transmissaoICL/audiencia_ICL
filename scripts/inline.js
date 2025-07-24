@@ -76,7 +76,7 @@ function atualizaTabela(data, programa){
     let tbody = document.getElementById('tabelaBody');
     tbody.innerHTML = `
         <tr style="background-color: #0056b3;">
-        <th style="color: #f0f0f0;></th>
+        <th style="color: #f0f0f0;"></th>
         <th id="date" style="color: #f0f0f0;"></th>
         <th id="time" style="color: #f0f0f0;"></th>
         </tr>
@@ -89,7 +89,7 @@ function atualizaTabela(data, programa){
     let listaDesordenada = [];
 
     console.log(timestamp);
-    document.getElementById("date").innerHTML = ` Dia ${timestamp.getDate().toLocaleString()}/${timestamp.getMonth().toLocaleString()}/${timestamp.getFullYear().toLocaleString()}`;
+    document.getElementById("date").innerHTML = ` Dia ${timestamp.getDate()}/${timestamp.getMonth() + 1}/${timestamp.getFullYear()}`;
     document.getElementById("time").innerHTML = timestamp.toLocaleString();
     
     console.log(data);
@@ -217,8 +217,8 @@ async function consultarAudiencias() {
     });
 
     const data = await resposta.json();
-    for (let i = 0; i < data.length; i++) {
-        const res = data[i];
+    for (let i = 0; i < data.final.length; i++) {
+        const res = data.final[i];
         const plataforma = res.plataforma;
         const canal = res.canal;
         const viewers = res.viewers;
@@ -248,8 +248,8 @@ async function consultarAudiencias() {
     linhasManuais.forEach(tr => tbody.appendChild(tr));
 
     atualizarGraficoAudiencia();
-    atualizaTabela(data, programa);
-    sendWhatsapp(data, linksICL, programa);
+    atualizaTabela(data.final, programa);
+    sendWhatsapp(data.final, linksICL, programa);
 }
 
 setInterval(() => {
