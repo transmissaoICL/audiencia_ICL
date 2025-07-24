@@ -1,3 +1,21 @@
-2025/07/24-06:29:31.050 1ab8 Reusing MANIFEST C:\Users\ICLli\OneDrive\projeto-audiencia\tmp\session\Default\IndexedDB\https_www.youtube.com_0.indexeddb.leveldb/MANIFEST-000001
-2025/07/24-06:29:31.051 1ab8 Recovering log #287
-2025/07/24-06:29:31.056 1ab8 Reusing old log C:\Users\ICLli\OneDrive\projeto-audiencia\tmp\session\Default\IndexedDB\https_www.youtube.com_0.indexeddb.leveldb/000287.log 
+2025/07/24-12:30:47.817 4e88 Reusing MANIFEST C:\Users\ICLli\OneDrive\projeto-audiencia\tmp\session\Default\IndexedDB\https_www.youtube.com_0.indexeddb.leveldb/MANIFEST-000001
+2025/07/24-12:30:47.818 4e88 Recovering log #518
+2025/07/24-12:30:47.819 4e88 Reusing old log C:\Users\ICLli\OneDrive\projeto-audiencia\tmp\session\Default\IndexedDB\https_www.youtube.com_0.indexeddb.leveldb/000518.log 
+2025/07/24-12:31:15.740 6ea4 Level-0 table #523: started
+2025/07/24-12:31:15.758 6ea4 Level-0 table #523: 2197665 bytes OK
+2025/07/24-12:31:15.760 6ea4 Delete type=0 #518
+2025/07/24-12:31:18.761 6ea4 Compacting 1@1 + 1@2 files
+2025/07/24-12:31:18.769 6ea4 Generated table #524@1: 2028 keys, 110073 bytes
+2025/07/24-12:31:18.769 6ea4 Compacted 1@1 + 1@2 files => 110073 bytes
+2025/07/24-12:31:18.770 6ea4 compacted to: files[ 0 0 1 0 0 0 0 ]
+2025/07/24-12:31:55.722 6ea4 Level-0 table #526: started
+2025/07/24-12:31:55.736 6ea4 Level-0 table #526: 2334448 bytes OK
+2025/07/24-12:31:55.738 6ea4 Delete type=2 #520
+2025/07/24-12:31:55.738 6ea4 Delete type=0 #522
+2025/07/24-12:31:55.738 6ea4 Delete type=2 #523
+2025/07/24-12:31:58.617 6854 Compacting 1@1 + 1@2 files
+2025/07/24-12:31:58.630 6854 Generated table #527@1: 2077 keys, 88905 bytes
+2025/07/24-12:31:58.630 6854 Compacted 1@1 + 1@2 files => 88905 bytes
+2025/07/24-12:31:58.631 6854 compacted to: files[ 0 0 1 0 0 0 0 ]
+2025/07/24-12:31:58.632 6854 Delete type=2 #524
+2025/07/24-12:31:58.632 6854 Delete type=2 #526
