@@ -1843,3 +1843,28 @@ Time: 12:18
 Group ID: JEOSMN0MLKf50GPwhZ1DPO
 Message: *ROLE - Audiencia:* Facebook: 87 - Youtube: 11083 - Instagram: 0 Total: 11170
 --------------------
+Date: 24/7/2025
+Time: 13:26
+Group ID: JEOSMN0MLKf50GPwhZ1DPO
+Message: *ICL NOTÍCIAS - Audiencia:* Facebook: 0 - Youtube: 230 - Instagram: 0 Total: 230
+--------------------
+Date: 24/7/2025
+Time: 13:29
+Group ID: JEOSMN0MLKf50GPwhZ1DPO
+Message: *ICL NOTÍCIAS - Audiencia:* Facebook: 0 - Youtube: 238 - Instagram: 0 Total: 238
+--------------------
+Date: 24/7/2025
+Time: 13:31
+Group ID: JEOSMN0MLKf50GPwhZ1DPO
+Message: *ICL NOTÍCIAS - Audiencia:* Facebook: 0 - Youtube: 243 - Instagram: 0 Total: 243
+--------------------
+Date: 24/7/2025
+Time: 13:33
+Group ID: JEOSMN0MLKf50GPwhZ1DPO
+Message: *ICL NOTÍCIAS - Audiencia:* Facebook: 0 - Youtube: 247 - Instagram: 0 Total: 247
+--------------------
+Date: 24/7/2025
+Time: 13:35
+Group ID: JEOSMN0MLKf50GPwhZ1DPO
+Message: *ICL NOTÍCIAS - Audiencia:* Facebook: 0 - Youtube: 278 - Instagram: 0 Total: 278
+--------------------

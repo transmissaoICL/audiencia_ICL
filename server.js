@@ -304,17 +304,41 @@ async function rasparInstagram(page, link) {
   return { plataforma: 'Instagram', canal, viewers, link };
 }
 
+async function sendWhatsapp(data, linksICL, programaICL){
+  let historicoICL = [];
+
+  for (let res of data){
+
+    let encontrado = linksICL.find(a => a === res.link);
+    if (encontrado){
+      historicoICL.push(res);
+    }
+  }
+
+  let whatsapp = await fetch('http://localhost:8000/api/whatsapp', {
+    method: 'POST',
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ 
+      grupo: "JEOSMN0MLKf50GPwhZ1DPO",
+      audiencia: `${ JSON.stringify(historicoICL) }`,
+      programa: programaICL })
+    })
+
+  let status = await whatsapp.json();
+  console.log(status.status);
+}
+
 
 app.post('/api/raspar', async (req, res) => {
-  let { links } = req.body;
+  let { links, linksICL } = req.body;
   let resultados = [];
 
   const browser = await puppeteer.launch({
     headless: false,
     defaultViewport: null,
     userDataDir: './tmp/session',
-    args: ['--start-maximized', '--no-sandbox', '--disable-setuid-sandbox', '--window-position=-32000,-32000',]
-    //'--no-sandbox', '--disable-setuid-sandbox'
+    args: ['--start-maximized', '--no-sandbox', '--disable-setuid-sandbox', ]
+    //'--no-sandbox', '--disable-setuid-sandbox''--window-position=-32000,-32000',
   });
 
   for (let link of links) {
@@ -347,11 +371,16 @@ app.post('/api/raspar', async (req, res) => {
     await page.close();
     
   }
+
+  let timestamp = new Date().toLocaleTimeString();
   
-  final = addHistorico(resultados);
+  historico = addHistorico(historico, resultados, timestamp);
+
+  sendWhatsapp(historico, linksICL, programaAtual);
+
   await browser.close();
 
-  res.json({ final, programaAtual });
+  res.json({ historico, programaAtual });
 });
 
 app.listen(3000, () => {

@@ -46,7 +46,7 @@ const chart = new Chart(ctx, {
   }
 });
 
-function atualizarGraficoAudiencia() {
+function atualizarGraficoAudiencia(historico) {
   if (historico.length === 0) return;
 
   const timestamps = Object.keys(historico[0].dadosHistoricos);
@@ -90,7 +90,7 @@ function atualizaTabela(data, programa){
 
     console.log(timestamp);
     document.getElementById("date").innerHTML = ` Dia ${timestamp.getDate()}/${timestamp.getMonth() + 1}/${timestamp.getFullYear()}`;
-    document.getElementById("time").innerHTML = timestamp.toLocaleString();
+    document.getElementById("time").innerHTML = `Atualizado em: ${timestamp.toLocaleTimeString()}`;
     
     console.log(data);
     //ITERA SOBRE OS DADOS
@@ -174,30 +174,6 @@ function atualizarTotal(data) {
     }
 }
 
-async function sendWhatsapp(data, linksICL, programaICL){
-  let historicoICL = [];
-
-  for (let res of data){
-
-    let encontrado = linksICL.find(a => a === res.link);
-    if (encontrado){
-      historicoICL.push(res);
-    }
-  }
-
-  let whatsapp = await fetch('http://localhost:8000/api/whatsapp', {
-  method: 'POST',
-  headers: { "Content-Type": "application/json" },
-  body: JSON.stringify({ 
-    grupo: "JEOSMN0MLKf50GPwhZ1DPO",
-    audiencia: `${ JSON.stringify(historicoICL) }`,
-    programa: programaICL })
-  })
-
-  let status = await whatsapp.json();
-  console.log(status.status);
-}
-
 async function consultarAudiencias() {
 
     let textareaConcorrencia = document.getElementById("urlsConcorrencia");
@@ -213,15 +189,16 @@ async function consultarAudiencias() {
     let resposta = await fetch("http://localhost:3000/api/raspar", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ links })
+        body: JSON.stringify({ links, linksICL })
     });
 
     const data = await resposta.json();
-    for (let i = 0; i < data.final.length; i++) {
-        const res = data.final[i];
+    for (let i = 0; i < data.historico.length; i++) {
+        const res = data.historico[i];
         const plataforma = res.plataforma;
         const canal = res.canal;
-        const viewers = res.viewers;
+        let lastKeyConcorrencia = Object.keys(res.dadosHistoricos).at(-1);
+        const viewers = res.dadosHistoricos[lastKeyConcorrencia];
 
         detalhesHtml += `<tr class=audiencia-line>
         <td class=audiencia-cell>${plataforma}</td>
@@ -247,9 +224,9 @@ async function consultarAudiencias() {
     // Reanexa linhas manuais
     linhasManuais.forEach(tr => tbody.appendChild(tr));
 
-    atualizarGraficoAudiencia();
-    atualizaTabela(data.final, programa);
-    sendWhatsapp(data.final, linksICL, programa);
+    atualizarGraficoAudiencia(data.historico);
+    atualizaTabela(data.historico, programa);
+    sendWhatsapp(data.historico, linksICL, programa);
 }
 
 setInterval(() => {

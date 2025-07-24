@@ -6,10 +6,8 @@ function audienciaTemporal() {
 };
 
 
-function addHistorico(data){
-    let historico = [];
+function addHistorico(historico, data, time){
     var novoCanal;
-    let timestamp = new Date().toLocaleTimeString();
 
     //ITERA OS ITEMS DOS RESULTADOS
     for (let res of data){
@@ -22,18 +20,18 @@ function addHistorico(data){
             novoCanal.canal = res.canal;
             novoCanal.link = res.link;
             novoCanal.plataforma = res.plataforma;
-            novoCanal.dadosHistoricos[timestamp] = res.viewers;
+            novoCanal.dadosHistoricos[time] = res.viewers;
             historico.push(novoCanal);
         }
 
         else if (encontrado && res.canal !== encontrado.canal){
           encontrado.link = res.link;
-          encontrado.dadosHistoricos[timestamp] = res.viewers;
+          encontrado.dadosHistoricos[time] = res.viewers;
         }
 
         //CASO ELE ENCONTRE ELE ATUALIZA O TIMESTAMP
         else {
-            encontrado.dadosHistoricos[timestamp] = res.viewers;
+            encontrado.dadosHistoricos[time] = res.viewers;
         }
     }
 
