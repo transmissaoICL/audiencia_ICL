@@ -1,3 +1,9 @@
+<<<<<<< HEAD
 2025/07/24-13:35:04.100 8058 Reusing MANIFEST C:\Users\ICLli\OneDrive\projeto-audiencia\tmp\session\Default\Site Characteristics Database/MANIFEST-000001
 2025/07/24-13:35:04.101 8058 Recovering log #3
 2025/07/24-13:35:04.102 8058 Reusing old log C:\Users\ICLli\OneDrive\projeto-audiencia\tmp\session\Default\Site Characteristics Database/000003.log 
+=======
+2025/07/24-12:26:44.951 80d4 Reusing MANIFEST C:\Users\ICLli\OneDrive\projeto-audiencia\tmp\session\Default\Site Characteristics Database/MANIFEST-000001
+2025/07/24-12:26:44.952 80d4 Recovering log #3
+2025/07/24-12:26:44.952 80d4 Reusing old log C:\Users\ICLli\OneDrive\projeto-audiencia\tmp\session\Default\Site Characteristics Database/000003.log 
+>>>>>>> main

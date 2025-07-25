@@ -1188,6 +1188,7 @@ Time: 13:44
 Group ID: JEOSMN0MLKf50GPwhZ1DPO
 Message: *None - Audiencia:* Facebook: 0 - Youtube: 0 - Instagram: 0 Total: 0
 --------------------
+<<<<<<< HEAD
 Date: 22/7/2025
 Time: 17:4
 Group ID: JEOSMN0MLKf50GPwhZ1DPO
@@ -1867,4 +1868,340 @@ Date: 24/7/2025
 Time: 13:35
 Group ID: JEOSMN0MLKf50GPwhZ1DPO
 Message: *ICL NOTÍCIAS - Audiencia:* Facebook: 0 - Youtube: 278 - Instagram: 0 Total: 278
+=======
+Date: 24/7/2025
+Time: 7:34
+Group ID: JEOSMN0MLKf50GPwhZ1DPO
+Message: *ICL NOTÍCIAS - Audiencia:* Facebook: 294 - Youtube: 17595 - Instagram: 435 Total: 18324
+--------------------
+Date: 24/7/2025
+Time: 7:38
+Group ID: JEOSMN0MLKf50GPwhZ1DPO
+Message: *ICL NOTÍCIAS - Audiencia:* Facebook: 220 - Youtube: 18709 - Instagram: 474 Total: 19403
+--------------------
+Date: 24/7/2025
+Time: 7:42
+Group ID: JEOSMN0MLKf50GPwhZ1DPO
+Message: *ICL NOTÍCIAS - Audiencia:* Facebook: 323 - Youtube: 19551 - Instagram: 450 Total: 20324
+--------------------
+Date: 24/7/2025
+Time: 7:46
+Group ID: JEOSMN0MLKf50GPwhZ1DPO
+Message: *ICL NOTÍCIAS - Audiencia:* Facebook: 293 - Youtube: 20322 - Instagram: 466 Total: 21081
+--------------------
+Date: 24/7/2025
+Time: 7:50
+Group ID: JEOSMN0MLKf50GPwhZ1DPO
+Message: *ICL NOTÍCIAS - Audiencia:* Facebook: 347 - Youtube: 21418 - Instagram: 512 Total: 22277
+--------------------
+Date: 24/7/2025
+Time: 7:54
+Group ID: JEOSMN0MLKf50GPwhZ1DPO
+Message: *ICL NOTÍCIAS - Audiencia:* Facebook: 338 - Youtube: 22515 - Instagram: 540 Total: 23393
+--------------------
+Date: 24/7/2025
+Time: 7:58
+Group ID: JEOSMN0MLKf50GPwhZ1DPO
+Message: *ICL NOTÍCIAS - Audiencia:* Facebook: 353 - Youtube: 23323 - Instagram: 548 Total: 24224
+--------------------
+Date: 24/7/2025
+Time: 8:2
+Group ID: JEOSMN0MLKf50GPwhZ1DPO
+Message: *ICL NOTÍCIAS - Audiencia:* Facebook: 354 - Youtube: 23326 - Instagram: 480 Total: 24160
+--------------------
+Date: 24/7/2025
+Time: 8:6
+Group ID: JEOSMN0MLKf50GPwhZ1DPO
+Message: *ICL NOTÍCIAS - Audiencia:* Facebook: 329 - Youtube: 25888 - Instagram: 493 Total: 26710
+--------------------
+Date: 24/7/2025
+Time: 8:10
+Group ID: JEOSMN0MLKf50GPwhZ1DPO
+Message: *ICL NOTÍCIAS - Audiencia:* Facebook: 373 - Youtube: 28111 - Instagram: 527 Total: 29011
+--------------------
+Date: 24/7/2025
+Time: 8:14
+Group ID: JEOSMN0MLKf50GPwhZ1DPO
+Message: *ICL NOTÍCIAS - Audiencia:* Facebook: 381 - Youtube: 30494 - Instagram: 589 Total: 31464
+--------------------
+Date: 24/7/2025
+Time: 8:18
+Group ID: JEOSMN0MLKf50GPwhZ1DPO
+Message: *ICL NOTÍCIAS - Audiencia:* Facebook: 379 - Youtube: 31823 - Instagram: 637 Total: 32839
+--------------------
+Date: 24/7/2025
+Time: 8:22
+Group ID: JEOSMN0MLKf50GPwhZ1DPO
+Message: *ICL NOTÍCIAS - Audiencia:* Facebook: 388 - Youtube: 32899 - Instagram: 655 Total: 33942
+--------------------
+Date: 24/7/2025
+Time: 8:27
+Group ID: JEOSMN0MLKf50GPwhZ1DPO
+Message: *ICL NOTÍCIAS - Audiencia:* Facebook: 403 - Youtube: 32282 - Instagram: 686 Total: 33371
+--------------------
+Date: 24/7/2025
+Time: 8:30
+Group ID: JEOSMN0MLKf50GPwhZ1DPO
+Message: *ICL NOTÍCIAS - Audiencia:* Facebook: 433 - Youtube: 35019 - Instagram: 685 Total: 36137
+--------------------
+Date: 24/7/2025
+Time: 8:34
+Group ID: JEOSMN0MLKf50GPwhZ1DPO
+Message: *ICL NOTÍCIAS - Audiencia:* Facebook: 448 - Youtube: 35832 - Instagram: 693 Total: 36973
+--------------------
+Date: 24/7/2025
+Time: 8:38
+Group ID: JEOSMN0MLKf50GPwhZ1DPO
+Message: *ICL NOTÍCIAS - Audiencia:* Facebook: 427 - Youtube: 35979 - Instagram: 703 Total: 37109
+--------------------
+Date: 24/7/2025
+Time: 8:47
+Group ID: JEOSMN0MLKf50GPwhZ1DPO
+Message: *ICL NOTÍCIAS - Audiencia:* Facebook: 429 - Youtube: 37841 - Instagram: 747 Total: 39017
+--------------------
+Date: 24/7/2025
+Time: 8:51
+Group ID: JEOSMN0MLKf50GPwhZ1DPO
+Message: *ICL NOTÍCIAS - Audiencia:* Facebook: 426 - Youtube: 37430 - Instagram: 694 Total: 38550
+--------------------
+Date: 24/7/2025
+Time: 8:55
+Group ID: JEOSMN0MLKf50GPwhZ1DPO
+Message: *ICL NOTÍCIAS - Audiencia:* Facebook: 269 - Youtube: 36860 - Instagram: 682 Total: 37811
+--------------------
+Date: 24/7/2025
+Time: 8:59
+Group ID: JEOSMN0MLKf50GPwhZ1DPO
+Message: *ICL NOTÍCIAS - Audiencia:* Facebook: 412 - Youtube: 36963 - Instagram: 684 Total: 38059
+--------------------
+Date: 24/7/2025
+Time: 9:3
+Group ID: JEOSMN0MLKf50GPwhZ1DPO
+Message: *ICL NOTÍCIAS - Audiencia:* Facebook: 429 - Youtube: 37101 - Instagram: 705 Total: 38235
+--------------------
+Date: 24/7/2025
+Time: 9:7
+Group ID: JEOSMN0MLKf50GPwhZ1DPO
+Message: *ICL NOTÍCIAS - Audiencia:* Facebook: 225 - Youtube: 37261 - Instagram: 707 Total: 38193
+--------------------
+Date: 24/7/2025
+Time: 9:11
+Group ID: JEOSMN0MLKf50GPwhZ1DPO
+Message: *ICL NOTÍCIAS - Audiencia:* Facebook: 264 - Youtube: 37585 - Instagram: 751 Total: 38600
+--------------------
+Date: 24/7/2025
+Time: 9:15
+Group ID: JEOSMN0MLKf50GPwhZ1DPO
+Message: *ICL NOTÍCIAS - Audiencia:* Facebook: 434 - Youtube: 37574 - Instagram: 732 Total: 38740
+--------------------
+Date: 24/7/2025
+Time: 9:19
+Group ID: JEOSMN0MLKf50GPwhZ1DPO
+Message: *ICL NOTÍCIAS - Audiencia:* Facebook: 428 - Youtube: 37250 - Instagram: 750 Total: 38428
+--------------------
+Date: 24/7/2025
+Time: 9:23
+Group ID: JEOSMN0MLKf50GPwhZ1DPO
+Message: *ICL NOTÍCIAS - Audiencia:* Facebook: 381 - Youtube: 36989 - Instagram: 281 Total: 37651
+--------------------
+Date: 24/7/2025
+Time: 9:28
+Group ID: JEOSMN0MLKf50GPwhZ1DPO
+Message: *ICL NOTÍCIAS - Audiencia:* Facebook: 409 - Youtube: 36505 - Instagram: 751 Total: 37665
+--------------------
+Date: 24/7/2025
+Time: 9:31
+Group ID: JEOSMN0MLKf50GPwhZ1DPO
+Message: *ICL NOTÍCIAS - Audiencia:* Facebook: 392 - Youtube: 36182 - Instagram: 764 Total: 37338
+--------------------
+Date: 24/7/2025
+Time: 9:34
+Group ID: JEOSMN0MLKf50GPwhZ1DPO
+Message: *ICL NOTÍCIAS - Audiencia:* Facebook: 408 - Youtube: 36682 - Instagram: 751 Total: 37841
+--------------------
+Date: 24/7/2025
+Time: 9:39
+Group ID: JEOSMN0MLKf50GPwhZ1DPO
+Message: *ICL NOTÍCIAS - Audiencia:* Facebook: 409 - Youtube: 36199 - Instagram: 691 Total: 37299
+--------------------
+Date: 24/7/2025
+Time: 9:43
+Group ID: JEOSMN0MLKf50GPwhZ1DPO
+Message: *ICL NOTÍCIAS - Audiencia:* Facebook: 404 - Youtube: 35945 - Instagram: 585 Total: 36934
+--------------------
+Date: 24/7/2025
+Time: 9:47
+Group ID: JEOSMN0MLKf50GPwhZ1DPO
+Message: *ICL NOTÍCIAS - Audiencia:* Facebook: 210 - Youtube: 36125 - Instagram: 623 Total: 36958
+--------------------
+Date: 24/7/2025
+Time: 9:51
+Group ID: JEOSMN0MLKf50GPwhZ1DPO
+Message: *ICL NOTÍCIAS - Audiencia:* Facebook: 217 - Youtube: 36179 - Instagram: 677 Total: 37073
+--------------------
+Date: 24/7/2025
+Time: 9:55
+Group ID: JEOSMN0MLKf50GPwhZ1DPO
+Message: *ICL NOTÍCIAS - Audiencia:* Facebook: 294 - Youtube: 33357 - Instagram: 501 Total: 34152
+--------------------
+Date: 24/7/2025
+Time: 9:59
+Group ID: JEOSMN0MLKf50GPwhZ1DPO
+Message: *ICL NOTÍCIAS - Audiencia:* Facebook: 311 - Youtube: 31820 - Instagram: 499 Total: 32630
+--------------------
+Date: 24/7/2025
+Time: 10:3
+Group ID: JEOSMN0MLKf50GPwhZ1DPO
+Message: *ICL NOTÍCIAS - Audiencia:* Facebook: 294 - Youtube: 30811 - Instagram: 419 Total: 31524
+--------------------
+Date: 24/7/2025
+Time: 10:8
+Group ID: JEOSMN0MLKf50GPwhZ1DPO
+Message: *ICL NOTÍCIAS - Audiencia:* Facebook: 294 - Youtube: 29951 - Instagram: 434 Total: 30679
+--------------------
+Date: 24/7/2025
+Time: 10:11
+Group ID: JEOSMN0MLKf50GPwhZ1DPO
+Message: *ICL NOTÍCIAS - Audiencia:* Facebook: 262 - Youtube: 28969 - Instagram: 418 Total: 29649
+--------------------
+Date: 24/7/2025
+Time: 10:15
+Group ID: JEOSMN0MLKf50GPwhZ1DPO
+Message: *ICL NOTÍCIAS - Audiencia:* Facebook: 267 - Youtube: 28863 - Instagram: 469 Total: 29599
+--------------------
+Date: 24/7/2025
+Time: 10:19
+Group ID: JEOSMN0MLKf50GPwhZ1DPO
+Message: *ICL NOTÍCIAS - Audiencia:* Facebook: 260 - Youtube: 28106 - Instagram: 423 Total: 28789
+--------------------
+Date: 24/7/2025
+Time: 10:23
+Group ID: JEOSMN0MLKf50GPwhZ1DPO
+Message: *ICL NOTÍCIAS - Audiencia:* Facebook: 121 - Youtube: 27050 - Instagram: 444 Total: 27615
+--------------------
+Date: 24/7/2025
+Time: 10:27
+Group ID: JEOSMN0MLKf50GPwhZ1DPO
+Message: *ICL NOTÍCIAS - Audiencia:* Facebook: 242 - Youtube: 26340 - Instagram: 55 Total: 26637
+--------------------
+Date: 24/7/2025
+Time: 10:31
+Group ID: JEOSMN0MLKf50GPwhZ1DPO
+Message: *ICL NOTÍCIAS - Audiencia:* Facebook: 228 - Youtube: 22565 - Instagram: 108 Total: 22901
+--------------------
+Date: 24/7/2025
+Time: 10:35
+Group ID: JEOSMN0MLKf50GPwhZ1DPO
+Message: *ICL NOTÍCIAS - Audiencia:* Facebook: 149 - Youtube: 19662 - Instagram: 115 Total: 19926
+--------------------
+Date: 24/7/2025
+Time: 10:39
+Group ID: JEOSMN0MLKf50GPwhZ1DPO
+Message: *ICL NOTÍCIAS - Audiencia:* Facebook: 135 - Youtube: 18090 - Instagram: 70 Total: 18295
+--------------------
+Date: 24/7/2025
+Time: 10:43
+Group ID: JEOSMN0MLKf50GPwhZ1DPO
+Message: *ICL NOTÍCIAS - Audiencia:* Facebook: 128 - Youtube: 17210 - Instagram: 137 Total: 17475
+--------------------
+Date: 24/7/2025
+Time: 10:47
+Group ID: JEOSMN0MLKf50GPwhZ1DPO
+Message: *ICL NOTÍCIAS - Audiencia:* Facebook: 119 - Youtube: 16449 - Instagram: 155 Total: 16723
+--------------------
+Date: 24/7/2025
+Time: 10:51
+Group ID: JEOSMN0MLKf50GPwhZ1DPO
+Message: *ICL NOTÍCIAS - Audiencia:* Facebook: 119 - Youtube: 15442 - Instagram: 139 Total: 15700
+--------------------
+Date: 24/7/2025
+Time: 10:55
+Group ID: JEOSMN0MLKf50GPwhZ1DPO
+Message: *ICL NOTÍCIAS - Audiencia:* Facebook: 112 - Youtube: 14686 - Instagram: 136 Total: 14934
+--------------------
+Date: 24/7/2025
+Time: 10:59
+Group ID: JEOSMN0MLKf50GPwhZ1DPO
+Message: *ICL NOTÍCIAS - Audiencia:* Facebook: 113 - Youtube: 14007 - Instagram: 135 Total: 14255
+--------------------
+Date: 24/7/2025
+Time: 11:3
+Group ID: JEOSMN0MLKf50GPwhZ1DPO
+Message: *ICL NOTÍCIAS - Audiencia:* Facebook: 94 - Youtube: 12869 - Instagram: 114 Total: 13077
+--------------------
+Date: 24/7/2025
+Time: 11:7
+Group ID: JEOSMN0MLKf50GPwhZ1DPO
+Message: *ICL NOTÍCIAS - Audiencia:* Facebook: 84 - Youtube: 12181 - Instagram: 56 Total: 12321
+--------------------
+Date: 24/7/2025
+Time: 11:11
+Group ID: JEOSMN0MLKf50GPwhZ1DPO
+Message: *ICL NOTÍCIAS - Audiencia:* Facebook: 84 - Youtube: 12102 - Instagram: 120 Total: 12306
+--------------------
+Date: 24/7/2025
+Time: 11:15
+Group ID: JEOSMN0MLKf50GPwhZ1DPO
+Message: *ICL NOTÍCIAS - Audiencia:* Facebook: 35 - Youtube: 11920 - Instagram: 160 Total: 12115
+--------------------
+Date: 24/7/2025
+Time: 11:19
+Group ID: JEOSMN0MLKf50GPwhZ1DPO
+Message: *ICL NOTÍCIAS - Audiencia:* Facebook: 97 - Youtube: 11878 - Instagram: 156 Total: 12131
+--------------------
+Date: 24/7/2025
+Time: 11:35
+Group ID: JEOSMN0MLKf50GPwhZ1DPO
+Message: *ICL NOTÍCIAS - Audiencia:* Facebook: 79 - Youtube: 11030 - Instagram: 131 Total: 11240
+--------------------
+Date: 24/7/2025
+Time: 11:39
+Group ID: JEOSMN0MLKf50GPwhZ1DPO
+Message: *ICL NOTÍCIAS - Audiencia:* Facebook: 78 - Youtube: 11058 - Instagram: 121 Total: 11257
+--------------------
+Date: 24/7/2025
+Time: 11:56
+Group ID: JEOSMN0MLKf50GPwhZ1DPO
+Message: *ICL NOTÍCIAS - Audiencia:* Facebook: 96 - Youtube: 11093 - Instagram: 142 Total: 11331
+--------------------
+Date: 24/7/2025
+Time: 12:1
+Group ID: JEOSMN0MLKf50GPwhZ1DPO
+Message: *ICL NOTÍCIAS - Audiencia:* Facebook: 92 - Youtube: 10901 - Instagram: 149 Total: 11142
+--------------------
+Date: 24/7/2025
+Time: 12:5
+Group ID: JEOSMN0MLKf50GPwhZ1DPO
+Message: *ICL NOTÍCIAS - Audiencia:* Facebook: 86 - Youtube: 10688 - Instagram: 130 Total: 10904
+--------------------
+Date: 24/7/2025
+Time: 12:9
+Group ID: JEOSMN0MLKf50GPwhZ1DPO
+Message: *ICL NOTÍCIAS - Audiencia:* Facebook: 78 - Youtube: 10419 - Instagram: 122 Total: 10619
+--------------------
+Date: 24/7/2025
+Time: 12:13
+Group ID: JEOSMN0MLKf50GPwhZ1DPO
+Message: *ICL NOTÍCIAS - Audiencia:* Facebook: 69 - Youtube: 10030 - Instagram: 120 Total: 10219
+--------------------
+Date: 24/7/2025
+Time: 12:17
+Group ID: JEOSMN0MLKf50GPwhZ1DPO
+Message: *ICL NOTÍCIAS - Audiencia:* Facebook: 78 - Youtube: 9937 - Instagram: 122 Total: 10137
+--------------------
+Date: 24/7/2025
+Time: 12:21
+Group ID: JEOSMN0MLKf50GPwhZ1DPO
+Message: *ICL NOTÍCIAS - Audiencia:* Facebook: 77 - Youtube: 9627 - Instagram: 100 Total: 9804
+--------------------
+Date: 24/7/2025
+Time: 12:25
+Group ID: JEOSMN0MLKf50GPwhZ1DPO
+Message: *ICL NOTÍCIAS - Audiencia:* Facebook: 83 - Youtube: 9426 - Instagram: 88 Total: 9597
+--------------------
+Date: 24/7/2025
+Time: 12:29
+Group ID: JEOSMN0MLKf50GPwhZ1DPO
+Message: *ICL NOTÍCIAS - Audiencia:* Facebook: 80 - Youtube: 9049 - Instagram: 96 Total: 9225
+>>>>>>> main
 --------------------

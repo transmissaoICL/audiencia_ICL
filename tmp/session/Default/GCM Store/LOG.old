@@ -1,3 +1,9 @@
+<<<<<<< HEAD
 2025/07/23-12:13:59.025 8a5c Reusing MANIFEST C:\Users\ICLli\OneDrive\projeto-audiencia\tmp\session\Default\GCM Store/MANIFEST-000001
 2025/07/23-12:13:59.029 8a5c Recovering log #3
 2025/07/23-12:13:59.031 8a5c Reusing old log C:\Users\ICLli\OneDrive\projeto-audiencia\tmp\session\Default\GCM Store/000003.log 
+=======
+2025/07/24-12:29:01.889 5994 Reusing MANIFEST C:\Users\ICLli\OneDrive\projeto-audiencia\tmp\session\Default\GCM Store/MANIFEST-000001
+2025/07/24-12:29:01.891 5994 Recovering log #3
+2025/07/24-12:29:01.892 5994 Reusing old log C:\Users\ICLli\OneDrive\projeto-audiencia\tmp\session\Default\GCM Store/000003.log 
+>>>>>>> main

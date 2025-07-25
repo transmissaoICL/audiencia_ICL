@@ -1,3 +1,9 @@
+<<<<<<< HEAD
 2025/07/23-12:17:28.610 53c8 Reusing MANIFEST C:\Users\ICLli\OneDrive\projeto-audiencia\tmp\session\Default\IndexedDB\https_www.facebook.com_0.indexeddb.leveldb/MANIFEST-000001
 2025/07/23-12:17:28.610 53c8 Recovering log #12
 2025/07/23-12:17:28.611 53c8 Reusing old log C:\Users\ICLli\OneDrive\projeto-audiencia\tmp\session\Default\IndexedDB\https_www.facebook.com_0.indexeddb.leveldb/000012.log 
+=======
+2025/07/24-12:32:11.231 4e88 Reusing MANIFEST C:\Users\ICLli\OneDrive\projeto-audiencia\tmp\session\Default\IndexedDB\https_www.facebook.com_0.indexeddb.leveldb/MANIFEST-000001
+2025/07/24-12:32:11.231 4e88 Recovering log #7
+2025/07/24-12:32:11.237 4e88 Reusing old log C:\Users\ICLli\OneDrive\projeto-audiencia\tmp\session\Default\IndexedDB\https_www.facebook.com_0.indexeddb.leveldb/000007.log 
+>>>>>>> main

@@ -1,3 +1,9 @@
+<<<<<<< HEAD
 2025/07/24-13:35:04.099 4c70 Reusing MANIFEST C:\Users\ICLli\OneDrive\projeto-audiencia\tmp\session\Default\Service Worker\Database/MANIFEST-000001
 2025/07/24-13:35:04.100 4c70 Recovering log #29
 2025/07/24-13:35:04.100 4c70 Reusing old log C:\Users\ICLli\OneDrive\projeto-audiencia\tmp\session\Default\Service Worker\Database/000029.log 
+=======
+2025/07/24-12:26:44.949 361c Reusing MANIFEST C:\Users\ICLli\OneDrive\projeto-audiencia\tmp\session\Default\Service Worker\Database/MANIFEST-000001
+2025/07/24-12:26:44.949 361c Recovering log #20
+2025/07/24-12:26:44.950 361c Reusing old log C:\Users\ICLli\OneDrive\projeto-audiencia\tmp\session\Default\Service Worker\Database/000020.log 
+>>>>>>> main

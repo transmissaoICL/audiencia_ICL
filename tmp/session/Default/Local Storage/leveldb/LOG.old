@@ -1,3 +1,12 @@
+<<<<<<< HEAD
 2025/07/24-13:35:04.124 7d5c Reusing MANIFEST C:\Users\ICLli\OneDrive\projeto-audiencia\tmp\session\Default\Local Storage\leveldb/MANIFEST-000001
 2025/07/24-13:35:04.129 7d5c Recovering log #3
 2025/07/24-13:35:04.131 7d5c Reusing old log C:\Users\ICLli\OneDrive\projeto-audiencia\tmp\session\Default\Local Storage\leveldb/000003.log 
+=======
+2025/07/24-12:26:44.976 7804 Reusing MANIFEST C:\Users\ICLli\OneDrive\projeto-audiencia\tmp\session\Default\Local Storage\leveldb/MANIFEST-000001
+2025/07/24-12:26:44.981 7804 Recovering log #162
+2025/07/24-12:26:44.985 7804 Reusing old log C:\Users\ICLli\OneDrive\projeto-audiencia\tmp\session\Default\Local Storage\leveldb/000162.log 
+2025/07/24-12:28:08.054 7804 Level-0 table #166: started
+2025/07/24-12:28:08.062 7804 Level-0 table #166: 11787 bytes OK
+2025/07/24-12:28:08.065 7804 Delete type=0 #162
+>>>>>>> main

@@ -1,3 +1,9 @@
+<<<<<<< HEAD
 2025/07/24-13:37:07.273 514c Reusing MANIFEST C:\Users\ICLli\OneDrive\projeto-audiencia\tmp\session\Default\File System\Origins/MANIFEST-000001
 2025/07/24-13:37:07.273 514c Recovering log #3
 2025/07/24-13:37:07.273 514c Reusing old log C:\Users\ICLli\OneDrive\projeto-audiencia\tmp\session\Default\File System\Origins/000003.log 
+=======
+2025/07/24-12:30:47.715 6854 Reusing MANIFEST C:\Users\ICLli\OneDrive\projeto-audiencia\tmp\session\Default\File System\Origins/MANIFEST-000001
+2025/07/24-12:30:47.716 6854 Recovering log #3
+2025/07/24-12:30:47.716 6854 Reusing old log C:\Users\ICLli\OneDrive\projeto-audiencia\tmp\session\Default\File System\Origins/000003.log 
+>>>>>>> main

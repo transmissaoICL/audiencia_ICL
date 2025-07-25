@@ -120,10 +120,11 @@ function atualizaTabela(data, programa){
 
     for (let entrie of listaDesordenada){
         let linha = document.createElement('tr');
+        let numberAudiencia = entrie[1].toLocaleString('de-DE');
         linha.innerHTML = `
         <td>${listaDesordenada.indexOf(entrie) + 1}</td>
         <td>${entrie[0]}</td>
-        <td>${entrie[1]}</td>`
+        <td>${numberAudiencia}</td>`
         ;
         tbody.appendChild(linha);
     }

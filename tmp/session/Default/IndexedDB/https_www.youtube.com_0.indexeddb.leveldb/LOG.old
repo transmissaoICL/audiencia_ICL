@@ -1,3 +1,36 @@
+<<<<<<< HEAD
 2025/07/24-13:35:07.346 1f24 Reusing MANIFEST C:\Users\ICLli\OneDrive\projeto-audiencia\tmp\session\Default\IndexedDB\https_www.youtube.com_0.indexeddb.leveldb/MANIFEST-000001
 2025/07/24-13:35:07.346 1f24 Recovering log #4
 2025/07/24-13:35:07.352 1f24 Reusing old log C:\Users\ICLli\OneDrive\projeto-audiencia\tmp\session\Default\IndexedDB\https_www.youtube.com_0.indexeddb.leveldb/000004.log 
+=======
+2025/07/24-12:26:47.598 21e0 Reusing MANIFEST C:\Users\ICLli\OneDrive\projeto-audiencia\tmp\session\Default\IndexedDB\https_www.youtube.com_0.indexeddb.leveldb/MANIFEST-000001
+2025/07/24-12:26:47.598 21e0 Recovering log #508
+2025/07/24-12:26:47.603 21e0 Reusing old log C:\Users\ICLli\OneDrive\projeto-audiencia\tmp\session\Default\IndexedDB\https_www.youtube.com_0.indexeddb.leveldb/000508.log 
+2025/07/24-12:27:01.398 8f14 Level-0 table #513: started
+2025/07/24-12:27:01.425 8f14 Level-0 table #513: 2273356 bytes OK
+2025/07/24-12:27:01.429 8f14 Delete type=0 #508
+2025/07/24-12:27:04.271 cd4 Compacting 1@1 + 1@2 files
+2025/07/24-12:27:04.280 cd4 Generated table #514@1: 1971 keys, 83468 bytes
+2025/07/24-12:27:04.280 cd4 Compacted 1@1 + 1@2 files => 83468 bytes
+2025/07/24-12:27:04.282 cd4 compacted to: files[ 0 0 1 0 0 0 0 ]
+2025/07/24-12:27:04.283 cd4 Delete type=2 #510
+2025/07/24-12:27:04.283 cd4 Delete type=2 #513
+2025/07/24-12:27:40.652 8f14 Level-0 table #516: started
+2025/07/24-12:27:40.672 8f14 Level-0 table #516: 2407985 bytes OK
+2025/07/24-12:27:40.674 8f14 Delete type=0 #512
+2025/07/24-12:27:43.960 21e0 Compacting 1@1 + 1@2 files
+2025/07/24-12:27:43.969 21e0 Generated table #517@1: 1994 keys, 72420 bytes
+2025/07/24-12:27:43.969 21e0 Compacted 1@1 + 1@2 files => 72420 bytes
+2025/07/24-12:27:43.971 21e0 compacted to: files[ 0 0 1 0 0 0 0 ]
+2025/07/24-12:27:43.972 21e0 Delete type=2 #514
+2025/07/24-12:27:43.972 21e0 Delete type=2 #516
+2025/07/24-12:28:45.116 8f14 Level-0 table #519: started
+2025/07/24-12:28:45.142 8f14 Level-0 table #519: 2378765 bytes OK
+2025/07/24-12:28:45.146 8f14 Delete type=0 #515
+2025/07/24-12:28:48.374 8f14 Compacting 1@1 + 1@2 files
+2025/07/24-12:28:48.384 8f14 Generated table #520@1: 2050 keys, 107157 bytes
+2025/07/24-12:28:48.384 8f14 Compacted 1@1 + 1@2 files => 107157 bytes
+2025/07/24-12:28:48.387 8f14 compacted to: files[ 0 0 1 0 0 0 0 ]
+2025/07/24-12:28:48.387 8f14 Delete type=2 #517
+2025/07/24-12:28:48.387 8f14 Delete type=2 #519
+>>>>>>> main
