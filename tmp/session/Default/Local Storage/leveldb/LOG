@@ -1,6 +1,0 @@
-2025/07/24-12:30:45.106 2668 Reusing MANIFEST C:\Users\ICLli\OneDrive\projeto-audiencia\tmp\session\Default\Local Storage\leveldb/MANIFEST-000001
-2025/07/24-12:30:45.110 2668 Recovering log #165
-2025/07/24-12:30:45.112 2668 Reusing old log C:\Users\ICLli\OneDrive\projeto-audiencia\tmp\session\Default\Local Storage\leveldb/000165.log 
-2025/07/24-12:32:16.172 4804 Level-0 table #169: started
-2025/07/24-12:32:16.178 4804 Level-0 table #169: 14260 bytes OK
-2025/07/24-12:32:16.181 4804 Delete type=0 #165
