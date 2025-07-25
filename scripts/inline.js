@@ -5,8 +5,6 @@ let historico = [];
 //TODO: Fazer com que o bot consiga mandar a audiencia no grupo do Zap
 //TODO: Fazer o bot uma imagem da audiencia e mandar no grupo do zap
 
-//import { json_save } from './utils/handlers.js';
-
 function audienciaTemporal() {
     this.canal = '',
     this.link = '',
@@ -48,7 +46,7 @@ const chart = new Chart(ctx, {
   }
 });
 
-function atualizarGraficoAudiencia() {
+function atualizarGraficoAudiencia(historico) {
   if (historico.length === 0) return;
 
   const timestamps = Object.keys(historico[0].dadosHistoricos);
@@ -71,10 +69,18 @@ function atualizarGraficoAudiencia() {
 
 //ATUALIZA TABELA DE ACORDO COM OS DADOS HISTORICOS
 function atualizaTabela(data, programa){
+
+    let timestamp = new Date();
     let textareaICL = document.getElementById("urlsICL");
     let canaisICL = textareaICL.value.trim().split("\n").filter(Boolean);
     let tbody = document.getElementById('tabelaBody');
-    tbody.innerHTML = `<tr style="background-color: #0056b3;">
+    tbody.innerHTML = `
+        <tr style="background-color: #0056b3;">
+        <th style="color: #f0f0f0;"></th>
+        <th id="date" style="color: #f0f0f0;"></th>
+        <th id="time" style="color: #f0f0f0;"></th>
+        </tr>
+        <tr style="background-color: #0056b3;">
         <th style="color: #f0f0f0;">#</th>
         <th style="color: #f0f0f0;">Canal</th>
         <th style="color: #f0f0f0;">Audiencia</th>
@@ -82,6 +88,11 @@ function atualizaTabela(data, programa){
     let totalICL = 0;
     let listaDesordenada = [];
 
+    console.log(timestamp);
+    document.getElementById("date").innerHTML = ` Dia ${timestamp.getDate()}/${timestamp.getMonth() + 1}/${timestamp.getFullYear()}`;
+    document.getElementById("time").innerHTML = `Atualizado em: ${timestamp.toLocaleTimeString()}`;
+    
+    console.log(data);
     //ITERA SOBRE OS DADOS
     for (let res of data){
 
@@ -164,30 +175,6 @@ function atualizarTotal(data) {
     }
 }
 
-async function sendWhatsapp(data, linksICL, programaICL){
-  let historicoICL = [];
-
-  for (let res of data){
-
-    let encontrado = linksICL.find(a => a === res.link);
-    if (encontrado){
-      historicoICL.push(res);
-    }
-  }
-
-  let whatsapp = await fetch('http://localhost:8000/api/whatsapp', {
-  method: 'POST',
-  headers: { "Content-Type": "application/json" },
-  body: JSON.stringify({ 
-    grupo: "JEOSMN0MLKf50GPwhZ1DPO",
-    audiencia: `${ JSON.stringify(historicoICL) }`,
-    programa: programaICL })
-  })
-
-  let status = await whatsapp.json();
-  console.log(status.status);
-}
-
 async function consultarAudiencias() {
 
     let textareaConcorrencia = document.getElementById("urlsConcorrencia");
@@ -203,15 +190,16 @@ async function consultarAudiencias() {
     let resposta = await fetch("http://localhost:3000/api/raspar", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ links })
+        body: JSON.stringify({ links, linksICL })
     });
 
     const data = await resposta.json();
-    for (let i = 0; i < data.resultados.length; i++) {
-        const res = data.resultados[i];
+    for (let i = 0; i < data.historico.length; i++) {
+        const res = data.historico[i];
         const plataforma = res.plataforma;
         const canal = res.canal;
-        const viewers = res.viewers;
+        let lastKeyConcorrencia = Object.keys(res.dadosHistoricos).at(-1);
+        const viewers = res.dadosHistoricos[lastKeyConcorrencia];
 
         detalhesHtml += `<tr class=audiencia-line>
         <td class=audiencia-cell>${plataforma}</td>
@@ -237,12 +225,11 @@ async function consultarAudiencias() {
     // Reanexa linhas manuais
     linhasManuais.forEach(tr => tbody.appendChild(tr));
 
-    atualizarTotal(data);
-    atualizarGraficoAudiencia();
-    atualizaTabela(historico, programa);
-    sendWhatsapp(historico, linksICL, programa);
+    atualizarGraficoAudiencia(data.historico);
+    atualizaTabela(data.historico, programa);
+    sendWhatsapp(data.historico, linksICL, programa);
 }
 
 setInterval(() => {
-consultarAudiencias();
+  consultarAudiencias();
 }, 120000);

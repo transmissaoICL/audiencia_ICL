@@ -1,4 +1,5 @@
 #completle ignore this folders
 
 venv/
-tmp/
+tmp/*
+tmp/session/*
