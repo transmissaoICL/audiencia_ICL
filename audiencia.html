@@ -20,9 +20,16 @@
       <textarea id="urlsICL" placeholder="https://youtube.com/...\nhttps://facebook.com/...\nhttps://twitch.tv/...\n"></textarea>       
     </div>
   </div>
-
-  <button onclick="consultarAudiencias">Consultar Agora</button>
-  <p><em>Audiência será atualizada automaticamente a cada 30 segundos.</em></p>
+  <div class="container">
+    <div style="padding-right: 30px">
+      <h3>Habilitar Consulta</h3>
+      <label class="switch">
+        <input type="checkbox" id="myToggle">
+        <span class="slider round"></span>
+      </label>
+    </div>
+  </div>
+  <p><em>Audiência será atualizada automaticamente a cada 2 minutos (idealmente).</em></p>
 
   <div class="results">
     <div>

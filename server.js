@@ -2,13 +2,16 @@ const puppeteer = require('puppeteer');
 const express = require('express');
 const cors = require('cors');
 const { timeout } = require('puppeteer');
-const { addHistorico } = require('./scripts/utils/dataHandler')
+const { addHistorico, saveJSON, addHistoricoPrograma } = require('./scripts/utils/dataHandler')
 const app = express();
 
 app.use(cors());
 app.use(express.json());
 
 let historico = [];
+let historicoICL = [];
+
+let historicoTotal =[];
 
 const account = {
   username: "celioglicerio",
@@ -337,9 +340,11 @@ app.post('/api/raspar', async (req, res) => {
     headless: false,
     defaultViewport: null,
     userDataDir: './tmp/session',
-    args: ['--start-maximized', '--no-sandbox', '--disable-setuid-sandbox', ]
+    args: ['--start-maximized', '--no-sandbox', '--disable-setuid-sandbox', '--window-position=-32000,-32000',]
     //'--no-sandbox', '--disable-setuid-sandbox''--window-position=-32000,-32000',
   });
+
+  let timestamp = new Date().toLocaleTimeString();
 
   for (let link of links) {
     let page = await browser.newPage();
@@ -367,18 +372,28 @@ app.post('/api/raspar', async (req, res) => {
       resultado = { plataforma: 'Desconhecida', canal: '-', viewers: 0 };
     }
 
+    for (let linkICL of linksICL){
+      if (link === linkICL){
+        historicoICL = addHistoricoPrograma(resultado, historicoICL, programaAtual, timestamp);
+      }
+    }
     resultados.push({ ...resultado, link});
     await page.close();
     
   }
-
-  let timestamp = new Date().toLocaleTimeString();
   
   historico = addHistorico(historico, resultados, timestamp);
 
-  sendWhatsapp(historico, linksICL, programaAtual);
+  try{
+    sendWhatsapp(historico, linksICL, programaAtual);
+  }
+  catch{
+    console.log('Não foi possível mandar mensagem. Ligue a porta do whatsapp');
+  }
 
   await browser.close();
+
+  historicoTotal.push(...historico, ...historicoICL);
 
   res.json({ historico, programaAtual });
 });
@@ -387,10 +402,15 @@ app.listen(3000, () => {
   console.log('Servidor rodando em http://localhost:3000');
 });
 
+setInterval(() => {
+    saveJSON(historicoTotal);
+}, 720000);
+
 
 process.on('SIGINT', async () => {
   console.log('\nEncerrando servidor...');
   server.close(() => {
+    saveJSON(historicoTotal);
     console.log('Servidor Express encerrado.');
     process.exit(0);
   });

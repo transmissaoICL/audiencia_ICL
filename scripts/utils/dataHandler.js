@@ -5,6 +5,18 @@ function audienciaTemporal() {
     this.dadosHistoricos = {}
 };
 
+function audienciaPrograma() {
+    this.programa = '',
+    this.dadosHistoricos = {}
+}
+
+function audienciaCompleta() {
+    this.year = 0,
+    this.month = 0,
+    this.day = 0,
+    this.audiencias = []
+}
+
 
 function addHistorico(historico, data, time){
     var novoCanal;
@@ -38,4 +50,51 @@ function addHistorico(historico, data, time){
     return historico;
 }
 
-module.exports = { addHistorico };
+function addHistoricoPrograma(data, historicoICL, programa, time){
+    var novoPrograma;
+
+    if (historicoICL.length != 0){
+        for (let prog of historicoICL){
+            if (prog.programa === programa){
+                if (Object.keys(prog.dadosHistoricos).at(-1) === time){
+                    prog.dadosHistoricos[time] += data.viewers;
+                }
+                else{
+                    prog.dadosHistoricos[time] = data.viewers;
+                }
+            }
+
+            else{
+                novoPrograma = new audienciaPrograma();
+                novoPrograma.programa = programa;
+                novoPrograma.dadosHistoricos[time] = data.viewers;
+                historicoICL.push(novoPrograma);
+            }
+        }
+    }
+    else{
+        novoPrograma = new audienciaPrograma();
+        novoPrograma.programa = programa;
+        novoPrograma.dadosHistoricos[time] = data.viewers;
+        historicoICL.push(novoPrograma);
+    }
+    return historicoICL;
+}
+
+function saveJSON(data){
+    console.log('Salvando audiencia...')
+    const date = new Date();
+    let completo = new audienciaCompleta();
+    completo.audiencias = data;
+    completo.year = date.getFullYear();
+    completo.month = date.getMonth();
+    completo.day = date.getDate();
+    const fs = require('fs');
+    const jsonString = JSON.stringify(completo, null, 2);
+    fs.writeFileSync(`./data/historicos/audiencia-${date.toISOString().split('T')[0]}.json`, jsonString);
+    console.log("Arquivo se audiência salvo.");
+}
+
+
+
+module.exports = { addHistorico, saveJSON, addHistoricoPrograma };

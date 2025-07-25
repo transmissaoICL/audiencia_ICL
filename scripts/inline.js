@@ -46,6 +46,24 @@ const chart = new Chart(ctx, {
   }
 });
 
+let scrapping = false;
+let interval;
+
+const myToggle = document.getElementById('myToggle');
+myToggle.addEventListener('change', function() {
+    scrapping = !scrapping;
+    if (scrapping){
+      interval = setInterval(() => {
+        consultarAudiencias();
+      }, 120000);
+      console.log('Server ligado. Aguardando Scrapping');
+    }
+    else {
+      clearInterval(interval);
+      console.log('Server desligado');
+    }
+});
+
 function atualizarGraficoAudiencia(historico) {
   if (historico.length === 0) return;
 
@@ -88,11 +106,9 @@ function atualizaTabela(data, programa){
     let totalICL = 0;
     let listaDesordenada = [];
 
-    console.log(timestamp);
     document.getElementById("date").innerHTML = ` Dia ${timestamp.getDate()}/${timestamp.getMonth() + 1}/${timestamp.getFullYear()}`;
     document.getElementById("time").innerHTML = `Atualizado em: ${timestamp.toLocaleTimeString()}`;
     
-    console.log(data);
     //ITERA SOBRE OS DADOS
     for (let res of data){
 
@@ -227,9 +243,5 @@ async function consultarAudiencias() {
 
     atualizarGraficoAudiencia(data.historico);
     atualizaTabela(data.historico, programa);
-    sendWhatsapp(data.historico, linksICL, programa);
 }
 
-setInterval(() => {
-  consultarAudiencias();
-}, 120000);
