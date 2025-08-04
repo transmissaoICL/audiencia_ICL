@@ -1,4 +1,5 @@
 const puppeteer = require('puppeteer');
+const { Cluster } = require('puppeteer-cluster');
 const express = require('express');
 const cors = require('cors');
 const { timeout } = require('puppeteer');
@@ -293,50 +294,45 @@ app.post('/api/raspar', async (req, res) => {
 
   let programaAtual = programas[programa];
 
-  const browser = await puppeteer.launch({
-    headless: false,
-    defaultViewport: null,
-    userDataDir: './tmp/session',
-    args: ['--start-maximized', '--no-sandbox', '--disable-setuid-sandbox', '--window-position=-32000,-32000',]
-    //'--no-sandbox', '--disable-setuid-sandbox''--window-position=-32000,-32000',
+  const cluster = await Cluster.launch({
+    concurrency: Cluster.CONCURRENCY_PAGE,  // ou BROWSER para isolamento total
+    maxConcurrency: 3,
+    puppeteerOptions: {
+      headless: false,
+      args: ['--no-sandbox', '--disable-setuid-sandbox']
+    }
   });
 
-  let timestamp = new Date().toLocaleTimeString();
-
-  for (let link of links) {
-    let page = await browser.newPage();
+  await cluster.task(async ({ page, data: { link } }) => {
     let resultado;
-
-    const handlers = [
-      { test: 'youtube.com', fn: rasparYouTube, plataforma: 'YouTube' },
-      { test: 'facebook.com', fn: rasparFacebook, plataforma: 'Facebook' },
-      { test: 'twitch.tv', fn: rasparTwitch, plataforma: 'Twitch' },
-      { test: 'instagram.com', fn: rasparInstagram, plataforma: 'Instagram' }
-    ];
-
-    for (const { test, fn, plataforma } of handlers) {
-      if (link.includes(test)) {
-        try {
-          resultado = await fn(page, link);
-        } catch {
-          resultado = { plataforma, canal: '-', viewers: 0 };
-        }
-        break;
-      }
+    if (link.includes('youtube.com')) {
+      resultado = await rasparYouTube(page, link);
+    } else if (link.includes('facebook.com')) {
+      resultado = await rasparFacebook(page, link);
+    } else if (link.includes('twitch.tv')) {
+      resultado = await rasparTwitch(page, link);
+    } else if (link.includes('instagram.com')) {
+      resultado = await rasparInstagram(page, link);
+    } else {
+      resultado = { plataforma: 'Desconhecida', canal: '-', viewers: 0, link };
     }
 
-    if (!resultado) {
-      resultado = { plataforma: 'Desconhecida', canal: '-', viewers: 0 };
-    }
-    resultados.push({ ...resultado});
-    await page.close();
-    
+    resultados.push(resultado);
+  });
+
+  for (const link of links) {
+    await cluster.queue({ link });
   }
+
+  // Espera tudo terminar
+  await cluster.idle();
+  await cluster.close();
+
+  console.log('Resultados finais:', resultados);
 
   historico = addHistorico(historico, resultados, timestamp);
 
   // historicoICL = addHistoricoPrograma(resultados, historicoICL, programa, timestamp);
-
 
   try{
     sendWhatsapp(historico, linksICL, programaAtual);
