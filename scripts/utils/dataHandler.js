@@ -1,3 +1,5 @@
+const { programas } = require('../../data/constants')
+
 function audienciaTemporal() {
     this.canal = '',
     this.link = '',
@@ -7,6 +9,7 @@ function audienciaTemporal() {
 
 function audienciaPrograma() {
     this.programa = '',
+    this.index = Number,
     this.dadosHistoricos = {}
 }
 
@@ -14,7 +17,8 @@ function audienciaCompleta() {
     this.year = 0,
     this.month = 0,
     this.day = 0,
-    this.audiencias = []
+    this.audienciasCanais = [],
+    this.audienciasProgramas = []
 }
 
 
@@ -55,7 +59,7 @@ function addHistoricoPrograma(data, historicoICL, programa, time){
 
     if (historicoICL.length != 0){
         for (let prog of historicoICL){
-            if (prog.programa === programa){
+            if (prog.index === programa){
                 if (Object.keys(prog.dadosHistoricos).at(-1) === time){
                     prog.dadosHistoricos[time] += data.viewers;
                 }
@@ -67,6 +71,7 @@ function addHistoricoPrograma(data, historicoICL, programa, time){
             else{
                 novoPrograma = new audienciaPrograma();
                 novoPrograma.programa = programa;
+                novoPrograma.index = programas.indexOf(programa);
                 novoPrograma.dadosHistoricos[time] = data.viewers;
                 historicoICL.push(novoPrograma);
             }
@@ -81,15 +86,22 @@ function addHistoricoPrograma(data, historicoICL, programa, time){
     return historicoICL;
 }
 
-function saveJSON(data){
+function saveJSON(data, dataICL){
     console.log('Salvando audiencia...')
     const date = new Date();
     let completo = new audienciaCompleta();
-    completo.audiencias = data;
+    completo.audienciasCanais = [...data];
+    completo.audienciasProgramas = [...dataICL]
     completo.year = date.getFullYear();
     completo.month = date.getMonth();
     completo.day = date.getDate();
+    //const dir = date.getMonth().toString()
     const fs = require('fs');
+    const path = require('path');
+
+    //const dirPath = path.join('.data/historicos', dir);
+    //const filePath = path.join(dir, `audiencia-${date.toISOString().split('T')[0]}.json`);
+
     const jsonString = JSON.stringify(completo, null, 2);
     fs.writeFileSync(`./data/historicos/audiencia-${date.toISOString().split('T')[0]}.json`, jsonString);
     console.log("Arquivo se audiência salvo.");

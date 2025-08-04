@@ -4,6 +4,7 @@ const cors = require('cors');
 const { timeout } = require('puppeteer');
 const { addHistorico, saveJSON, addHistoricoPrograma } = require('./scripts/utils/dataHandler')
 const app = express();
+const { programas } = require('./data/constants');
 
 app.use(cors());
 app.use(express.json());
@@ -25,43 +26,9 @@ const facebookDict = {
   'profile.php?id=100083958152654': "ICL Notícias está ao vivo"
 }
 
-let programaAtual;
-
 const instaElements = {
   aria_label: 'Ícone do Contador de visualizadores',
   ao_vivo: 'AO VIVO',
-}
-
-function tituloICL(title){
-
-  switch (true){
-    case title.includes('DESPERTA ICL AO VIVO'):
-      return 'DESPERTA';
-    case title.includes('ICL NOTÍCIAS AO VIVO'):
-      return 'N1';
-    case title.includes('EM DETALHES'):
-      return 'EM DETALHES';
-    case title.includes('ICL MERCADO E INVESTIMENTOS AO VIVO'):
-      return 'ICL MERCADO E INVESTIMENTO';
-    case title.includes('ICL NOTÍCIAS 2 AO VIVO'):
-      return 'N2';
-    case title.includes('ROLÊ ICL'):
-      return 'ROLE';
-    case title.includes('WEBCOMUNISTAS COM LAURA SABINO E IAN NEVES AO VIVO'):
-      return 'WEBCOMUNISTAS';
-    case title.includes('ESPIRITUALIDADE NA AÇÃO'):
-      return 'ESPIRITUALIDADE';
-    case title.includes('PROVOCAÇÃO HISTÓRICA'):
-      return 'PROVOCAÇÃO HISTÓRICA';
-    case title.includes('CHICO PINHEIRO ENTREVISTA'):
-      return 'CP ENTREVISTA';
-    case title.includes('ICL ENTREVISTA AO VIVO'):
-      return 'ICL ENTREVISTA';
-    case title.includes('ICL URGENTE  AO VIVO'):
-      return 'URGENTE';
-    default:
-      return 'ICL NOTÍCIAS';
-  }
 }
 
 async function rasparYouTube(page, link) {
@@ -78,19 +45,6 @@ async function rasparYouTube(page, link) {
       canal = await page.$eval(seletor, el => el.textContent.trim());
     } catch {
       console.warn(`Canal YouTube não encontrado via #channel-name. Link: ${link}`);
-    }
-
-    if (canal == 'Eduardo Moreira' || canal == 'Instituto Conhecimento Liberta' || canal == 'ICL Notícias'){
-      // Pega titulo para mudar na Tabela
-      try{
-        titleDiv = await page.waitForSelector('#title', { timeout: 1000 });
-        const title = await page.evaluate(el => el.textContent.trim(), titleDiv);
-        programaAtual = tituloICL(title);
-
-      }
-      catch (err){
-        console.warn(`Não foi possível pegar o titulo: ${err.message}`);
-      }
     }
 
     // Viewers (ao vivo)
@@ -288,7 +242,8 @@ async function rasparInstagram(page, link) {
       return span?.outerText || '0';
     }, instaElements.aria_label);
 
-    viewers = parseInt(rawViewers.replace(/\./g, '').replace(',', '')) || 0;
+    const cleaned = rawViewers.replace(/[^\d]/g, '');
+    viewers = parseInt(cleaned) || 0;
 
     // Nome do canal (genérico)
     try {
@@ -333,8 +288,10 @@ async function sendWhatsapp(data, linksICL, programaICL){
 
 
 app.post('/api/raspar', async (req, res) => {
-  let { links, linksICL } = req.body;
+  let { links, linksICL, programa } = req.body;
   let resultados = [];
+
+  let programaAtual = programas[programa];
 
   const browser = await puppeteer.launch({
     headless: false,
@@ -371,29 +328,26 @@ app.post('/api/raspar', async (req, res) => {
     if (!resultado) {
       resultado = { plataforma: 'Desconhecida', canal: '-', viewers: 0 };
     }
-
-    for (let linkICL of linksICL){
-      if (link === linkICL){
-        historicoICL = addHistoricoPrograma(resultado, historicoICL, programaAtual, timestamp);
-      }
-    }
-    resultados.push({ ...resultado, link});
+    resultados.push({ ...resultado});
     await page.close();
     
   }
-  
+
   historico = addHistorico(historico, resultados, timestamp);
+
+  // historicoICL = addHistoricoPrograma(resultados, historicoICL, programa, timestamp);
+
 
   try{
     sendWhatsapp(historico, linksICL, programaAtual);
   }
+  
   catch{
     console.log('Não foi possível mandar mensagem. Ligue a porta do whatsapp');
   }
 
   await browser.close();
 
-  historicoTotal.push(...historico, ...historicoICL);
 
   res.json({ historico, programaAtual });
 });
@@ -403,14 +357,13 @@ app.listen(3000, () => {
 });
 
 setInterval(() => {
-    saveJSON(historicoTotal);
+    saveJSON(historico, historicoICL);
 }, 720000);
 
 
 process.on('SIGINT', async () => {
   console.log('\nEncerrando servidor...');
   server.close(() => {
-    saveJSON(historicoTotal);
     console.log('Servidor Express encerrado.');
     process.exit(0);
   });

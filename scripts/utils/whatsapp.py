@@ -21,7 +21,6 @@ app.add_middleware(
 async def enviar_mensagem(request: Request):
     data = await request.json()
     group_name = data.get("grupo")
-    print(data.get("programa"))
     programa = data.get("programa")
     mensagem = whatsappTextHandler(json.loads(data.get("audiencia")), programa)
     

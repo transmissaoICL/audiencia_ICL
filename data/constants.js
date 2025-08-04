@@ -1,0 +1,18 @@
+const programas = [
+    'DESPERTA',
+    'ICL NOTICIAS 1',
+    'EM DETALHES',
+    'ICL MERCADO E INVESTIMENTOS',
+    'ROLE ICL',
+    'WEBCOMUNISTAS',
+    'ESPIRITUALIDADE NA AÇÃO',
+    'PROVOCAÇÃO HISTORICA',
+    'CHICO PINHEIRO ENTREVISTA',
+    'ICL ENTREVISTA',
+    'URGENTE',
+    'ICL NOTICIAS 2',
+    'PRECISAMOS CONVERSAR',
+    'OUTRO',
+];
+
+module.exports = { programas };

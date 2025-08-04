@@ -47,6 +47,7 @@ const chart = new Chart(ctx, {
 });
 
 let scrapping = false;
+
 let interval;
 
 const myToggle = document.getElementById('myToggle');
@@ -63,6 +64,13 @@ myToggle.addEventListener('change', function() {
       console.log('Server desligado');
     }
 });
+
+const programaDropdown = document.getElementById('programaDropdown');
+let programa = Number(programaDropdown.value);
+programaDropdown.addEventListener('change', function() {
+  programa = Number(programaDropdown.value);
+})
+
 
 function atualizarGraficoAudiencia(historico) {
   if (historico.length === 0) return;
@@ -138,9 +146,9 @@ function atualizaTabela(data, programa){
         let linha = document.createElement('tr');
         let numberAudiencia = entrie[1].toLocaleString('de-DE');
         linha.innerHTML = `
-        <td>${listaDesordenada.indexOf(entrie) + 1}</td>
-        <td>${entrie[0]}</td>
-        <td>${numberAudiencia}</td>`
+        <td class="cell-concorrencia" >${listaDesordenada.indexOf(entrie) + 1}</td>
+        <td class="cell-concorrencia">${entrie[0]}</td>
+        <td class="cell-concorrencia">${numberAudiencia}</td>`
         ;
         tbody.appendChild(linha);
     }
@@ -206,7 +214,7 @@ async function consultarAudiencias() {
     let resposta = await fetch("http://localhost:3000/api/raspar", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ links, linksICL })
+        body: JSON.stringify({ links, linksICL, programa })
     });
 
     const data = await resposta.json();
@@ -227,8 +235,6 @@ async function consultarAudiencias() {
         total += viewers;
     }
 
-    let programa = data.programaAtual;
-
     const tbody = document.getElementById("auto");
 
     // Salva linhas manuais
@@ -242,6 +248,6 @@ async function consultarAudiencias() {
     linhasManuais.forEach(tr => tbody.appendChild(tr));
 
     atualizarGraficoAudiencia(data.historico);
-    atualizaTabela(data.historico, programa);
+    atualizaTabela(data.historico, data.programaAtual);
 }
 

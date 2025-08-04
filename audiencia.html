@@ -28,65 +28,67 @@
         <span class="slider round"></span>
       </label>
     </div>
+    <div>
+      <h3>Programa Atual</h3>
+      <select name="programaAtual" id="programaDropdown">
+        <option value="0">Desperta</option>
+        <option value="1">ICL Notícias 1</option>
+        <option value="2">Em Detalhes</option>
+        <option value="3">ICL Mercado e Investimentos</option>
+        <option value="4">Role ICL</option>
+        <option value="5">Webcomunistas</option>
+        <option value="6">Espiritualidade na Ação</option>
+        <option value="7">Provocação Histórica</option>
+        <option value="8">Chico Pinheiro Entrevista</option>
+        <option value="9">ICL Entrevista</option>
+        <option value="10">Urgente</option>
+        <option value="11">ICL Notícias 2</option>
+        <option value="12">Precisamos Conversar</option>
+        <option value="13">Outro</option>
+      </select>
+    </div>
   </div>
   <p><em>Audiência será atualizada automaticamente a cada 2 minutos (idealmente).</em></p>
 
   <div class="results">
-    <div>
-      <h2>Resultado</h2>
-      <table>
-        <thead>
-          <tr>
-            <th>Plataforma</th>
-            <th>Canal</th>
-            <th>Espectadores</th>
-            <th></th>
-          </tr>
-        </thead>
-        <tbody id="auto"></tbody>
-        <tfoot>
-          <tr>
-        </tfoot>
-      </table>
-      <button onclick="adicionarLinhaManual">+ Adicionar Linha Manual</button>
+    <div class="container">
+      <div>
+        <h2>Resultado</h2>
+        <table>
+          <thead>
+            <tr>
+              <th>Plataforma</th>
+              <th>Canal</th>
+              <th>Espectadores</th>
+              <th></th>
+            </tr>
+          </thead>
+          <tbody id="auto"></tbody>
+          <tfoot>
+            <tr>
+          </tfoot>
+        </table>
+      </div>
+      <div>
+        <table id="tabelaConcorrencia" width="800" height="200">
+          <tbody id="tabelaBody">
+            <tr class="row-concorrencia" style="background-color: #0056b3;">
+              <th id="date" style="color: #f0f0f0;"></th>
+              <th id="time" style="color: #f0f0f0;"></th>
+            </tr>
+            <tr class="row-concorrencia" style="background-color: #0056b3;">
+              <th style="color: #f0f0f0;">Canal</th>
+              <th style="color: #f0f0f0;">Audiencia</th>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <!--<button onclick="adicionarLinhaManual">+ Adicionar Linha Manual</button>-->
     </div>
-    <div>
-      <h2>Resultado</h2>
-      <table>
-        <thead>
-          <tr>
-            <th>Plataforma</th>
-            <th>Canal</th>
-            <th>Espectadores</th>
-            <th></th>
-          </tr>
-        </thead>
-        <tbody id="auto"></tbody>
-        <tfoot>
-          <tr>
-            <td colspan="2"><strong>Total</strong></td>
-            <td id="total">0</td>
-            <td></td>
-          </tr>
-        </tfoot>
-      </table>
-    </div>
-  </div>
 
   <canvas id="graficoAudiencia" width="800" height="200"></canvas>
 
-  <table id="tabelaConcorrencia" width="800" height="200">
-    <tbody id="tabelaBody">
-      <tr style="background-color: #0056b3;">
-        <th id="date" style="color: #f0f0f0;"></th>
-        <th id="time" style="color: #f0f0f0;"></th>
-      </tr>
-      <tr style="background-color: #0056b3;">
-        <th style="color: #f0f0f0;">Canal</th>
-        <th style="color: #f0f0f0;">Audiencia</th>
-      </tr>
-    </tbody>
-  </table>
+
   <script src="scripts/inline.js" defer></script>
 </body>
 </html>
