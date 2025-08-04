@@ -329,7 +329,7 @@ app.post('/api/raspar', async (req, res) => {
   await cluster.idle();
   await cluster.close();
 
-  console.log('Resultados finais:', resultados);
+  let timestamp = new Date().toLocaleTimeString();
 
   historico = addHistorico(historico, resultados, timestamp);
 
@@ -342,9 +342,6 @@ app.post('/api/raspar', async (req, res) => {
   catch{
     console.log('Não foi possível mandar mensagem. Ligue a porta do whatsapp');
   }
-
-  await browser.close();
-
 
   res.json({ historico, programaAtual });
 });
