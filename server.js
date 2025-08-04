@@ -299,7 +299,8 @@ app.post('/api/raspar', async (req, res) => {
     maxConcurrency: 3,
     puppeteerOptions: {
       headless: false,
-      args: ['--no-sandbox', '--disable-setuid-sandbox']
+      userDataDir: './tmp/session',
+      args: ['--start-maximized', '--no-sandbox', '--disable-setuid-sandbox', '--window-position=-32000,-32000',]
     }
   });
 
