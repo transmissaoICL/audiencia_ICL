@@ -1,6 +1,6 @@
 from fastapi import FastAPI, Request
 from fastapi.middleware.cors import CORSMiddleware
-from datetime import datetime, timedelta
+from datetime import datetime
 import pywhatkit
 import json
 
@@ -23,9 +23,6 @@ async def enviar_mensagem(request: Request):
     group_name = data.get("grupo")
     programa = data.get("programa")
     mensagem = whatsappTextHandler(json.loads(data.get("audiencia")), programa)
-    
-    
-    now = datetime.now() + timedelta(minutes=1)
 
     try:
         # Envia mensagem para o grupo
@@ -55,6 +52,9 @@ def whatsappTextHandler(data, programa):
                 audiencia_insta += canal.get('dadosHistoricos')[ultimo_dado]
                 continue
     
+    today = datetime.now()
+    formated_date = today.strftime("%d\%m\%Y")
+
     audiencia_total = audiencia_yt + audiencia_fb + audiencia_insta
-    mensagem = f'*{programa} - Audiencia:* \n\n Facebook: {audiencia_fb} - Youtube: {audiencia_yt} - Instagram: {audiencia_insta}\n\n Total: {audiencia_total}'
+    mensagem = f'*{formated_date} - {programa} - Audiencia:* \n\n Facebook: {audiencia_fb} - Youtube: {audiencia_yt} - Instagram: {audiencia_insta}\n\n Total: {audiencia_total}'
     return mensagem

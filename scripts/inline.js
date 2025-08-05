@@ -48,6 +48,8 @@ const chart = new Chart(ctx, {
 
 let scrapping = false;
 
+let teste = false;
+
 let interval;
 
 const myToggle = document.getElementById('myToggle');
@@ -56,7 +58,7 @@ myToggle.addEventListener('change', function() {
     if (scrapping){
       interval = setInterval(() => {
         consultarAudiencias();
-      }, 120000);
+      }, 180000);
       console.log('Server ligado. Aguardando Scrapping');
     }
     else {
@@ -64,6 +66,11 @@ myToggle.addEventListener('change', function() {
       console.log('Server desligado');
     }
 });
+
+const testeToggle = document.getElementById('testToggle');
+testeToggle.addEventListener('change', function(){
+  teste = !teste;
+})
 
 const programaDropdown = document.getElementById('programaDropdown');
 let programa = Number(programaDropdown.value);
@@ -211,10 +218,16 @@ async function consultarAudiencias() {
     let total = 0;
     let detalhesHtml = "";
 
+    let nomePrograma = '';
+
+    if (programa === 13){
+      nomePrograma = document.getElementById('nomePrograma').value;
+    }
+
     let resposta = await fetch("http://localhost:3000/api/raspar", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ links, linksICL, programa })
+        body: JSON.stringify({ links, linksICL, programa, nomePrograma, teste })
     });
 
     const data = await resposta.json();

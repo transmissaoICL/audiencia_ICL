@@ -5,7 +5,7 @@ const cors = require('cors');
 const { timeout } = require('puppeteer');
 const { addHistorico, saveJSON, addHistoricoPrograma } = require('./scripts/utils/dataHandler')
 const app = express();
-const { programas } = require('./data/constants');
+const { programas, whatsappConst } = require('./data/constants');
 
 app.use(cors());
 app.use(express.json());
@@ -263,7 +263,7 @@ async function rasparInstagram(page, link) {
   return { plataforma: 'Instagram', canal, viewers, link };
 }
 
-async function sendWhatsapp(data, linksICL, programaICL){
+async function sendWhatsapp(data, linksICL, programaICL, teste){
   let historicoICL = [];
 
   for (let res of data){
@@ -274,25 +274,38 @@ async function sendWhatsapp(data, linksICL, programaICL){
     }
   }
 
-  let whatsapp = await fetch('http://localhost:8000/api/whatsapp', {
+  let grupoWhatsapp;
+
+  if (teste){ grupoWhatsapp = whatsappConst['grupoTeste']; }
+  else { grupoWhatsapp = whatsappConst['grupoAudiencia']; }
+
+  let whatsappSend = await fetch('http://localhost:8000/api/whatsapp', {
     method: 'POST',
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify({ 
-      grupo: "JEOSMN0MLKf50GPwhZ1DPO",
+      grupo: whatsappConst['grupoTeste'],
       audiencia: `${ JSON.stringify(historicoICL) }`,
       programa: programaICL })
     })
 
-  let status = await whatsapp.json();
+  let status = await whatsappSend.json();
   console.log(status.status);
 }
 
 
 app.post('/api/raspar', async (req, res) => {
-  let { links, linksICL, programa } = req.body;
+  let { links, linksICL, programa, nomePrograma, teste } = req.body;
   let resultados = [];
 
-  let programaAtual = programas[programa];
+  let programaAtual;
+
+  if (programa === 13){
+    programaAtual = nomePrograma;
+  }
+
+  else{
+    programaAtual = programas[programa];
+  }
 
   const cluster = await Cluster.launch({
     concurrency: Cluster.CONCURRENCY_PAGE,  // ou BROWSER para isolamento total
@@ -333,10 +346,10 @@ app.post('/api/raspar', async (req, res) => {
 
   historico = addHistorico(historico, resultados, timestamp);
 
-  // historicoICL = addHistoricoPrograma(resultados, historicoICL, programa, timestamp);
+  historicoICL = addHistoricoPrograma(resultados, historicoICL, programa, timestamp);
 
   try{
-    sendWhatsapp(historico, linksICL, programaAtual);
+    sendWhatsapp(historico, linksICL, programaAtual, teste);
   }
   
   catch{
