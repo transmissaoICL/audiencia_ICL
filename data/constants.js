@@ -15,4 +15,9 @@ const programas = [
     'OUTRO',
 ];
 
-module.exports = { programas };
+const whatsappConst = {
+    grupoTeste: 'JEOSMN0MLKf50GPwhZ1DPO',
+    grupoAudiencia: 'KANTowb8uZiLll43vXJMq8'
+}
+
+module.exports = { programas, whatsappConst };

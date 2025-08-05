@@ -28,6 +28,13 @@
         <span class="slider round"></span>
       </label>
     </div>
+    <div style="padding-right: 30px">
+      <h3>Periodo de Teste</h3>
+      <label class="switch">
+        <input type="checkbox" id="testToggle">
+        <span class="slider round"></span>
+      </label>
+    </div>
     <div>
       <h3>Programa Atual</h3>
       <select name="programaAtual" id="programaDropdown">
@@ -46,6 +53,10 @@
         <option value="12">Precisamos Conversar</option>
         <option value="13">Outro</option>
       </select>
+    </div>
+    <div>
+      <h3>Nome do Programa Especial</h3>
+      <input id="nomePrograma" type="text" style="background-color: aliceblue; border: 1px solid black;">
     </div>
   </div>
   <p><em>Audiência será atualizada automaticamente a cada 2 minutos (idealmente).</em></p>
@@ -70,7 +81,7 @@
         </table>
       </div>
       <div>
-        <table id="tabelaConcorrencia" width="800" height="200">
+        <table id="tabelaConcorrencia" width="600" height="200">
           <tbody id="tabelaBody">
             <tr class="row-concorrencia" style="background-color: #0056b3;">
               <th id="date" style="color: #f0f0f0;"></th>

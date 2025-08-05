@@ -70,8 +70,8 @@ function addHistoricoPrograma(data, historicoICL, programa, time){
 
             else{
                 novoPrograma = new audienciaPrograma();
-                novoPrograma.programa = programa;
-                novoPrograma.index = programas.indexOf(programa);
+                novoPrograma.index = programa;
+                novoPrograma.programa = programas[programa];
                 novoPrograma.dadosHistoricos[time] = data.viewers;
                 historicoICL.push(novoPrograma);
             }
@@ -79,7 +79,8 @@ function addHistoricoPrograma(data, historicoICL, programa, time){
     }
     else{
         novoPrograma = new audienciaPrograma();
-        novoPrograma.programa = programa;
+        novoPrograma.programa = programas[programa];
+        novoPrograma.index = programa;
         novoPrograma.dadosHistoricos[time] = data.viewers;
         historicoICL.push(novoPrograma);
     }
