@@ -4,12 +4,14 @@ textarea { width: 100%; max-width: 600px; height: 150px; padding: 1rem; font-siz
 .container { display: grid; grid-template-columns: 1fr 1fr}
 button { padding: 0.75rem 1.5rem; font-size: 1rem; border: none; border-radius: 8px; background-color: #007bff; color: white; cursor: pointer; margin: 0.5rem 0; }
 button:hover { background-color: #0056b3; }
-.results { margin-top: 2rem; width: 100%; background: white; padding: 1.5rem; border-radius: 10px; box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1); }
-.results table { width: 100%; border-collapse: collapse; }
+.results { margin-top: 2rem; width: 100%; background: white; padding: 1.5rem; border-radius: 10px; box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1); font-size: large;}
+.results table { width: 100%; border-collapse: collapse; } 
 /*.results th, .results td { border: 1px solid #ccc; padding: 0.5rem; text-align: left; }
 .results th { background-color: #f5f5f5; }*/
-.row-concorrencia { max-width: 50px; }
-.cell-concorrencia { border: 1px solid black; text-align: center; max-width: 50px;}
+ #canaisEspecificos { width: 100%; } 
+#tabelaConcorrencia { width: 70% } 
+.cell-concorrencia { border: 1px solid black; min-width: 20px;}
+.cell-numero { border: 1px solid black; text-align: center; min-width: 20px;}
 .remove-btn { background-color: #dc3545; color: white; border: none; padding: 0.25rem 0.5rem; border-radius: 4px; cursor: pointer; }
 .remove-btn:hover { background-color: #b02a37; }
 input[type="text"], input[type="number"] { width: 100%; border: none; background: transparent; padding: 0; font-size: 1rem; color: #333; }

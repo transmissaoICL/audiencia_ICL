@@ -58,7 +58,7 @@ myToggle.addEventListener('change', function() {
     if (scrapping){
       interval = setInterval(() => {
         consultarAudiencias();
-      }, 180000);
+      }, 240000);
       console.log('Server ligado. Aguardando Scrapping');
     }
     else {
@@ -108,15 +108,15 @@ function atualizaTabela(data, programa){
     let canaisICL = textareaICL.value.trim().split("\n").filter(Boolean);
     let tbody = document.getElementById('tabelaBody');
     tbody.innerHTML = `
-        <tr style="background-color: #0056b3;">
+        <tr  class="row-concorrencia" style="background-color: #0056b3;">
         <th style="color: #f0f0f0;"></th>
-        <th id="date" style="color: #f0f0f0;"></th>
-        <th id="time" style="color: #f0f0f0;"></th>
+        <th id="date" style="color: #f0f0f0; border: 1px solid black"></th>
+        <th id="time" style="color: #f0f0f0; border: 1px solid black"></th>
         </tr>
-        <tr style="background-color: #0056b3;">
-        <th style="color: #f0f0f0;">#</th>
-        <th style="color: #f0f0f0;">Canal</th>
-        <th style="color: #f0f0f0;">Audiencia</th>
+        <tr  class="row-concorrencia" style="background-color: #0056b3;">
+        <th style="color: #f0f0f0; border: 1px solid black">#</th>
+        <th style="color: #f0f0f0; border: 1px solid black">Canal</th>
+        <th style="color: #f0f0f0; border: 1px solid black">Audiencia</th>
         </tr>`;
     let totalICL = 0;
     let listaDesordenada = [];
@@ -155,7 +155,7 @@ function atualizaTabela(data, programa){
         linha.innerHTML = `
         <td class="cell-concorrencia" >${listaDesordenada.indexOf(entrie) + 1}</td>
         <td class="cell-concorrencia">${entrie[0]}</td>
-        <td class="cell-concorrencia">${numberAudiencia}</td>`
+        <td class="cell-numero">${numberAudiencia}</td>`
         ;
         tbody.appendChild(linha);
     }
@@ -224,7 +224,7 @@ async function consultarAudiencias() {
       nomePrograma = document.getElementById('nomePrograma').value;
     }
 
-    let resposta = await fetch("http://localhost:3000/api/raspar", {
+    let resposta = await fetch("/api/raspar", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ links, linksICL, programa, nomePrograma, teste })
