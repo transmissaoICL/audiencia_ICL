@@ -63,9 +63,9 @@
 
   <div class="results">
     <div class="container">
-      <div>
+      <div id="canaisEspecificos">
         <h2>Resultado</h2>
-        <table>
+        <table >
           <thead>
             <tr>
               <th>Plataforma</th>
@@ -80,16 +80,16 @@
           </tfoot>
         </table>
       </div>
-      <div>
-        <table id="tabelaConcorrencia" width="600" height="200">
+      <div id="tabelaConcorrencia">
+        <table id="tabelaConcorrencia">
           <tbody id="tabelaBody">
             <tr class="row-concorrencia" style="background-color: #0056b3;">
-              <th id="date" style="color: #f0f0f0;"></th>
-              <th id="time" style="color: #f0f0f0;"></th>
+              <th id="date" style="color: #f0f0f0; border: 1px solid black;"></th>
+              <th id="time" style="color: #f0f0f0; border: 1px solid black;"></th>
             </tr>
             <tr class="row-concorrencia" style="background-color: #0056b3;">
-              <th style="color: #f0f0f0;">Canal</th>
-              <th style="color: #f0f0f0;">Audiencia</th>
+              <th style="color: #f0f0f0; border: 1px solid black;">Canal</th>
+              <th style="color: #f0f0f0; border: 1px solid black;">Audiência</th>
             </tr>
           </tbody>
         </table>
@@ -97,7 +97,7 @@
       <!--<button onclick="adicionarLinhaManual">+ Adicionar Linha Manual</button>-->
     </div>
 
-  <canvas id="graficoAudiencia" width="800" height="200"></canvas>
+  <canvas id="graficoAudiencia"></canvas>
 
 
   <script src="scripts/inline.js" defer></script>

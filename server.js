@@ -5,10 +5,14 @@ const cors = require('cors');
 const { timeout } = require('puppeteer');
 const { addHistorico, saveJSON, addHistoricoPrograma } = require('./scripts/utils/dataHandler')
 const app = express();
+const path = require('path');
 const { programas, whatsappConst } = require('./data/constants');
 
 app.use(cors());
 app.use(express.json());
+
+// Servir arquivos estáticos, como audiencia.html
+app.use(express.static(path.join(__dirname)));
 
 let historico = [];
 let historicoICL = [];
@@ -309,7 +313,7 @@ app.post('/api/raspar', async (req, res) => {
 
   const cluster = await Cluster.launch({
     concurrency: Cluster.CONCURRENCY_PAGE,  // ou BROWSER para isolamento total
-    maxConcurrency: 3,
+    maxConcurrency: 2,
     puppeteerOptions: {
       headless: false,
       userDataDir: './tmp/session',
