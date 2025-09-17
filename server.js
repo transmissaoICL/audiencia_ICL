@@ -41,40 +41,36 @@ async function rasparYouTube(page, link) {
   let viewers = 0;
 
   try {
-    await page.goto(link, { waitUntil: 'domcontentloaded', timeout: 60000 });
+    await page.goto(link, { waitUntil: 'networkidle2', timeout: 60000 });
 
-    // Nome do canal (via ytd-channel-name)
+    // Nome do canal
     try {
       const seletor = '#channel-name a';
-      await page.waitForSelector(seletor, { timeout: 60000 });
+      await page.waitForSelector(seletor, { timeout: 10000 });
       canal = await page.$eval(seletor, el => el.textContent.trim());
     } catch {
       console.warn(`Canal YouTube não encontrado via #channel-name. Link: ${link}`);
     }
 
-    // Viewers (ao vivo)
+    // Viewers
     try {
-      const spans = await page.$$('span');
-      for (const span of spans) {
-        let text = await (await span.getProperty('textContent')).jsonValue();
-        if (text.includes('assistindo agora')) {
-          let match = text.match(/([\d\.,]+)/);
-          if (match) {
-            viewers = parseInt(match[1].replace(/\./g, '').replace(',', ''));
-            break;
-          }
-        }
+      await page.waitForSelector(".view-count", { timeout: 5000 });
+
+      const audiencia = await page.evaluate(() => document.querySelector(".view-count").outerText);
+
+      if (audiencia.match("aguardando") || audiencia.match("waiting") || audiencia.match("vizualizações")){
+        console.warn("Live não iniciada");
       }
+      viewers = parseInt(audiencia.split(" ")[0].replace(",", ""));
+      } catch (err){
+        console.warn(`Falha ao pegar audiencia: ${err.message}`);
+      }
+
     } catch (err) {
-      console.warn('Viewers YouTube não encontrado:', err.message);
+      console.warn(`Falha ao acessar YouTube: ${err.message}`);
     }
-
-  } catch (err) {
-    throw new Error(`Falha ao acessar YouTube: ${err.message}`);
+    return { plataforma: 'YouTube', canal, viewers, link };  
   }
-
-  return { plataforma: 'YouTube', canal, viewers, link };
-}
 
 
 async function rasparFacebook(page, link) {
@@ -186,7 +182,7 @@ async function rasparInstagram(page, link) {
   let canal = '-';
   let viewers = 0;
 
-  await page.goto('https://www.instagram.com/accounts/login/', { waitUntil: 'networkidle2' });
+  await page.goto('https://www.instagram.com/', { waitUntil: 'networkidle2' });
 
   try {
     // Aguarda especificamente os campos certos
@@ -227,11 +223,10 @@ async function rasparInstagram(page, link) {
     if (!urlOk) await page.goto(link, { waitUntil: 'networkidle2' });
 
     await sleep(1000);
-
     const buttons = await page.$$('button');
     for (const btn of buttons) {
       const text = await (await btn.getProperty('innerText')).jsonValue();
-      if (text.includes('Toque para reproduzir')) {
+      if (text.includes('Tap')) {
         await btn.click();
         break;
       }
@@ -239,11 +234,28 @@ async function rasparInstagram(page, link) {
 
     await sleep(1000);
     // Espera contador aparecer
-    await page.waitForSelector(`svg[aria-label="${instaElements.aria_label}"]`, { timeout: 1000 });
+    try {
+      await page.waitForSelector(`svg[aria-label="${instaElements.aria_label}"]`, { timeout: 1000 });
+    }
+
+    catch {
+      const profilePage = link.slice(0, -5);
+      await page.goto(profilePage, { waitUntil: 'networkidle2' });
+      const clickable = await page.$$('span');
+      for (const spans of clickable){
+        const spanText = await (await spans.getProperty('innerText')).jsonValue();
+        if ( spanText.includes('LIVE')){
+          await spans.click();
+          break;
+        }
+      }
+    }
+
+    await sleep(1000);
 
     // Pega número de viewers
     const rawViewers = await page.evaluate((ariaLabel) => {
-      const span = document.querySelector(`svg[aria-label="${ariaLabel}"]`)?.parentNode?.parentNode?.querySelector('span.html-span');
+      const span = document.querySelector('span.html-span');
       return span?.outerText || '0';
     }, instaElements.aria_label);
 
@@ -287,7 +299,7 @@ async function sendWhatsapp(data, linksICL, programaICL, teste){
     method: 'POST',
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify({ 
-      grupo: whatsappConst['grupoTeste'],
+      grupo: grupoWhatsapp,
       audiencia: `${ JSON.stringify(historicoICL) }`,
       programa: programaICL })
     })
@@ -313,14 +325,14 @@ app.post('/api/raspar', async (req, res) => {
 
   const cluster = await Cluster.launch({
     concurrency: Cluster.CONCURRENCY_PAGE,  // ou BROWSER para isolamento total
-    maxConcurrency: 2,
+    maxConcurrency: 7,
     puppeteerOptions: {
       headless: false,
       userDataDir: './tmp/session',
-      args: ['--start-maximized', '--no-sandbox', '--disable-setuid-sandbox', '--window-position=-32000,-32000',]
+      args: ['--start-maximized', '--no-sandbox', '--disable-setuid-sandbox',]
     }
   });
-
+// '--window-position=-32000,-32000',
   await cluster.task(async ({ page, data: { link } }) => {
     let resultado;
     if (link.includes('youtube.com')) {
@@ -353,6 +365,7 @@ app.post('/api/raspar', async (req, res) => {
   historicoICL = addHistoricoPrograma(resultados, historicoICL, programa, timestamp);
 
   try{
+    console.log(historico);
     sendWhatsapp(historico, linksICL, programaAtual, teste);
   }
   

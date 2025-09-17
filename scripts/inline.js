@@ -58,7 +58,7 @@ myToggle.addEventListener('change', function() {
     if (scrapping){
       interval = setInterval(() => {
         consultarAudiencias();
-      }, 240000);
+      }, 243000);
       console.log('Server ligado. Aguardando Scrapping');
     }
     else {
