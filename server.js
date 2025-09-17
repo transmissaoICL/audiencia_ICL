@@ -50,7 +50,7 @@ async function rasparYouTube(page, link) {
       canal = await page.$eval(seletor, el => el.textContent.trim());
     } catch {
       console.warn(`Canal YouTube não encontrado via #channel-name. Link: ${link}`);
-    }
+    }    
 
     // Viewers
     try {
@@ -61,7 +61,9 @@ async function rasparYouTube(page, link) {
       if (audiencia.match("aguardando") || audiencia.match("waiting") || audiencia.match("vizualizações")){
         console.warn("Live não iniciada");
       }
-      viewers = parseInt(audiencia.split(" ")[0].replace(",", ""));
+      if (audiencia.match("assistindo") || audiencia.match("watching")){
+        viewers = parseInt(audiencia.split(" ")[0].replace(",", ""));
+      }
       } catch (err){
         console.warn(`Falha ao pegar audiencia: ${err.message}`);
       }
@@ -223,6 +225,7 @@ async function rasparInstagram(page, link) {
     if (!urlOk) await page.goto(link, { waitUntil: 'networkidle2' });
 
     await sleep(1000);
+    try{
     const buttons = await page.$$('button');
     for (const btn of buttons) {
       const text = await (await btn.getProperty('innerText')).jsonValue();
@@ -231,11 +234,7 @@ async function rasparInstagram(page, link) {
         break;
       }
     }
-
-    await sleep(1000);
-    // Espera contador aparecer
-    try {
-      await page.waitForSelector(`svg[aria-label="${instaElements.aria_label}"]`, { timeout: 1000 });
+      await sleep(1000);
     }
 
     catch {
@@ -254,7 +253,7 @@ async function rasparInstagram(page, link) {
     await sleep(1000);
 
     // Pega número de viewers
-    const rawViewers = await page.evaluate((ariaLabel) => {
+    const rawViewers = await page.evaluate(() => {
       const span = document.querySelector('span.html-span');
       return span?.outerText || '0';
     }, instaElements.aria_label);
@@ -329,7 +328,7 @@ app.post('/api/raspar', async (req, res) => {
     puppeteerOptions: {
       headless: false,
       userDataDir: './tmp/session',
-      args: ['--start-maximized', '--no-sandbox', '--disable-setuid-sandbox',]
+      args: ['--start-maximized', '--no-sandbox', '--disable-setuid-sandbox', '--window-position=-32000,-32000',]
     }
   });
 // '--window-position=-32000,-32000',
@@ -365,7 +364,6 @@ app.post('/api/raspar', async (req, res) => {
   historicoICL = addHistoricoPrograma(resultados, historicoICL, programa, timestamp);
 
   try{
-    console.log(historico);
     sendWhatsapp(historico, linksICL, programaAtual, teste);
   }
   
