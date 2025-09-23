@@ -215,39 +215,20 @@ async function rasparInstagram(page, link) {
   }
 
   try {
-
-    // Acessa o link da live
-    await page.goto(link, { waitUntil: 'networkidle2' });
-   
-    
-    // Garante que está na live
-    const urlOk = await page.evaluate(() => location.href.includes('/live'));
-    if (!urlOk) await page.goto(link, { waitUntil: 'networkidle2' });
-
-    await sleep(1000);
     try{
-    const buttons = await page.$$('button');
-    for (const btn of buttons) {
-      const text = await (await btn.getProperty('innerText')).jsonValue();
-      if (text.includes('Tap')) {
-        await btn.click();
-        break;
-      }
-    }
-      await sleep(1000);
-    }
-
-    catch {
       const profilePage = link.slice(0, -5);
       await page.goto(profilePage, { waitUntil: 'networkidle2' });
+      await sleep(1000);
       const clickable = await page.$$('span');
       for (const spans of clickable){
         const spanText = await (await spans.getProperty('innerText')).jsonValue();
-        if ( spanText.includes('LIVE')){
+        if ( spanText.includes('LIVE') || spanText.includes('AO VIVO')){
           await spans.click();
           break;
         }
       }
+    } catch(err){
+      console.warn(`Erro ao entrar na Live: ${err.message}`);
     }
 
     await sleep(1000);
@@ -324,7 +305,7 @@ app.post('/api/raspar', async (req, res) => {
 
   const cluster = await Cluster.launch({
     concurrency: Cluster.CONCURRENCY_PAGE,  // ou BROWSER para isolamento total
-    maxConcurrency: 7,
+    maxConcurrency: 2,
     puppeteerOptions: {
       headless: false,
       userDataDir: './tmp/session',
