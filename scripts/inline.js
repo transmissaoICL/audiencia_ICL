@@ -153,7 +153,7 @@ function atualizaTabela(data, programa){
         let linha = document.createElement('tr');
         let numberAudiencia = entrie[1].toLocaleString('de-DE');
         linha.innerHTML = `
-        <td class="cell-concorrencia" >${listaDesordenada.indexOf(entrie) + 1}</td>
+        <td class="cell-concorrencia" ><b>${listaDesordenada.indexOf(entrie) + 1}</b></td>
         <td class="cell-concorrencia">${entrie[0]}</td>
         <td class="cell-numero">${numberAudiencia}</td>`
         ;
