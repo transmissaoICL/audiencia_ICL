@@ -108,7 +108,7 @@ function atualizaTabela(data, programa){
     let canaisICL = textareaICL.value.trim().split("\n").filter(Boolean);
     let tbody = document.getElementById('tabelaBody');
     tbody.innerHTML = `
-        <tr  class="row-concorrencia" style="background-color: #099ace;">
+        <tr  class="row-concorrencia row-header" style="background-color: #099ace;">
         <th style="color: #f0f0f0;"></th>
         <th id="date" style="color: #f0f0f0; border: 1px solid black"></th>
         <th id="time" style="color: #f0f0f0; border: 1px solid black"></th>
