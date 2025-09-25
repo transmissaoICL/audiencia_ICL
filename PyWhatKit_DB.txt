@@ -15677,3 +15677,13 @@ Group ID: KANTowb8uZiLll43vXJMq8
 Message: *25\09\2025 - ROLE ICL - Audiencia:* Facebook: 60 - Youtube: 11647 - Instagram: 202 Total: 11909
 >>>>>>> ad9bfc8d96803d37aa6c57bccbd2b6682486f900
 --------------------
+Date: 25/9/2025
+Time: 14:1
+Group ID: JEOSMN0MLKf50GPwhZ1DPO
+Message: *25\09\2025 - Teste Tabela - Audiencia:* Facebook: 0 - Youtube: 0 - Instagram: 0 Total: 0
+--------------------
+Date: 25/9/2025
+Time: 14:7
+Group ID: JEOSMN0MLKf50GPwhZ1DPO
+Message: *25\09\2025 - Teste Tabela - Audiencia:* Facebook: 0 - Youtube: 0 - Instagram: 0 Total: 0
+--------------------
