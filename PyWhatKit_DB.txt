@@ -15310,8 +15310,370 @@ Time: 12:20
 Group ID: KANTowb8uZiLll43vXJMq8
 Message: *23\09\2025 - ROLE ICL - Audiencia:* Facebook: 98 - Youtube: 9138 - Instagram: 72 Total: 9308
 --------------------
+<<<<<<< HEAD
 Date: 24/9/2025
 Time: 14:29
 Group ID: JEOSMN0MLKf50GPwhZ1DPO
 Message: *24\09\2025 - Teste Audiencia Modular - Audiencia:* Facebook: 0 - Youtube: 2408 - Instagram: 0 Total: 2408
+=======
+Date: 25/9/2025
+Time: 7:22
+Group ID: KANTowb8uZiLll43vXJMq8
+Message: *25\09\2025 - DESPERTA - Audiencia:* Facebook: 174 - Youtube: 16843 - Instagram: 454 Total: 17471
+--------------------
+Date: 25/9/2025
+Time: 7:26
+Group ID: KANTowb8uZiLll43vXJMq8
+Message: *25\09\2025 - DESPERTA - Audiencia:* Facebook: 289 - Youtube: 19071 - Instagram: 523 Total: 19883
+--------------------
+Date: 25/9/2025
+Time: 7:42
+Group ID: KANTowb8uZiLll43vXJMq8
+Message: *25\09\2025 - DESPERTA - Audiencia:* Facebook: 427 - Youtube: 25202 - Instagram: 606 Total: 26235
+--------------------
+Date: 25/9/2025
+Time: 7:50
+Group ID: KANTowb8uZiLll43vXJMq8
+Message: *25\09\2025 - DESPERTA - Audiencia:* Facebook: 420 - Youtube: 27781 - Instagram: 702 Total: 28903
+--------------------
+Date: 25/9/2025
+Time: 7:58
+Group ID: KANTowb8uZiLll43vXJMq8
+Message: *25\09\2025 - DESPERTA - Audiencia:* Facebook: 345 - Youtube: 29672 - Instagram: 674 Total: 30691
+--------------------
+Date: 25/9/2025
+Time: 8:2
+Group ID: KANTowb8uZiLll43vXJMq8
+Message: *25\09\2025 - ICL NOTICIAS 1 - Audiencia:* Facebook: 177 - Youtube: 30744 - Instagram: 535 Total: 31456
+--------------------
+Date: 25/9/2025
+Time: 8:6
+Group ID: KANTowb8uZiLll43vXJMq8
+Message: *25\09\2025 - ICL NOTICIAS 1 - Audiencia:* Facebook: 394 - Youtube: 30036 - Instagram: 563 Total: 30993
+--------------------
+Date: 25/9/2025
+Time: 8:10
+Group ID: KANTowb8uZiLll43vXJMq8
+Message: *25\09\2025 - ICL NOTICIAS 1 - Audiencia:* Facebook: 437 - Youtube: 33326 - Instagram: 401 Total: 34164
+--------------------
+Date: 25/9/2025
+Time: 8:14
+Group ID: KANTowb8uZiLll43vXJMq8
+Message: *25\09\2025 - ICL NOTICIAS 1 - Audiencia:* Facebook: 393 - Youtube: 35468 - Instagram: 664 Total: 36525
+--------------------
+Date: 25/9/2025
+Time: 8:18
+Group ID: KANTowb8uZiLll43vXJMq8
+Message: *25\09\2025 - ICL NOTICIAS 1 - Audiencia:* Facebook: 186 - Youtube: 36617 - Instagram: 404 Total: 37207
+--------------------
+Date: 25/9/2025
+Time: 8:22
+Group ID: KANTowb8uZiLll43vXJMq8
+Message: *25\09\2025 - ICL NOTICIAS 1 - Audiencia:* Facebook: 464 - Youtube: 38331 - Instagram: 597 Total: 39392
+--------------------
+Date: 25/9/2025
+Time: 8:26
+Group ID: KANTowb8uZiLll43vXJMq8
+Message: *25\09\2025 - ICL NOTICIAS 1 - Audiencia:* Facebook: 428 - Youtube: 39705 - Instagram: 752 Total: 40885
+--------------------
+Date: 25/9/2025
+Time: 8:30
+Group ID: KANTowb8uZiLll43vXJMq8
+Message: *25\09\2025 - ICL NOTICIAS 1 - Audiencia:* Facebook: 476 - Youtube: 41122 - Instagram: 761 Total: 42359
+--------------------
+Date: 25/9/2025
+Time: 8:34
+Group ID: KANTowb8uZiLll43vXJMq8
+Message: *25\09\2025 - ICL NOTICIAS 1 - Audiencia:* Facebook: 423 - Youtube: 41457 - Instagram: 741 Total: 42621
+--------------------
+Date: 25/9/2025
+Time: 8:39
+Group ID: KANTowb8uZiLll43vXJMq8
+Message: *25\09\2025 - ICL NOTICIAS 1 - Audiencia:* Facebook: 457 - Youtube: 42476 - Instagram: 788 Total: 43721
+--------------------
+Date: 25/9/2025
+Time: 8:42
+Group ID: KANTowb8uZiLll43vXJMq8
+Message: *25\09\2025 - ICL NOTICIAS 1 - Audiencia:* Facebook: 436 - Youtube: 43249 - Instagram: 451 Total: 44136
+--------------------
+Date: 25/9/2025
+Time: 8:46
+Group ID: KANTowb8uZiLll43vXJMq8
+Message: *25\09\2025 - ICL NOTICIAS 1 - Audiencia:* Facebook: 437 - Youtube: 43310 - Instagram: 799 Total: 44546
+--------------------
+Date: 25/9/2025
+Time: 8:50
+Group ID: KANTowb8uZiLll43vXJMq8
+Message: *25\09\2025 - ICL NOTICIAS 1 - Audiencia:* Facebook: 290 - Youtube: 43399 - Instagram: 786 Total: 44475
+--------------------
+Date: 25/9/2025
+Time: 8:54
+Group ID: KANTowb8uZiLll43vXJMq8
+Message: *25\09\2025 - ICL NOTICIAS 1 - Audiencia:* Facebook: 190 - Youtube: 43198 - Instagram: 791 Total: 44179
+--------------------
+Date: 25/9/2025
+Time: 8:58
+Group ID: KANTowb8uZiLll43vXJMq8
+Message: *25\09\2025 - ICL NOTICIAS 1 - Audiencia:* Facebook: 424 - Youtube: 42816 - Instagram: 607 Total: 43847
+--------------------
+Date: 25/9/2025
+Time: 9:3
+Group ID: KANTowb8uZiLll43vXJMq8
+Message: *25\09\2025 - ICL NOTICIAS 1 - Audiencia:* Facebook: 279 - Youtube: 42260 - Instagram: 453 Total: 42992
+--------------------
+Date: 25/9/2025
+Time: 9:7
+Group ID: KANTowb8uZiLll43vXJMq8
+Message: *25\09\2025 - ICL NOTICIAS 1 - Audiencia:* Facebook: 277 - Youtube: 42184 - Instagram: 694 Total: 43155
+--------------------
+Date: 25/9/2025
+Time: 9:11
+Group ID: KANTowb8uZiLll43vXJMq8
+Message: *25\09\2025 - ICL NOTICIAS 1 - Audiencia:* Facebook: 448 - Youtube: 41257 - Instagram: 659 Total: 42364
+--------------------
+Date: 25/9/2025
+Time: 9:15
+Group ID: KANTowb8uZiLll43vXJMq8
+Message: *25\09\2025 - ICL NOTICIAS 1 - Audiencia:* Facebook: 248 - Youtube: 40584 - Instagram: 650 Total: 41482
+--------------------
+Date: 25/9/2025
+Time: 9:19
+Group ID: KANTowb8uZiLll43vXJMq8
+Message: *25\09\2025 - ICL NOTICIAS 1 - Audiencia:* Facebook: 258 - Youtube: 41061 - Instagram: 665 Total: 41984
+--------------------
+Date: 25/9/2025
+Time: 9:23
+Group ID: KANTowb8uZiLll43vXJMq8
+Message: *25\09\2025 - ICL NOTICIAS 1 - Audiencia:* Facebook: 253 - Youtube: 40968 - Instagram: 656 Total: 41877
+--------------------
+Date: 25/9/2025
+Time: 9:27
+Group ID: KANTowb8uZiLll43vXJMq8
+Message: *25\09\2025 - ICL NOTICIAS 1 - Audiencia:* Facebook: 376 - Youtube: 40415 - Instagram: 625 Total: 41416
+--------------------
+Date: 25/9/2025
+Time: 9:30
+Group ID: KANTowb8uZiLll43vXJMq8
+Message: *25\09\2025 - ICL NOTICIAS 1 - Audiencia:* Facebook: 255 - Youtube: 41193 - Instagram: 363 Total: 41811
+--------------------
+Date: 25/9/2025
+Time: 9:35
+Group ID: KANTowb8uZiLll43vXJMq8
+Message: *25\09\2025 - ICL NOTICIAS 1 - Audiencia:* Facebook: 246 - Youtube: 41080 - Instagram: 348 Total: 41674
+--------------------
+Date: 25/9/2025
+Time: 9:39
+Group ID: KANTowb8uZiLll43vXJMq8
+Message: *25\09\2025 - ICL NOTICIAS 1 - Audiencia:* Facebook: 397 - Youtube: 40379 - Instagram: 585 Total: 41361
+--------------------
+Date: 25/9/2025
+Time: 9:43
+Group ID: KANTowb8uZiLll43vXJMq8
+Message: *25\09\2025 - ICL NOTICIAS 1 - Audiencia:* Facebook: 397 - Youtube: 39684 - Instagram: 502 Total: 40583
+--------------------
+Date: 25/9/2025
+Time: 9:47
+Group ID: KANTowb8uZiLll43vXJMq8
+Message: *25\09\2025 - ICL NOTICIAS 1 - Audiencia:* Facebook: 393 - Youtube: 39363 - Instagram: 338 Total: 40094
+--------------------
+Date: 25/9/2025
+Time: 9:50
+Group ID: KANTowb8uZiLll43vXJMq8
+Message: *25\09\2025 - ICL NOTICIAS 1 - Audiencia:* Facebook: 383 - Youtube: 38927 - Instagram: 162 Total: 39472
+--------------------
+Date: 25/9/2025
+Time: 9:55
+Group ID: KANTowb8uZiLll43vXJMq8
+Message: *25\09\2025 - ICL NOTICIAS 1 - Audiencia:* Facebook: 145 - Youtube: 37972 - Instagram: 323 Total: 38440
+--------------------
+Date: 25/9/2025
+Time: 9:59
+Group ID: KANTowb8uZiLll43vXJMq8
+Message: *25\09\2025 - ICL NOTICIAS 1 - Audiencia:* Facebook: 366 - Youtube: 37866 - Instagram: 539 Total: 38771
+--------------------
+Date: 25/9/2025
+Time: 10:3
+Group ID: KANTowb8uZiLll43vXJMq8
+Message: *25\09\2025 - ICL NOTICIAS 1 - Audiencia:* Facebook: 332 - Youtube: 36924 - Instagram: 522 Total: 37778
+--------------------
+Date: 25/9/2025
+Time: 10:6
+Group ID: KANTowb8uZiLll43vXJMq8
+Message: *25\09\2025 - ICL NOTICIAS 1 - Audiencia:* Facebook: 250 - Youtube: 36392 - Instagram: 564 Total: 37206
+--------------------
+Date: 25/9/2025
+Time: 10:11
+Group ID: KANTowb8uZiLll43vXJMq8
+Message: *25\09\2025 - ICL NOTICIAS 1 - Audiencia:* Facebook: 328 - Youtube: 35919 - Instagram: 546 Total: 36793
+--------------------
+Date: 25/9/2025
+Time: 10:15
+Group ID: KANTowb8uZiLll43vXJMq8
+Message: *25\09\2025 - ICL NOTICIAS 1 - Audiencia:* Facebook: 339 - Youtube: 35734 - Instagram: 577 Total: 36650
+--------------------
+Date: 25/9/2025
+Time: 10:18
+Group ID: KANTowb8uZiLll43vXJMq8
+Message: *25\09\2025 - ICL NOTICIAS 1 - Audiencia:* Facebook: 298 - Youtube: 35577 - Instagram: 221 Total: 36096
+--------------------
+Date: 25/9/2025
+Time: 10:22
+Group ID: KANTowb8uZiLll43vXJMq8
+Message: *25\09\2025 - ICL NOTICIAS 1 - Audiencia:* Facebook: 76 - Youtube: 31699 - Instagram: 438 Total: 32213
+--------------------
+Date: 25/9/2025
+Time: 10:26
+Group ID: KANTowb8uZiLll43vXJMq8
+Message: *25\09\2025 - ICL NOTICIAS 1 - Audiencia:* Facebook: 264 - Youtube: 30553 - Instagram: 0 Total: 30817
+--------------------
+Date: 25/9/2025
+Time: 10:31
+Group ID: KANTowb8uZiLll43vXJMq8
+Message: *25\09\2025 - ICL NOTICIAS 1 - Audiencia:* Facebook: 239 - Youtube: 29289 - Instagram: 115 Total: 29643
+--------------------
+Date: 25/9/2025
+Time: 10:35
+Group ID: KANTowb8uZiLll43vXJMq8
+Message: *25\09\2025 - EM DETALHES - Audiencia:* Facebook: 174 - Youtube: 23750 - Instagram: 140 Total: 24064
+--------------------
+Date: 25/9/2025
+Time: 10:38
+Group ID: KANTowb8uZiLll43vXJMq8
+Message: *25\09\2025 - EM DETALHES - Audiencia:* Facebook: 137 - Youtube: 21653 - Instagram: 29 Total: 21819
+--------------------
+Date: 25/9/2025
+Time: 10:43
+Group ID: KANTowb8uZiLll43vXJMq8
+Message: *25\09\2025 - EM DETALHES - Audiencia:* Facebook: 142 - Youtube: 20401 - Instagram: 154 Total: 20697
+--------------------
+Date: 25/9/2025
+Time: 10:46
+Group ID: KANTowb8uZiLll43vXJMq8
+Message: *25\09\2025 - EM DETALHES - Audiencia:* Facebook: 51 - Youtube: 19457 - Instagram: 143 Total: 19651
+--------------------
+Date: 25/9/2025
+Time: 10:50
+Group ID: KANTowb8uZiLll43vXJMq8
+Message: *25\09\2025 - EM DETALHES - Audiencia:* Facebook: 128 - Youtube: 18572 - Instagram: 145 Total: 18845
+--------------------
+Date: 25/9/2025
+Time: 10:55
+Group ID: KANTowb8uZiLll43vXJMq8
+Message: *25\09\2025 - EM DETALHES - Audiencia:* Facebook: 73 - Youtube: 17793 - Instagram: 157 Total: 18023
+--------------------
+Date: 25/9/2025
+Time: 10:58
+Group ID: KANTowb8uZiLll43vXJMq8
+Message: *25\09\2025 - EM DETALHES - Audiencia:* Facebook: 63 - Youtube: 17108 - Instagram: 196 Total: 17367
+--------------------
+Date: 25/9/2025
+Time: 11:1
+Group ID: JEOSMN0MLKf50GPwhZ1DPO
+Message: *25\09\2025 - Teste Multitasking - Audiencia:* Facebook: 0 - Youtube: 75453 - Instagram: 0 Total: 75453
+--------------------
+Date: 25/9/2025
+Time: 11:3
+Group ID: KANTowb8uZiLll43vXJMq8
+Message: *25\09\2025 - EM DETALHES - Audiencia:* Facebook: 103 - Youtube: 15636 - Instagram: 132 Total: 15871
+--------------------
+Date: 25/9/2025
+Time: 11:5
+Group ID: JEOSMN0MLKf50GPwhZ1DPO
+Message: *25\09\2025 - Teste Multitasking - Audiencia:* Facebook: 0 - Youtube: 77425 - Instagram: 0 Total: 77425
+--------------------
+Date: 25/9/2025
+Time: 11:6
+Group ID: KANTowb8uZiLll43vXJMq8
+Message: *25\09\2025 - ICL MERCADO E INVESTIMENTOS - Audiencia:* Facebook: 21 - Youtube: 14952 - Instagram: 128 Total: 15101
+--------------------
+Date: 25/9/2025
+Time: 11:9
+Group ID: JEOSMN0MLKf50GPwhZ1DPO
+Message: *25\09\2025 - Teste Multitasking - Audiencia:* Facebook: 0 - Youtube: 77878 - Instagram: 0 Total: 77878
+--------------------
+Date: 25/9/2025
+Time: 11:10
+Group ID: KANTowb8uZiLll43vXJMq8
+Message: *25\09\2025 - ICL MERCADO E INVESTIMENTOS - Audiencia:* Facebook: 35 - Youtube: 14314 - Instagram: 104 Total: 14453
+--------------------
+Date: 25/9/2025
+Time: 11:13
+Group ID: JEOSMN0MLKf50GPwhZ1DPO
+Message: *25\09\2025 - Teste Multitasking - Audiencia:* Facebook: 0 - Youtube: 80177 - Instagram: 0 Total: 80177
+--------------------
+Date: 25/9/2025
+Time: 11:14
+Group ID: KANTowb8uZiLll43vXJMq8
+Message: *25\09\2025 - ICL MERCADO E INVESTIMENTOS - Audiencia:* Facebook: 56 - Youtube: 13849 - Instagram: 88 Total: 13993
+--------------------
+Date: 25/9/2025
+Time: 11:17
+Group ID: JEOSMN0MLKf50GPwhZ1DPO
+Message: *25\09\2025 - Teste Multitasking - Audiencia:* Facebook: 0 - Youtube: 87792 - Instagram: 0 Total: 87792
+--------------------
+Date: 25/9/2025
+Time: 11:18
+Group ID: KANTowb8uZiLll43vXJMq8
+Message: *25\09\2025 - ICL MERCADO E INVESTIMENTOS - Audiencia:* Facebook: 72 - Youtube: 13410 - Instagram: 100 Total: 13582
+--------------------
+Date: 25/9/2025
+Time: 11:21
+Group ID: JEOSMN0MLKf50GPwhZ1DPO
+Message: *25\09\2025 - Teste Multitasking - Audiencia:* Facebook: 0 - Youtube: 92396 - Instagram: 0 Total: 92396
+--------------------
+Date: 25/9/2025
+Time: 11:22
+Group ID: KANTowb8uZiLll43vXJMq8
+Message: *25\09\2025 - ICL MERCADO E INVESTIMENTOS - Audiencia:* Facebook: 30 - Youtube: 13103 - Instagram: 113 Total: 13246
+--------------------
+Date: 25/9/2025
+Time: 11:25
+Group ID: JEOSMN0MLKf50GPwhZ1DPO
+Message: *25\09\2025 - Teste Multitasking - Audiencia:* Facebook: 0 - Youtube: 95889 - Instagram: 0 Total: 95889
+--------------------
+Date: 25/9/2025
+Time: 11:26
+Group ID: KANTowb8uZiLll43vXJMq8
+Message: *25\09\2025 - ICL MERCADO E INVESTIMENTOS - Audiencia:* Facebook: 39 - Youtube: 12820 - Instagram: 112 Total: 12971
+--------------------
+Date: 25/9/2025
+Time: 11:29
+Group ID: JEOSMN0MLKf50GPwhZ1DPO
+Message: *25\09\2025 - Teste Multitasking - Audiencia:* Facebook: 0 - Youtube: 98044 - Instagram: 0 Total: 98044
+--------------------
+Date: 25/9/2025
+Time: 11:30
+Group ID: KANTowb8uZiLll43vXJMq8
+Message: *25\09\2025 - ICL MERCADO E INVESTIMENTOS - Audiencia:* Facebook: 73 - Youtube: 12679 - Instagram: 107 Total: 12859
+--------------------
+Date: 25/9/2025
+Time: 11:33
+Group ID: JEOSMN0MLKf50GPwhZ1DPO
+Message: *25\09\2025 - Teste Multitasking - Audiencia:* Facebook: 0 - Youtube: 100452 - Instagram: 0 Total: 100452
+--------------------
+Date: 25/9/2025
+Time: 11:35
+Group ID: KANTowb8uZiLll43vXJMq8
+Message: *25\09\2025 - ROLE ICL - Audiencia:* Facebook: 69 - Youtube: 12427 - Instagram: 96 Total: 12592
+--------------------
+Date: 25/9/2025
+Time: 11:37
+Group ID: JEOSMN0MLKf50GPwhZ1DPO
+Message: *25\09\2025 - Teste Multitasking - Audiencia:* Facebook: 0 - Youtube: 100791 - Instagram: 0 Total: 100791
+--------------------
+Date: 25/9/2025
+Time: 11:38
+Group ID: KANTowb8uZiLll43vXJMq8
+Message: *25\09\2025 - ROLE ICL - Audiencia:* Facebook: 38 - Youtube: 11894 - Instagram: 142 Total: 12074
+--------------------
+Date: 25/9/2025
+Time: 11:43
+Group ID: KANTowb8uZiLll43vXJMq8
+Message: *25\09\2025 - ROLE ICL - Audiencia:* Facebook: 56 - Youtube: 11671 - Instagram: 180 Total: 11907
+--------------------
+Date: 25/9/2025
+Time: 11:47
+Group ID: KANTowb8uZiLll43vXJMq8
+Message: *25\09\2025 - ROLE ICL - Audiencia:* Facebook: 60 - Youtube: 11647 - Instagram: 202 Total: 11909
+>>>>>>> ad9bfc8d96803d37aa6c57bccbd2b6682486f900
 --------------------

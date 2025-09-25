@@ -3,7 +3,7 @@ const { Cluster } = require('puppeteer-cluster');
 const express = require('express');
 const cors = require('cors');
 const { timeout } = require('puppeteer');
-const { addHistorico, saveJSON, addHistoricoPrograma } = require('./scripts/utils/dataHandler')
+const { addHistorico, saveJSON, addHistoricoPrograma, historicoObj } = require('./scripts/utils/dataHandler')
 const app = express();
 const path = require('path');
 const { programas, whatsappConst } = require('./data/constants');
@@ -14,7 +14,6 @@ app.use(express.json());
 // Servir arquivos estáticos, como audiencia.html
 app.use(express.static(path.join(__dirname)));
 
-let historico = [];
 let historicoICL = [];
 
 let historicoTotal =[];
@@ -290,8 +289,13 @@ async function sendWhatsapp(data, linksICL, programaICL, teste){
 
 
 app.post('/api/raspar', async (req, res) => {
-  let { links, linksICL, programa, nomePrograma, teste } = req.body;
+  let { links, linksICL, programa, nomePrograma, teste, historico } = req.body;
   let resultados = [];
+  console.log(historico);
+  if (historico === undefined){
+    historico = new historicoObj();
+  }
+  console.log(historico);
 
   let programaAtual;
 
@@ -340,12 +344,12 @@ app.post('/api/raspar', async (req, res) => {
 
   let timestamp = new Date().toLocaleTimeString();
 
-  historico = addHistorico(historico, resultados, timestamp);
+  historico.resultados = addHistorico(historico.resultados, resultados, timestamp);
 
   historicoICL = addHistoricoPrograma(resultados, historicoICL, programa, timestamp);
 
   try{
-    sendWhatsapp(historico, linksICL, programaAtual, teste);
+    sendWhatsapp(historico.resultados, linksICL, programaAtual, teste);
   }
   
   catch{
@@ -359,9 +363,10 @@ app.listen(3000, () => {
   console.log('Servidor rodando em http://localhost:3000');
 });
 
-setInterval(() => {
-    saveJSON(historico, historicoICL);
-}, 720000);
+
+//setInterval(() => {
+  //  saveJSON(historico, historicoICL);
+//}, 720000);
 
 
 process.on('SIGINT', async () => {

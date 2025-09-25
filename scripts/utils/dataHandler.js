@@ -1,5 +1,9 @@
 const { programas } = require('../../data/constants')
 
+function historicoObj() {
+    this.resultados = []
+}
+
 function audienciaTemporal() {
     this.canal = '',
     this.link = '',
@@ -110,4 +114,4 @@ function saveJSON(data, dataICL){
 
 
 
-module.exports = { addHistorico, saveJSON, addHistoricoPrograma };
+module.exports = { addHistorico, saveJSON, addHistoricoPrograma, historicoObj };
