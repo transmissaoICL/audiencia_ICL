@@ -10,7 +10,8 @@ button:hover { background-color: #0056b3; }
 .results th { background-color: #f5f5f5; }*/
  #canaisEspecificos { width: 100%; } 
 #tabelaConcorrencia { width: 80% } 
-.cell-concorrencia { border: 1px solid black; min-width: 20px;}
+.cell-concorrencia-ranking { border: 1px solid black; min-width: 30px; align-items: center;}
+.cell-concorrencia { border: 1px solid black; min-width: 200px;}
 .cell-numero { border: 1px solid black; text-align: center; min-width: 20px;}
 .remove-btn { background-color: #dc3545; color: white; border: none; padding: 0.25rem 0.5rem; border-radius: 4px; cursor: pointer; }
 .remove-btn:hover { background-color: #b02a37; }

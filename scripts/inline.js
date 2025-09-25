@@ -1,17 +1,9 @@
-let historico = [];
+let historicoModular = undefined;
 
 //TODO: Organizar o projeto mais modularmente
 //TODO: Achar uma forma de pegar a audiencia do Instagram
 //TODO: Fazer com que o bot consiga mandar a audiencia no grupo do Zap
 //TODO: Fazer o bot uma imagem da audiencia e mandar no grupo do zap
-
-function audienciaTemporal() {
-    this.canal = '',
-    this.link = '',
-    this.plataforma = '',
-    this.dadosHistoricos = {}
-};
-
 
 const coresPaleta = [
   '#1f77b4', '#ff7f0e', '#2ca02c', '#d62728', '#9467bd',
@@ -108,12 +100,12 @@ function atualizaTabela(data, programa){
     let canaisICL = textareaICL.value.trim().split("\n").filter(Boolean);
     let tbody = document.getElementById('tabelaBody');
     tbody.innerHTML = `
-        <tr  class="row-concorrencia" style="background-color: #0056b3;">
+        <tr  class="row-concorrencia" style="background-color: #099ace;">
         <th style="color: #f0f0f0;"></th>
         <th id="date" style="color: #f0f0f0; border: 1px solid black"></th>
         <th id="time" style="color: #f0f0f0; border: 1px solid black"></th>
         </tr>
-        <tr  class="row-concorrencia" style="background-color: #0056b3;">
+        <tr  class="row-concorrencia" style="background-color: #099ace;">
         <th style="color: #f0f0f0; border: 1px solid black">#</th>
         <th style="color: #f0f0f0; border: 1px solid black">Canal</th>
         <th style="color: #f0f0f0; border: 1px solid black">Audiencia</th>
@@ -153,7 +145,7 @@ function atualizaTabela(data, programa){
         let linha = document.createElement('tr');
         let numberAudiencia = entrie[1].toLocaleString('de-DE');
         linha.innerHTML = `
-        <td class="cell-concorrencia" ><b>${listaDesordenada.indexOf(entrie) + 1}</b></td>
+        <td class="cell-concorrencia-ranking" ><b>${listaDesordenada.indexOf(entrie) + 1}</b></td>
         <td class="cell-concorrencia">${entrie[0]}</td>
         <td class="cell-numero">${numberAudiencia}</td>`
         ;
@@ -227,16 +219,16 @@ async function consultarAudiencias() {
     let resposta = await fetch("/api/raspar", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ links, linksICL, programa, nomePrograma, teste })
+        body: JSON.stringify({ links, linksICL, programa, nomePrograma, teste, historicoModular})
     });
 
     const data = await resposta.json();
-    for (let i = 0; i < data.historico.length; i++) {
-        const res = data.historico[i];
-        const plataforma = res.plataforma;
-        const canal = res.canal;
-        let lastKeyConcorrencia = Object.keys(res.dadosHistoricos).at(-1);
-        const viewers = res.dadosHistoricos[lastKeyConcorrencia];
+    for (let i = 0; i < data.historico.resultados.length; i++) {
+        historicoModular = data.historico.resultados[i];
+        const plataforma = historicoModular.plataforma;
+        const canal = historicoModular.canal;
+        let lastKeyConcorrencia = Object.keys(historicoModular.dadosHistoricos).at(-1);
+        const viewers = historicoModular.dadosHistoricos[lastKeyConcorrencia];
 
         detalhesHtml += `<tr class=audiencia-line>
         <td class=audiencia-cell>${plataforma}</td>
@@ -260,7 +252,7 @@ async function consultarAudiencias() {
     // Reanexa linhas manuais
     linhasManuais.forEach(tr => tbody.appendChild(tr));
 
-    atualizarGraficoAudiencia(data.historico);
-    atualizaTabela(data.historico, data.programaAtual);
+    atualizarGraficoAudiencia(data.historico.resultados);
+    atualizaTabela(data.historico.resultados, data.programaAtual);
 }
 
