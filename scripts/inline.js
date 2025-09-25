@@ -225,10 +225,10 @@ async function consultarAudiencias() {
     const data = await resposta.json();
     for (let i = 0; i < data.historico.resultados.length; i++) {
         historicoModular = data.historico.resultados[i];
-        const plataforma = historicoModular.resultados.plataforma;
-        const canal = historicoModular.resultados.canal;
-        let lastKeyConcorrencia = Object.keys(historicoModular.resultados.dadosHistoricos).at(-1);
-        const viewers = historicoModular.resultados.dadosHistoricos[lastKeyConcorrencia];
+        const plataforma = historicoModular.plataforma;
+        const canal = historicoModular.canal;
+        let lastKeyConcorrencia = Object.keys(historicoModular.dadosHistoricos).at(-1);
+        const viewers = historicoModular.dadosHistoricos[lastKeyConcorrencia];
 
         detalhesHtml += `<tr class=audiencia-line>
         <td class=audiencia-cell>${plataforma}</td>
@@ -252,7 +252,7 @@ async function consultarAudiencias() {
     // Reanexa linhas manuais
     linhasManuais.forEach(tr => tbody.appendChild(tr));
 
-    atualizarGraficoAudiencia(data.historicoModular.resultados);
-    atualizaTabela(data.historicoModular.resultados, data.programaAtual);
+    atualizarGraficoAudiencia(data.historico.resultados);
+    atualizaTabela(data.historico.resultados, data.programaAtual);
 }
 

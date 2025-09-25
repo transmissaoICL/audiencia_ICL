@@ -363,9 +363,10 @@ app.listen(3000, () => {
   console.log('Servidor rodando em http://localhost:3000');
 });
 
-setInterval(() => {
-    saveJSON(historico, historicoICL);
-}, 720000);
+
+//setInterval(() => {
+  //  saveJSON(historico, historicoICL);
+//}, 720000);
 
 
 process.on('SIGINT', async () => {
