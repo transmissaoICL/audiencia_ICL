@@ -289,13 +289,15 @@ async function sendWhatsapp(data, linksICL, programaICL, teste){
 
 
 app.post('/api/raspar', async (req, res) => {
-  let { links, linksICL, programa, nomePrograma, teste, historico } = req.body;
+  let { links, linksICL, programa, nomePrograma, teste, historicoModular } = req.body;
   let resultados = [];
-  console.log(historico);
-  if (historico === undefined){
-    historico = new historicoObj();
+
+  console.log(historicoModular);
+
+  if (historicoModular === undefined){
+    historicoModular = new historicoObj();
   }
-  console.log(historico);
+  console.log(historicoModular);
 
   let programaAtual;
 
@@ -344,19 +346,19 @@ app.post('/api/raspar', async (req, res) => {
 
   let timestamp = new Date().toLocaleTimeString();
 
-  historico.resultados = addHistorico(historico.resultados, resultados, timestamp);
+  historicoModular.resultados = addHistorico(historicoModular.resultados, resultados, timestamp);
 
   historicoICL = addHistoricoPrograma(resultados, historicoICL, programa, timestamp);
 
   try{
-    sendWhatsapp(historico.resultados, linksICL, programaAtual, teste);
+    sendWhatsapp(historicoModular.resultados, linksICL, programaAtual, teste);
   }
   
   catch{
     console.log('Não foi possível mandar mensagem. Ligue a porta do whatsapp');
   }
 
-  res.json({ historico, programaAtual });
+  res.json({ historicoModular, programaAtual });
 });
 
 app.listen(3000, () => {

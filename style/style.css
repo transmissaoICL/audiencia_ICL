@@ -11,7 +11,7 @@ button:hover { background-color: #0056b3; }
 .row-header { padding: 20px }
  #canaisEspecificos { width: 100%; } 
 #tabelaConcorrencia { width: 80% } 
-.cell-concorrencia-ranking { border: 1px solid black; min-width: 30px; align-items: center;}
+.cell-concorrencia-ranking { border: 1px solid black; min-width: 40px; align-items: center;}
 .cell-concorrencia { border: 1px solid black; min-width: 200px;}
 .cell-numero { border: 1px solid black; text-align: center; min-width: 20px; align-content: center;}
 .remove-btn { background-color: #dc3545; color: white; border: none; padding: 0.25rem 0.5rem; border-radius: 4px; cursor: pointer; }
