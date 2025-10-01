@@ -100,7 +100,7 @@ function atualizaTabela(data, programa){
     let canaisICL = textareaICL.value.trim().split("\n").filter(Boolean);
     let tbody = document.getElementById('tabelaBody');
     tbody.innerHTML = `
-        <tr  class="row-concorrencia" style="background-color: #099ace;">
+        <tr  class="row-concorrencia row-header" style="background-color: #099ace;">
         <th style="color: #f0f0f0;"></th>
         <th id="date" style="color: #f0f0f0; border: 1px solid black"></th>
         <th id="time" style="color: #f0f0f0; border: 1px solid black"></th>
@@ -145,7 +145,7 @@ function atualizaTabela(data, programa){
         let linha = document.createElement('tr');
         let numberAudiencia = entrie[1].toLocaleString('de-DE');
         linha.innerHTML = `
-        <td class="cell-concorrencia-ranking" ><b>${listaDesordenada.indexOf(entrie) + 1}</b></td>
+        <td class="cell-concorrencia-ranking" ><b style: text-align: center>${listaDesordenada.indexOf(entrie) + 1}</b></td>
         <td class="cell-concorrencia">${entrie[0]}</td>
         <td class="cell-numero">${numberAudiencia}</td>`
         ;
@@ -223,21 +223,24 @@ async function consultarAudiencias() {
     });
 
     const data = await resposta.json();
-    for (let i = 0; i < data.historico.resultados.length; i++) {
-        historicoModular = data.historico.resultados[i];
-        const plataforma = historicoModular.plataforma;
-        const canal = historicoModular.canal;
-        let lastKeyConcorrencia = Object.keys(historicoModular.dadosHistoricos).at(-1);
-        const viewers = historicoModular.dadosHistoricos[lastKeyConcorrencia];
+    historicoModular = data.historicoModular;
+    historicoResultados = historicoModular.resultados;
 
-        detalhesHtml += `<tr class=audiencia-line>
-        <td class=audiencia-cell>${plataforma}</td>
-        <td>${canal}</td>
-        <td>${viewers}</td>
-        <td><button class='remove-btn' onclick='this.closest("tr").remove(); atualizarTotal();'>X</button></td>
-        </tr>`;
+    for (let i = 0; i < data.historicoModular.resultados.length; i++) {
+      resultado = historicoResultados[i];
+      const plataforma = resultado.plataforma;
+      const canal = resultado.canal;
+      let lastKeyConcorrencia = Object.keys(resultado.dadosHistoricos).at(-1);
+      const viewers = resultado.dadosHistoricos[lastKeyConcorrencia];
 
-        total += viewers;
+      detalhesHtml += `<tr class=audiencia-line>
+      <td class=audiencia-cell>${plataforma}</td>
+      <td>${canal}</td>
+      <td>${viewers}</td>
+      <td><button class='remove-btn' onclick='this.closest("tr").remove(); atualizarTotal();'>X</button></td>
+      </tr>`;
+
+      total += viewers;
     }
 
     const tbody = document.getElementById("auto");
@@ -252,7 +255,7 @@ async function consultarAudiencias() {
     // Reanexa linhas manuais
     linhasManuais.forEach(tr => tbody.appendChild(tr));
 
-    atualizarGraficoAudiencia(data.historico.resultados);
-    atualizaTabela(data.historico.resultados, data.programaAtual);
+    atualizarGraficoAudiencia(historicoResultados);
+    atualizaTabela(historicoResultados, data.programaAtual);
 }
 
