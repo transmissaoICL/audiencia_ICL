@@ -121,6 +121,8 @@ async function rasparFacebook(page, link) {
         return Array.from(spans).some(span => span.textContent && /^\d/.test(span.textContent.trim()));
       }, { timeout: 10000 });
 
+      await sleep(2000);
+
       const rawViewers = await page.evaluate(() => {
         const spans = Array.from(document.querySelectorAll('div[role="img"] span[dir="auto"]'));
         for (const span of spans) {
@@ -230,7 +232,7 @@ async function rasparInstagram(page, link) {
       console.warn(`Erro ao entrar na Live: ${err.message}`);
     }
 
-    await sleep(1000);
+    await sleep(3000);
 
     // Pega número de viewers
     const rawViewers = await page.evaluate(() => {
@@ -292,13 +294,10 @@ app.post('/api/raspar', async (req, res) => {
   let { links, linksICL, programa, nomePrograma, teste, historicoModular } = req.body;
   let resultados = [];
 
-  console.log(historicoModular);
-
   if (historicoModular === undefined){
     historicoModular = new historicoObj();
   }
-  console.log(historicoModular);
-
+  
   let programaAtual;
 
   if (programa === 13){

@@ -93,7 +93,7 @@ function atualizarGraficoAudiencia(historico) {
 }
 
 //ATUALIZA TABELA DE ACORDO COM OS DADOS HISTORICOS
-function atualizaTabela(data, programa){
+function atualizaTabela(data, programaAtual){
 
     let timestamp = new Date();
     let textareaICL = document.getElementById("urlsICL");
@@ -138,7 +138,7 @@ function atualizaTabela(data, programa){
 
     //TODO: Atualiza o nome na Tabela para o programa que está no ar no momento
     //COLOCA O VALOR DO ICL, ORDENA A LISTA E CRIA OS ITENS DA CABELA
-    listaDesordenada.push([programa, totalICL]);
+    listaDesordenada.push([programaAtual, totalICL]);
     listaDesordenada.sort((a, b) => b[1] - a[1]);
 
     for (let entrie of listaDesordenada){
