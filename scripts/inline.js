@@ -54,6 +54,7 @@ myToggle.addEventListener('change', function() {
       console.log('Server ligado. Aguardando Scrapping');
     }
     else {
+      alertMessageDisplay("Bot Pausado", "alert");
       clearInterval(interval);
       console.log('Server desligado');
     }
@@ -70,6 +71,19 @@ programaDropdown.addEventListener('change', function() {
   programa = Number(programaDropdown.value);
 })
 
+const alertMessage = document.getElementById("alertMessage");
+const alertCloseBtn = document.getElementById("closealert");
+
+function alertMessageHide(){
+  alertMessage.style.display = "none";
+}
+
+function alertMessageDisplay(message, alertType){
+  alertMessage.className = `alertmessage ${alertType}`;
+  alertMessage.innerText = message;
+  alertMessage.appendChild(alertCloseBtn);
+  alertMessage.style.display = "block";
+}
 
 function atualizarGraficoAudiencia(historico) {
   if (historico.length === 0) return;
@@ -96,6 +110,8 @@ function atualizarGraficoAudiencia(historico) {
 function atualizaTabela(data, programa){
 
     let timestamp = new Date();
+    let textareaConcorrencia = document.getElementById("urlsConcorrencia");
+    let canaisConcorrencia = textareaConcorrencia.value.trim().split("\n").filter(Boolean);
     let textareaICL = document.getElementById("urlsICL");
     let canaisICL = textareaICL.value.trim().split("\n").filter(Boolean);
     let tbody = document.getElementById('tabelaBody');
@@ -128,7 +144,7 @@ function atualizaTabela(data, programa){
             totalICL += res.dadosHistoricos[lastKeyICL];
         }
         //CASO NÃO, ELE ADICIONA AUTOMATICAMENTE EM UMA LISTA DESORDENADA PARA SER ORDENADA E COLOCADO NA TABELA FUTURAMENTE
-        else {
+        else if(canaisConcorrencia.find(a => a === res.link)) {
             let lastKeyConcorrencia = Object.keys(res.dadosHistoricos).at(-1);
             if (res.dadosHistoricos[lastKeyConcorrencia] != 0){
               listaDesordenada.push([res.canal, res.dadosHistoricos[lastKeyConcorrencia]]);
@@ -216,6 +232,7 @@ async function consultarAudiencias() {
       nomePrograma = document.getElementById('nomePrograma').value;
     }
 
+    alertMessageDisplay("Bot Está Raspando a audiencia", "success");
     let resposta = await fetch("/api/raspar", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
@@ -257,5 +274,7 @@ async function consultarAudiencias() {
 
     atualizarGraficoAudiencia(historicoResultados);
     atualizaTabela(historicoResultados, data.programaAtual);
+
+    alertMessageDisplay("Audiência Atualizada", "success");
 }
 

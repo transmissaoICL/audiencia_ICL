@@ -15687,3 +15687,58 @@ Time: 14:7
 Group ID: JEOSMN0MLKf50GPwhZ1DPO
 Message: *25\09\2025 - Teste Tabela - Audiencia:* Facebook: 0 - Youtube: 0 - Instagram: 0 Total: 0
 --------------------
+Date: 7/10/2025
+Time: 11:5
+Group ID: JEOSMN0MLKf50GPwhZ1DPO
+Message: *07\10\2025 - Teste Audiencia Duplicada - Audiencia:* Facebook: 93 - Youtube: 14229 - Instagram: 102 Total: 14424
+--------------------
+Date: 7/10/2025
+Time: 11:10
+Group ID: JEOSMN0MLKf50GPwhZ1DPO
+Message: *07\10\2025 - Teste Audiencia Duplicada - Audiencia:* Facebook: 87 - Youtube: 13710 - Instagram: 100 Total: 13897
+--------------------
+Date: 7/10/2025
+Time: 11:17
+Group ID: JEOSMN0MLKf50GPwhZ1DPO
+Message: *07\10\2025 - Teste Audiencia - Audiencia:* Facebook: 75 - Youtube: 13259 - Instagram: 136 Total: 13470
+--------------------
+Date: 7/10/2025
+Time: 11:24
+Group ID: JEOSMN0MLKf50GPwhZ1DPO
+Message: *07\10\2025 - Teste Audiencia - Audiencia:* Facebook: 72 - Youtube: 13002 - Instagram: 127 Total: 13201
+--------------------
+Date: 7/10/2025
+Time: 11:28
+Group ID: JEOSMN0MLKf50GPwhZ1DPO
+Message: *07\10\2025 - Teste Audiencia - Audiencia:* Facebook: 79 - Youtube: 12857 - Instagram: 56 Total: 12992
+--------------------
+Date: 7/10/2025
+Time: 11:32
+Group ID: JEOSMN0MLKf50GPwhZ1DPO
+Message: *07\10\2025 - Teste Audiencia - Audiencia:* Facebook: 81 - Youtube: 12659 - Instagram: 86 Total: 12826
+--------------------
+Date: 7/10/2025
+Time: 11:36
+Group ID: JEOSMN0MLKf50GPwhZ1DPO
+Message: *07\10\2025 - Teste Audiencia - Audiencia:* Facebook: 83 - Youtube: 11942 - Instagram: 118 Total: 12143
+--------------------
+Date: 7/10/2025
+Time: 11:40
+Group ID: JEOSMN0MLKf50GPwhZ1DPO
+Message: *07\10\2025 - Teste Audiencia - Audiencia:* Facebook: 79 - Youtube: 11760 - Instagram: 128 Total: 11967
+--------------------
+Date: 7/10/2025
+Time: 11:44
+Group ID: JEOSMN0MLKf50GPwhZ1DPO
+Message: *07\10\2025 - Teste Audiencia - Audiencia:* Facebook: 73 - Youtube: 11602 - Instagram: 155 Total: 11830
+--------------------
+Date: 7/10/2025
+Time: 11:48
+Group ID: JEOSMN0MLKf50GPwhZ1DPO
+Message: *07\10\2025 - Teste Audiencia - Audiencia:* Facebook: 78 - Youtube: 11487 - Instagram: 109 Total: 11674
+--------------------
+Date: 7/10/2025
+Time: 11:52
+Group ID: JEOSMN0MLKf50GPwhZ1DPO
+Message: *07\10\2025 - Teste Audiencia - Audiencia:* Facebook: 76 - Youtube: 11410 - Instagram: 186 Total: 11672
+--------------------
