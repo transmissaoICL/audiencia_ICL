@@ -10,97 +10,116 @@
 </head>
 <body>
   <h1>Monitor de Audiência ao Vivo</h1>
-  <div class='container'>
-    <div style="padding-right: 30px;">
-      <p>Cole os links das lives da Concorrência (YouTube, Facebook, etc):</p>
-      <textarea id="urlsConcorrencia" placeholder="https://youtube.com/...\nhttps://facebook.com/...\nhttps://twitch.tv/...\n"></textarea>      
-    </div>
-    <div style="padding-left: 30px;">
-      <p>Cole os links das lives do ICL (YouTube, Facebook, etc):</p>
-      <textarea id="urlsICL" placeholder="https://youtube.com/...\nhttps://facebook.com/...\nhttps://twitch.tv/...\n"></textarea>       
-    </div>
+  <div id="containerTabsBtns">
+    <button id="defaultOpen" class="tablink" onclick="openPage('tabConfiguracoes', this)">Configurações</button>
+    <button class="tablink" onclick="openPage('tabResultados', this)">Resultados</button>
+    <button class="tablink" onclick="openPage('tabGrafico', this)">Grafico</button>
+    <button class="tablink" onclick="openPage('tabChat', this)">Chat Ao Vivo</button>
   </div>
-  <div class="container">
-    <div style="padding-right: 30px">
-      <h3>Habilitar Consulta</h3>
-      <label class="switch">
-        <input type="checkbox" id="myToggle">
-        <span class="slider round"></span>
-      </label>
+  <div id="tabConfiguracoes" class="tabcontent">
+    <h3>Configurações</h3>
+    <div class='container'>
+      <div style="padding-right: 30px;">
+        <p>Cole os links das lives da Concorrência (YouTube, Facebook, etc):</p>
+        <textarea id="urlsConcorrencia" placeholder="https://youtube.com/...\nhttps://facebook.com/...\nhttps://twitch.tv/...\n"></textarea>      
+      </div>
+      <div style="padding-left: 30px;">
+        <p>Cole os links das lives do ICL (YouTube, Facebook, etc):</p>
+        <textarea id="urlsICL" placeholder="https://youtube.com/...\nhttps://facebook.com/...\nhttps://twitch.tv/...\n"></textarea>       
+      </div>
     </div>
-    <div style="padding-right: 30px">
-      <h3>Periodo de Teste</h3>
-      <label class="switch">
-        <input type="checkbox" id="testToggle">
-        <span class="slider round"></span>
-      </label>
-    </div>
-    <div>
-      <h3>Programa Atual</h3>
-      <select name="programaAtual" id="programaDropdown">
-        <option value="0">Desperta</option>
-        <option value="1">ICL Notícias 1</option>
-        <option value="2">Em Detalhes</option>
-        <option value="3">ICL Mercado e Investimentos</option>
-        <option value="4">Role ICL</option>
-        <option value="5">Webcomunistas</option>
-        <option value="6">Espiritualidade na Ação</option>
-        <option value="7">Provocação Histórica</option>
-        <option value="8">Chico Pinheiro Entrevista</option>
-        <option value="9">ICL Entrevista</option>
-        <option value="10">Urgente</option>
-        <option value="11">ICL Notícias 2</option>
-        <option value="12">Precisamos Conversar</option>
-        <option value="13">Outro</option>
-      </select>
-    </div>
-    <div>
-      <h3>Nome do Programa Especial</h3>
-      <input id="nomePrograma" type="text" style="background-color: aliceblue; border: 1px solid black;">
-    </div>
-  </div>
-  <p><em>Audiência será atualizada automaticamente a cada 2 minutos (idealmente).</em></p>
-  <div id="alertMessage" class="alertmessage" style="display: none;">
-    <span id="closealert" class="closebtn" onclick="alertMessageHide()">&times;</span>
-
-  </div>
-  <div class="results">
     <div class="container">
-      <div id="canaisEspecificos">
-        <h2>Resultado</h2>
-        <table >
-          <thead>
-            <tr>
-              <th>Plataforma</th>
-              <th>Canal</th>
-              <th>Espectadores</th>
-              <th></th>
-            </tr>
-          </thead>
-          <tbody id="auto"></tbody>
-          <tfoot>
-            <tr>
-          </tfoot>
-        </table>
+      <div style="padding-right: 30px">
+        <h3>Habilitar Consulta</h3>
+        <label class="switch">
+          <input type="checkbox" id="myToggle">
+          <span class="slider round"></span>
+        </label>
       </div>
-      <div id="tabelaConcorrencia">
-        <table id="tabelaConcorrencia">
-          <tbody id="tabelaBody">
-            <tr class="row-concorrencia row-header" style="background-color: #099ace;">
-              <th id="date" style="color: #f0f0f0; border: 1px solid black;"></th>
-              <th id="time" style="color: #f0f0f0; border: 1px solid black;"></th>
-            </tr>
-            <tr class="row-concorrencia" style="background-color: #099ace;">
-              <th style="color: #f0f0f0; border: 1px solid black;">Canal</th>
-              <th style="color: #f0f0f0; border: 1px solid black;">Audiência</th>
-            </tr>
-          </tbody>
-        </table>
+      <div style="padding-right: 30px">
+        <h3>Periodo de Teste</h3>
+        <label class="switch">
+          <input type="checkbox" id="testToggle">
+          <span class="slider round"></span>
+        </label>
       </div>
-      <!--<button onclick="adicionarLinhaManual">+ Adicionar Linha Manual</button>-->
+      <div>
+        <h3>Programa Atual</h3>
+        <select name="programaAtual" id="programaDropdown">
+          <option value="0">Desperta</option>
+          <option value="1">ICL Notícias 1</option>
+          <option value="2">Em Detalhes</option>
+          <option value="3">ICL Mercado e Investimentos</option>
+          <option value="4">Role ICL</option>
+          <option value="5">Webcomunistas</option>
+          <option value="6">Espiritualidade na Ação</option>
+          <option value="7">Provocação Histórica</option>
+          <option value="8">Chico Pinheiro Entrevista</option>
+          <option value="9">ICL Entrevista</option>
+          <option value="10">Urgente</option>
+          <option value="11">ICL Notícias 2</option>
+          <option value="12">Precisamos Conversar</option>
+          <option value="13">Outro</option>
+        </select>
+      </div>
+      <div>
+        <h3>Nome do Programa Especial</h3>
+        <input id="nomePrograma" type="text" style="background-color: aliceblue; border: 1px solid black;">
+      </div>
     </div>
+    <p><em>Audiência será atualizada automaticamente a cada 2 minutos (idealmente).</em></p>
+    <div id="alertMessage" class="alertmessage" style="display: none;">
+      <span id="closealert" class="closebtn" onclick="alertMessageHide()">&times;</span>
 
-  <canvas id="graficoAudiencia"></canvas>
+    </div>
+  </div>
+  <div id="tabResultados" class="tabcontent">
+    <h3>Resultados</h3>
+    <div class="results">
+      <div class="container">
+        <div id="canaisEspecificos">
+          <h2>Resultado</h2>
+          <table >
+            <thead>
+              <tr>
+                <th>Plataforma</th>
+                <th>Canal</th>
+                <th>Espectadores</th>
+                <th></th>
+              </tr>
+            </thead>
+            <tbody id="auto"></tbody>
+            <tfoot>
+              <tr>
+            </tfoot>
+          </table>
+        </div>
+        <div id="tabelaConcorrencia">
+          <table id="tabelaConcorrencia">
+            <tbody id="tabelaBody">
+              <tr class="row-concorrencia row-header" style="background-color: #099ace;">
+                <th id="date" style="color: #f0f0f0; border: 1px solid black;"></th>
+                <th id="time" style="color: #f0f0f0; border: 1px solid black;"></th>
+              </tr>
+              <tr class="row-concorrencia" style="background-color: #099ace;">
+                <th style="color: #f0f0f0; border: 1px solid black;">Canal</th>
+                <th style="color: #f0f0f0; border: 1px solid black;">Audiência</th>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <!--<button onclick="adicionarLinhaManual">+ Adicionar Linha Manual</button>-->
+      </div>
+    </div>
+  <div id="tabGrafico" class="tabcontent">
+    <h3>Grafico</h3>
+    <canvas id="graficoAudiencia"></canvas>
+  </div>
+
+  <div id="tabChat" class="tabcontent">
+    <h3>Chat Ao Vivo</h3>
+    EM BREVE
+  </div>
 
 
   <script src="scripts/inline.js" defer></script>

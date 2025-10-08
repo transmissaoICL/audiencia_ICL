@@ -21,6 +21,39 @@ input[type="text"]:focus, input[type="number"]:focus { outline: none; }
 .audiencia-line {outline: thin;}
 .audiencia-cell {outline: thin;}
 
+/* Style tab links */
+
+#containerTabsBtns{
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr 1fr;
+}
+
+.tablink {
+  background-color: #555;
+  float: left;
+  border: none;
+  outline: none;
+  cursor: pointer;
+  padding: 14px 16px;
+  font-size: 17px;
+}
+
+.tablink:hover {
+  background-color: #777;
+}
+
+/* Style the tab content (and add height:100% for full page content) */
+.tabcontent {
+  display: none;
+  padding: 100px 20px;
+  height: 100%;
+}
+
+/* Change the Active Tab to indicate which tab is active at the moment */
+.tablink.active{
+  background: #0056b3;
+}
+
 /* The alert message box */
 .alertmessage {
   padding: 20px;
