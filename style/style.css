@@ -1,7 +1,7 @@
 body { font-family: Arial, sans-serif; background-color: #f0f0f0; padding: 2rem; display: flex; flex-direction: column; align-items: center; }
 textarea, input, button { font-family: inherit; }
 textarea { width: 100%; max-width: 600px; height: 150px; padding: 1rem; font-size: 1rem; border-radius: 8px; border: 1px solid #ccc; margin-bottom: 1rem; }
-.container { display: grid; grid-template-columns: 1fr 1fr}
+.container { display: grid; grid-template-columns: 1fr 1fr;}
 button { padding: 0.75rem 1.5rem; font-size: 1rem; border: none; border-radius: 8px; background-color: #007bff; color: white; cursor: pointer; margin: 0.5rem 0; }
 button:hover { background-color: #0056b3; }
 .results { margin-top: 2rem; width: 100%; background: white; padding: 1.5rem; border-radius: 10px; box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1); font-size: large;}
@@ -20,6 +20,32 @@ input[type="text"], input[type="number"] { width: 100%; border: none; background
 input[type="text"]:focus, input[type="number"]:focus { outline: none; }
 .audiencia-line {outline: thin;}
 .audiencia-cell {outline: thin;}
+
+/* Links Style */
+.addBtn{
+  background: #209e01;
+}
+
+.containerLinks{
+  margin: 15px;
+}
+
+.closeLinkBtn{
+  padding: 7px;
+  cursor: pointer;
+}
+
+.closeLinkBtn:hover{
+  background-color: red;
+  color: white;
+}
+
+.linkLine{
+  border-radius: 10px;
+  opacity: 40%;
+  padding: 5px;
+  background-color: gray;
+  margin-top: 10px;}
 
 /* Style tab links */
 

@@ -10,6 +10,9 @@
 </head>
 <body>
   <h1>Monitor de Audiência ao Vivo</h1>
+  <div id="alertMessage" class="alertmessage" style="display: none;">
+    <span id="closealert" class="closebtn" onclick="alertMessageHide()">&times;</span>
+  </div>
   <div id="containerTabsBtns">
     <button id="defaultOpen" class="tablink" onclick="openPage('tabConfiguracoes', this)">Configurações</button>
     <button class="tablink" onclick="openPage('tabResultados', this)">Resultados</button>
@@ -18,14 +21,43 @@
   </div>
   <div id="tabConfiguracoes" class="tabcontent">
     <h3>Configurações</h3>
-    <div class='container'>
-      <div style="padding-right: 30px;">
-        <p>Cole os links das lives da Concorrência (YouTube, Facebook, etc):</p>
-        <textarea id="urlsConcorrencia" placeholder="https://youtube.com/...\nhttps://facebook.com/...\nhttps://twitch.tv/...\n"></textarea>      
+    <div class="container">
+      <div class='containerLinks'>
+        <h3>Canais concorrência</h3>
+        <div style="display: flex;">
+          <h5 style="margin-right: 75px;">Nome</h5>
+          <h5 style="margin-right: 40px;">Plataforma</h5>
+          <h5 style="margin-right: 100px;">Link</h5>
+
+        </div>
+        <div id="urlsConcorrencia">
+          <div class="linkLine">
+            <input class="linkName" placeholder="Nome do Canal" style="width: 15%;">
+            <input class="linkPlataforma" placeholder="Plataforma do Canal" style="width: 15%;">
+            <input class="link" placeholder="Link" style="width: 50%;">
+            <input class="customCheck" type="checkbox" style="height: 15px; width: 45px">
+            <span class="closeLinkBtn" onclick="excludeLink(this)">&timesb;</span>
+          </div>
+        </div>
+        <button id="btnLinkConcorrencia" class="addBtn" onclick="addLink(this)">&plus;</button>
       </div>
-      <div style="padding-left: 30px;">
-        <p>Cole os links das lives do ICL (YouTube, Facebook, etc):</p>
-        <textarea id="urlsICL" placeholder="https://youtube.com/...\nhttps://facebook.com/...\nhttps://twitch.tv/...\n"></textarea>       
+      <div class='containerLinks'>
+        <h3>Canais ICL</h3>
+        <div style="display: flex;">
+          <h5 style="margin-right: 75px;">Nome</h5>
+          <h5 style="margin-right: 40px;">Plataforma</h5>
+          <h5 style="margin-right: 100px;">Link</h5>
+        </div>
+        <div id="urlsICL">
+          <div class="linkLine">
+            <input class="linkName" placeholder="Nome do Canal" style="width: 15%;">
+            <input class="linkPlataforma" placeholder="Plataforma do Canal" style="width: 15%;">
+            <input class="link" placeholder="Link" style="width: 50%;">
+            <input class="customCheck" type="checkbox" style="height: 15px; width: 45px">
+            <span class="closeLinkBtn" onclick="excludeLink(this.parent)">&timesb;</span>
+          </div>
+        </div>
+        <button id="btnLinkICL" class="addBtn" onclick="addLink(this)">&plus;</button>
       </div>
     </div>
     <div class="container">
@@ -67,11 +99,7 @@
         <input id="nomePrograma" type="text" style="background-color: aliceblue; border: 1px solid black;">
       </div>
     </div>
-    <p><em>Audiência será atualizada automaticamente a cada 2 minutos (idealmente).</em></p>
-    <div id="alertMessage" class="alertmessage" style="display: none;">
-      <span id="closealert" class="closebtn" onclick="alertMessageHide()">&times;</span>
-
-    </div>
+    <p><em>Audiência será atualizada automaticamente a cada 4 minutos (idealmente).</em></p>
   </div>
   <div id="tabResultados" class="tabcontent">
     <h3>Resultados</h3>

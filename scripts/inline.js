@@ -71,6 +71,39 @@ programaDropdown.addEventListener('change', function() {
   programa = Number(programaDropdown.value);
 })
 
+const newLineInnerText = `
+<input class="linkName" placeholder="Nome do Canal" style="width: 15%;">
+<input class="linkPlataforma" placeholder="Plataforma do Canal" style="width: 15%;">
+<input class="link" placeholder="Link" style="width: 50%;">
+<input class="customCheck" type="checkbox" style="height: 15px; width: 45px">
+<span class="closeLinkBtn" onclick="excludeLink(this)">&timesb;</span>
+`
+
+function addLinkLine(element){
+  let newLine = document.createElement("div");
+  newLine.classList.add("linkLine");
+  newLine.innerHTML = newLineInnerText
+  element.appendChild(newLine);
+}
+
+function addLink(element){
+  // Get which button is pressed to now which link to create
+  if (element.id == "btnLinkConcorrencia"){
+    let concorrencia = document.getElementById("urlsConcorrencia");
+    addLinkLine(concorrencia);
+  }
+  else{
+    let icl = document.getElementById("urlsICL");
+    addLinkLine(icl);
+  }
+}
+
+function excludeLink(element){
+  let parent = element.parentNode;
+  parent.remove();
+
+}
+
 function openPage(pageName, elmnt) {
   // Hide all elements with class="tabcontent" by default */
   var i, tabcontent, tablinks;
