@@ -15742,3 +15742,13 @@ Time: 11:52
 Group ID: JEOSMN0MLKf50GPwhZ1DPO
 Message: *07\10\2025 - Teste Audiencia - Audiencia:* Facebook: 76 - Youtube: 11410 - Instagram: 186 Total: 11672
 --------------------
+Date: 8/10/2025
+Time: 14:36
+Group ID: JEOSMN0MLKf50GPwhZ1DPO
+Message: *08\10\2025 - Teste Nova UI - Audiencia:* Facebook: 0 - Youtube: 1743 - Instagram: 0 Total: 1743
+--------------------
+Date: 8/10/2025
+Time: 14:41
+Group ID: JEOSMN0MLKf50GPwhZ1DPO
+Message: *08\10\2025 - Teste Nova UI - Audiencia:* Facebook: 0 - Youtube: 9588 - Instagram: 0 Total: 9588
+--------------------

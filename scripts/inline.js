@@ -166,10 +166,22 @@ function atualizarGraficoAudiencia(historico) {
 function atualizaTabela(data, programaAtual){
 
     let timestamp = new Date();
-    let textareaConcorrencia = document.getElementById("urlsConcorrencia");
-    let canaisConcorrencia = textareaConcorrencia.value.trim().split("\n").filter(Boolean);
-    let textareaICL = document.getElementById("urlsICL");
-    let canaisICL = textareaICL.value.trim().split("\n").filter(Boolean);
+    let urlsConcorrencia = document.getElementById("urlsConcorrencia");
+    let linesConcorrencia = urlsConcorrencia.getElementsByClassName("linkLine");
+    let canaisConcorrencia = []
+    for (let element of linesConcorrencia){
+      let link = element.getElementsByClassName("link")[0].value;
+      canaisConcorrencia.push(link);
+    }
+
+    let urlsICL = document.getElementById("urlsICL");
+    let linesICL = urlsICL.getElementsByClassName("linkLine");
+    let canaisICL = [];
+    for (let element of linesICL){
+      let link = element.getElementsByClassName("link")[0].value;
+      canaisICL.push(link);
+    }
+
     let tbody = document.getElementById('tabelaBody');
     tbody.innerHTML = `
         <tr  class="row-concorrencia row-header" style="background-color: #099ace;">
@@ -272,13 +284,23 @@ function atualizarTotal(data) {
 
 async function consultarAudiencias() {
 
-    let textareaConcorrencia = document.getElementById("urlsConcorrencia");
-    let textareaICL = document.getElementById("urlsICL");
+    let urlsConcorrencia = document.getElementById("urlsConcorrencia");
+    let linesConcorrencia = urlsConcorrencia.getElementsByClassName("linkLine");
+    let canaisConcorrencia = []
+    for (let element of linesConcorrencia){
+      let link = element.getElementsByClassName("link")[0].value;
+      canaisConcorrencia.push(link);
+    }
 
-    let linksConcorrencia = textareaConcorrencia.value.trim().split("\n").filter(Boolean);
-    let linksICL = textareaICL.value.trim().split("\n").filter(Boolean);
+    let urlsICL = document.getElementById("urlsICL");
+    let linesICL = urlsICL.getElementsByClassName("linkLine");
+    let canaisICL = [];
+    for (let element of linesICL){
+      let link = element.getElementsByClassName("link")[0].value;
+      canaisICL.push(link);
+    }
 
-    let links = [...linksConcorrencia, ...linksICL];
+    let links = [...canaisConcorrencia, ...canaisICL];
     let total = 0;
     let detalhesHtml = "";
 
@@ -292,7 +314,7 @@ async function consultarAudiencias() {
     let resposta = await fetch("/api/raspar", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ links, linksICL, programa, nomePrograma, teste, historicoModular})
+        body: JSON.stringify({ links, canaisICL, programa, nomePrograma, teste, historicoModular})
     });
 
     const data = await resposta.json();

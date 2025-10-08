@@ -291,7 +291,7 @@ async function sendWhatsapp(data, linksICL, programaICL, teste){
 
 
 app.post('/api/raspar', async (req, res) => {
-  let { links, linksICL, programa, nomePrograma, teste, historicoModular } = req.body;
+  let { links, canaisICL, programa, nomePrograma, teste, historicoModular } = req.body;
   let resultados = [];
 
   if (historicoModular === undefined){
@@ -350,7 +350,7 @@ app.post('/api/raspar', async (req, res) => {
   historicoICL = addHistoricoPrograma(resultados, historicoICL, programa, timestamp);
 
   try{
-    sendWhatsapp(historicoModular.resultados, linksICL, programaAtual, teste);
+    sendWhatsapp(historicoModular.resultados, canaisICL, programaAtual, teste);
   }
   
   catch{
