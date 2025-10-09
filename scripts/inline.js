@@ -73,12 +73,13 @@ programaDropdown.addEventListener('change', function() {
 const newLineInnerText = `
 <input class="linkName" placeholder="Nome do Canal" style="width: 15%;">
 <input class="linkPlataforma" placeholder="Plataforma do Canal" style="width: 15%;">
-<input class="link" placeholder="Link" style="width: 50%; onchange="autoComplete(this)">
+<input class="link" placeholder="Link" style="width: 50%;" onchange="autoComplete(this)">
 <input class="customCheck" type="checkbox" style="height: 15px; width: 45px">
 <span class="closeLinkBtn" onclick="excludeLink(this)">&timesb;</span>
 `
 
 function autoComplete(element){
+  console.log(element);
   if (element.value.includes(' ')){
     let links = (element.value.split(" "));
     let newLine;
@@ -112,11 +113,15 @@ function addLink(element){
   // Get which button is pressed to now which link to create
   if (element.classList.contains("linkConcorrencia")){
     let concorrencia = document.getElementById("urlsConcorrencia");
-    return addLinkLine(concorrencia, "linkConcorrencia");
+    let newLine = addLinkLine(concorrencia, "linkConcorrencia");
+    newLine.getElementsByClassName('link')[0].classList.add('linkConcorrencia');
+    return newLine;
   }
   else{
     let icl = document.getElementById("urlsICL");
-    return addLinkLine(icl, "linkICL");
+    let newLine = addLinkLine(icl, "linkICL");
+    newLine.getElementsByClassName('link')[0].classList.add('linkICL');
+    return newLine;
   }
 }
 
