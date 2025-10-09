@@ -74,7 +74,7 @@ programaDropdown.addEventListener('change', function() {
 const newLineInnerText = `
 <input class="linkName" placeholder="Nome do Canal" style="width: 15%;">
 <input class="linkPlataforma" placeholder="Plataforma do Canal" style="width: 15%;">
-<input class="link" placeholder="Link" style="width: 50%;">
+<input class="link" placeholder="Link" style="width: 50%; onchange="autoComplete(this)">
 <input class="customCheck" type="checkbox" style="height: 15px; width: 45px">
 <span class="closeLinkBtn" onclick="excludeLink(this)">&timesb;</span>
 `
