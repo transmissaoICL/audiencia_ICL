@@ -34,12 +34,12 @@
           <div class="linkLine">
             <input class="linkName" placeholder="Nome do Canal" style="width: 15%;">
             <input class="linkPlataforma" placeholder="Plataforma do Canal" style="width: 15%;">
-            <input class="link" placeholder="Link" style="width: 50%;">
+            <input class="link linkConcorrencia" placeholder="Link" style="width: 50%;" onchange="autoComplete(this)">
             <input class="customCheck" type="checkbox" style="height: 15px; width: 45px">
             <span class="closeLinkBtn" onclick="excludeLink(this)">&timesb;</span>
           </div>
         </div>
-        <button id="btnLinkConcorrencia" class="addBtn" onclick="addLink(this)">&plus;</button>
+        <button class="addBtn linkConcorrencia" onclick="addLink(this)">&plus;</button>
       </div>
       <div class='containerLinks'>
         <h3>Canais ICL</h3>
@@ -52,12 +52,12 @@
           <div class="linkLine">
             <input class="linkName" placeholder="Nome do Canal" style="width: 15%;">
             <input class="linkPlataforma" placeholder="Plataforma do Canal" style="width: 15%;">
-            <input class="link" placeholder="Link" style="width: 50%;" onchange="autoComplete(this)">
+            <input class="link linkICL" placeholder="Link" style="width: 50%;" onchange="autoComplete(this)">
             <input class="customCheck" type="checkbox" style="height: 15px; width: 45px">
-            <span class="closeLinkBtn" onclick="excludeLink(this.parent)">&timesb;</span>
+            <span class="closeLinkBtn" onclick="excludeLink(this)">&timesb;</span>
           </div>
         </div>
-        <button id="btnLinkICL" class="addBtn" onclick="addLink(this)">&plus;</button>
+        <button class="addBtn linkICL" onclick="addLink(this)">&plus;</button>
       </div>
     </div>
     <div class="container">
@@ -139,6 +139,7 @@
         <!--<button onclick="adicionarLinhaManual">+ Adicionar Linha Manual</button>-->
       </div>
     </div>
+  </div>
   <div id="tabGrafico" class="tabcontent">
     <h3>Grafico</h3>
     <canvas id="graficoAudiencia"></canvas>

@@ -264,7 +264,6 @@ async function sendWhatsapp(data, linksICL, programaICL, teste){
   let historicoICL = [];
 
   for (let res of data){
-
     let encontrado = linksICL.find(a => a === res.link);
     if (encontrado){
       historicoICL.push(res);

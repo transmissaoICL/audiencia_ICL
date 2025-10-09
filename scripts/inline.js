@@ -51,12 +51,11 @@ myToggle.addEventListener('change', function() {
       interval = setInterval(() => {
         consultarAudiencias();
       }, 240000);
-      console.log('Server ligado. Aguardando Scrapping');
+      consultarAudiencias();
     }
     else {
       alertMessageDisplay("Bot Pausado", "alert");
       clearInterval(interval);
-      console.log('Server desligado');
     }
 });
 
@@ -79,22 +78,45 @@ const newLineInnerText = `
 <span class="closeLinkBtn" onclick="excludeLink(this)">&timesb;</span>
 `
 
-function addLinkLine(element){
+function autoComplete(element){
+  if (element.value.includes(' ')){
+    let links = (element.value.split(" "));
+    let newLine;
+    element.value = links.shift();
+    for (let link of links){
+      if (element.classList.contains("linkConcorrencia")){
+        newLine = addLink(element, "linkConcorrencia");
+        let linkInput = newLine.getElementsByClassName("link")[0];
+        linkInput.value = link;
+        linkInput.classList.add("linkConcorrencia")
+      }
+      else {
+        newLine = addLink(element, "linkICL");
+        let linkInput = newLine.getElementsByClassName("link")[0];
+        linkInput.value = link;
+        linkInput.classList.add("linkICL")
+      }
+    }
+  }
+}
+
+function addLinkLine(element, className){
   let newLine = document.createElement("div");
   newLine.classList.add("linkLine");
   newLine.innerHTML = newLineInnerText
   element.appendChild(newLine);
+  return newLine;
 }
 
 function addLink(element){
   // Get which button is pressed to now which link to create
-  if (element.id == "btnLinkConcorrencia"){
+  if (element.classList.contains("linkConcorrencia")){
     let concorrencia = document.getElementById("urlsConcorrencia");
-    addLinkLine(concorrencia);
+    return addLinkLine(concorrencia, "linkConcorrencia");
   }
   else{
     let icl = document.getElementById("urlsICL");
-    addLinkLine(icl);
+    return addLinkLine(icl, "linkICL");
   }
 }
 
@@ -142,6 +164,8 @@ function alertMessageDisplay(message, alertType){
 }
 
 function atualizarGraficoAudiencia(historico) {
+  console.log(historico.length);
+  console.log(historico);
   if (historico.length === 0) return;
 
   const timestamps = Object.keys(historico[0].dadosHistoricos);
@@ -289,6 +313,7 @@ async function consultarAudiencias() {
     let canaisConcorrencia = []
     for (let element of linesConcorrencia){
       let link = element.getElementsByClassName("link")[0].value;
+      if (link == " " || link == "") continue;
       canaisConcorrencia.push(link);
     }
 
