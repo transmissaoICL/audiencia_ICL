@@ -15,8 +15,7 @@ app.use(express.json());
 app.use(express.static(path.join(__dirname)));
 
 let historicoICL = [];
-
-let historicoTotal =[];
+let historicoCanaisICL = [];
 
 const account = {
   username: "celioglicerio",
@@ -346,7 +345,18 @@ app.post('/api/raspar', async (req, res) => {
 
   historicoModular.resultados = addHistorico(historicoModular.resultados, resultados, timestamp);
 
-  historicoICL = addHistoricoPrograma(resultados, historicoICL, programa, timestamp);
+
+
+  for (let canal of historicoModular.resultados){
+    let encontrado = canaisICL.find(a => a === canal.link);
+    if (encontrado){
+      historicoCanaisICL.push(canal);
+    }
+  }
+
+  historicoICL = addHistoricoPrograma(historicoCanaisICL, historicoICL, programa, timestamp);
+  
+  console.log(historicoICL);
 
   try{
     sendWhatsapp(historicoModular.resultados, canaisICL, programaAtual, teste);
@@ -364,8 +374,9 @@ app.listen(3000, () => {
 });
 
 
+
 //setInterval(() => {
-  //  saveJSON(historico, historicoICL);
+  //  saveJSON(historicoCanaisICL, historicoICL);
 //}, 720000);
 
 

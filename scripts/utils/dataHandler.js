@@ -59,24 +59,27 @@ function addHistorico(historico, data, time){
 }
 
 function addHistoricoPrograma(data, historicoICL, programa, time){
+    console.log(data)
     var novoPrograma;
+    
+    console.log(total);
+    let total = 0;
+    for (let views of data){
+        total += views.dadosHistoricos[Object.keys(views.dadosHistoricos).at(-1)];
+    }
+    console.log(total);
 
     if (historicoICL.length != 0){
         for (let prog of historicoICL){
             if (prog.index === programa){
-                if (Object.keys(prog.dadosHistoricos).at(-1) === time){
-                    prog.dadosHistoricos[time] += data.viewers;
-                }
-                else{
-                    prog.dadosHistoricos[time] = data.viewers;
-                }
+                prog.dadosHistoricos[time] = total;
             }
 
             else{
                 novoPrograma = new audienciaPrograma();
                 novoPrograma.index = programa;
                 novoPrograma.programa = programas[programa];
-                novoPrograma.dadosHistoricos[time] = data.viewers;
+                novoPrograma.dadosHistoricos[time] = total;
                 historicoICL.push(novoPrograma);
             }
         }
@@ -85,18 +88,18 @@ function addHistoricoPrograma(data, historicoICL, programa, time){
         novoPrograma = new audienciaPrograma();
         novoPrograma.programa = programas[programa];
         novoPrograma.index = programa;
-        novoPrograma.dadosHistoricos[time] = data.viewers;
+        novoPrograma.dadosHistoricos[time] = total;
         historicoICL.push(novoPrograma);
     }
     return historicoICL;
 }
 
-function saveJSON(data, dataICL){
+function saveJSON(dataCanais, dataPrograma){
     console.log('Salvando audiencia...')
     const date = new Date();
     let completo = new audienciaCompleta();
-    completo.audienciasCanais = [...data];
-    completo.audienciasProgramas = [...dataICL]
+    completo.audienciasCanais = [...dataCanais];
+    completo.audienciasProgramas = [...dataPrograma]
     completo.year = date.getFullYear();
     completo.month = date.getMonth();
     completo.day = date.getDate();
