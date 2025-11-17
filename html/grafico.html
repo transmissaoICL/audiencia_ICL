@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Monitor de Audiência ao Vivo</title>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <link rel="stylesheet" href="../style/style.css">
+</head>
+<body>
+    <div>
+      <h3>Grafico</h3>
+      <div class="container">
+        <h3>Programação</h3>
+        <label class="switch">
+          <input type="checkbox" id="progToggle">
+          <span class="slider round"></span>
+        </label>
+      </div>
+      <div>
+        <canvas id="graficoAudiencia"></canvas>
+      </div>
+    </div>
+    <script src="../scripts/grafico.js"></script>
+</body>

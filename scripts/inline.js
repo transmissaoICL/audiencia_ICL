@@ -1,8 +1,5 @@
 let historicoModular = undefined;
 
-//TODO: Organizar o projeto mais modularmente
-//TODO: Achar uma forma de pegar a audiencia do Instagram
-//TODO: Fazer com que o bot consiga mandar a audiencia no grupo do Zap
 //TODO: Fazer o bot uma imagem da audiencia e mandar no grupo do zap
 
 const coresPaleta = [
@@ -43,6 +40,13 @@ let scrapping = false;
 let teste = false;
 
 let interval;
+
+let programacao = false;
+
+const progToggle = document.getElementById('progToggle');
+progToggle.addEventListener('change', function(){
+  programacao = !programacao;
+});
 
 const myToggle = document.getElementById('myToggle');
 myToggle.addEventListener('change', function() {
@@ -313,76 +317,76 @@ function atualizarTotal(data) {
 
 async function consultarAudiencias() {
 
-    let urlsConcorrencia = document.getElementById("urlsConcorrencia");
-    let linesConcorrencia = urlsConcorrencia.getElementsByClassName("linkLine");
-    let canaisConcorrencia = []
-    for (let element of linesConcorrencia){
-      let link = element.getElementsByClassName("link")[0].value;
-      if (link == " " || link == "") continue;
-      canaisConcorrencia.push(link);
-    }
+  let urlsConcorrencia = document.getElementById("urlsConcorrencia");
+  let linesConcorrencia = urlsConcorrencia.getElementsByClassName("linkLine");
+  let canaisConcorrencia = []
+  for (let element of linesConcorrencia){
+    let link = element.getElementsByClassName("link")[0].value;
+    if (link == " " || link == "") continue;
+    canaisConcorrencia.push(link);
+  }
 
-    let urlsICL = document.getElementById("urlsICL");
-    let linesICL = urlsICL.getElementsByClassName("linkLine");
-    let canaisICL = [];
-    for (let element of linesICL){
-      let link = element.getElementsByClassName("link")[0].value;
-      canaisICL.push(link);
-    }
+  let urlsICL = document.getElementById("urlsICL");
+  let linesICL = urlsICL.getElementsByClassName("linkLine");
+  let canaisICL = [];
+  for (let element of linesICL){
+    let link = element.getElementsByClassName("link")[0].value;
+    canaisICL.push(link);
+  }
 
-    let links = [...canaisConcorrencia, ...canaisICL];
-    let total = 0;
-    let detalhesHtml = "";
+  let links = [...canaisConcorrencia, ...canaisICL];
+  let total = 0;
+  let detalhesHtml = "";
 
-    let nomePrograma = '';
+  let nomePrograma = '';
 
-    if (programa === 13){
-      nomePrograma = document.getElementById('nomePrograma').value;
-    }
+  if (programa === 13){
+    nomePrograma = document.getElementById('nomePrograma').value;
+  }
 
-    alertMessageDisplay("Bot Está Raspando a audiencia", "success");
-    let resposta = await fetch("/api/raspar", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ links, canaisICL, programa, nomePrograma, teste, historicoModular})
-    });
+  alertMessageDisplay("Bot Está Raspando a audiencia", "success");
+  let resposta = await fetch("http://localhost:3000/api/raspar", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ links, canaisICL, programa, nomePrograma, teste, historicoModular, programacao})
+  });
 
-    const data = await resposta.json();
-    historicoModular = data.historicoModular;
-    historicoResultados = historicoModular.resultados;
+  const data = await resposta.json();
+  historicoModular = data.historicoModular;
+  historicoResultados = historicoModular.resultados;
 
-    for (let i = 0; i < data.historicoModular.resultados.length; i++) {
-      resultado = historicoResultados[i];
-      const plataforma = resultado.plataforma;
-      const canal = resultado.canal;
-      let lastKeyConcorrencia = Object.keys(resultado.dadosHistoricos).at(-1);
-      const viewers = resultado.dadosHistoricos[lastKeyConcorrencia];
+  for (let i = 0; i < data.historicoModular.resultados.length; i++) {
+    resultado = historicoResultados[i];
+    const plataforma = resultado.plataforma;
+    const canal = resultado.canal;
+    let lastKeyConcorrencia = Object.keys(resultado.dadosHistoricos).at(-1);
+    const viewers = resultado.dadosHistoricos[lastKeyConcorrencia];
 
-      detalhesHtml += `<tr class=audiencia-line>
-      <td class=audiencia-cell>${plataforma}</td>
-      <td>${canal}</td>
-      <td>${viewers}</td>
-      <td><button class='remove-btn' onclick='this.closest("tr").remove(); atualizarTotal();'>X</button></td>
-      </tr>`;
+    detalhesHtml += `<tr class=audiencia-line>
+    <td class=audiencia-cell>${plataforma}</td>
+    <td>${canal}</td>
+    <td>${viewers}</td>
+    <td><button class='remove-btn' onclick='this.closest("tr").remove(); atualizarTotal();'>X</button></td>
+    </tr>`;
 
-      total += viewers;
-    }
+    total += viewers;
+  }
 
-    const tbody = document.getElementById("auto");
+  const tbody = document.getElementById("auto");
 
-    // Salva linhas manuais
-    const linhasManuais = Array.from(tbody.querySelectorAll("tr"))
-        .filter(tr => tr.querySelector("input"));
+  // Salva linhas manuais
+  const linhasManuais = Array.from(tbody.querySelectorAll("tr"))
+      .filter(tr => tr.querySelector("input"));
 
-    // Limpa e atualiza com dados automáticos
-    tbody.innerHTML = detalhesHtml;
+  // Limpa e atualiza com dados automáticos
+  tbody.innerHTML = detalhesHtml;
 
-    // Reanexa linhas manuais
-    linhasManuais.forEach(tr => tbody.appendChild(tr));
+  // Reanexa linhas manuais
+  linhasManuais.forEach(tr => tbody.appendChild(tr));
 
-    atualizarGraficoAudiencia(historicoResultados);
-    atualizaTabela(historicoResultados, data.programaAtual);
+  atualizarGraficoAudiencia(historicoResultados);
+  atualizaTabela(historicoResultados, data.programaAtual);
 
-    alertMessageDisplay("Audiência Atualizada", "success");
+  alertMessageDisplay("Audiência Atualizada", "success");
 }
 

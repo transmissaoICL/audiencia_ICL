@@ -58,17 +58,35 @@ function addHistorico(historico, data, time){
     return historico;
 }
 
-function addHistoricoPrograma(data, historicoICL, programa, time){
+function addHistoricoPrograma(data, historicoICL, programa, time, canaisICL){
     var novoPrograma;
+
+    let apenasICL = []
+    for (canal of canaisICL){
+        let encontrado = data.find(h => h.link === canal)
+        if (encontrado){
+            apenasICL.push(encontrado);
+        }
+    }
+
+    let total = 0;
+
+    for (canal of apenasICL){
+        total += Object.values(canal.dadosHistoricos).at(-1);
+    }
+
+    console.log(total);
+    console.log(apenasICL);
+
 
     if (historicoICL.length != 0){
         for (let prog of historicoICL){
             if (prog.index === programa){
                 if (Object.keys(prog.dadosHistoricos).at(-1) === time){
-                    prog.dadosHistoricos[time] += data.viewers;
+                    prog.dadosHistoricos[time] += total;
                 }
                 else{
-                    prog.dadosHistoricos[time] = data.viewers;
+                    prog.dadosHistoricos[time] = total;
                 }
             }
 
@@ -76,7 +94,7 @@ function addHistoricoPrograma(data, historicoICL, programa, time){
                 novoPrograma = new audienciaPrograma();
                 novoPrograma.index = programa;
                 novoPrograma.programa = programas[programa];
-                novoPrograma.dadosHistoricos[time] = data.viewers;
+                novoPrograma.dadosHistoricos[time] = total;
                 historicoICL.push(novoPrograma);
             }
         }
@@ -85,7 +103,7 @@ function addHistoricoPrograma(data, historicoICL, programa, time){
         novoPrograma = new audienciaPrograma();
         novoPrograma.programa = programas[programa];
         novoPrograma.index = programa;
-        novoPrograma.dadosHistoricos[time] = data.viewers;
+        novoPrograma.dadosHistoricos[time] = total;
         historicoICL.push(novoPrograma);
     }
     return historicoICL;
@@ -95,8 +113,8 @@ function saveJSON(data, dataICL){
     console.log('Salvando audiencia...')
     const date = new Date();
     let completo = new audienciaCompleta();
-    completo.audienciasCanais = [...data];
-    completo.audienciasProgramas = [...dataICL]
+    completo.audienciasCanais = [...data.resultados];
+    completo.audienciasProgramas = dataICL;
     completo.year = date.getFullYear();
     completo.month = date.getMonth();
     completo.day = date.getDate();
