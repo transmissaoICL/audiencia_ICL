@@ -6,12 +6,15 @@ const { addHistorico, saveJSON, addHistoricoPrograma, historicoObj } = require('
 const app = express();
 const path = require('path');
 const { programas, whatsappConst } = require('./data/constants');
+const { startWhatsApp, sendToGroup } = require('./scripts/utils/whatsappClient');
 
 app.use(cors());
 app.use(express.json());
 
 // Servir arquivos estáticos, como audiencia.html
 app.use(express.static(path.join(__dirname)));
+
+startWhatsApp();
 
 let historicoPrograma = [];
 
@@ -48,34 +51,57 @@ async function rasparTwitch(page, link) {
   return { plataforma: 'Twitch', canal, viewers, link };
 }
 
-async function sendWhatsapp(data, linksICL, programaICL, teste){
-  let historicoICL = [];
-
-  for (let res of data){
-    let encontrado = linksICL.find(a => a === res.link);
-    if (encontrado){
-      historicoICL.push(res);
+async function sendWhatsapp(data, linksICL, programaICL, teste) {
+    
+    // 1. Filtra e processa os dados (mantive sua lógica original de filtro)
+    let dadosFiltrados = [];
+    for (let res of data) {
+        let encontrado = linksICL.find(a => a === res.link);
+        if (encontrado) {
+            dadosFiltrados.push(res);
+        }
     }
-  }
 
-  let grupoWhatsapp;
+    // 2. Define o grupo
+    let grupoAlvo;
+    if (teste) { 
+        grupoAlvo = whatsappConst['grupoTeste']; // Certifique-se que isso é o Nome ou ID
+    } else { 
+        grupoAlvo = whatsappConst['grupoAudiencia']; 
+    }
 
-  if (teste){ grupoWhatsapp = whatsappConst['grupoTeste']; }
-  else { grupoWhatsapp = whatsappConst['grupoAudiencia']; }
+    // 3. Monta a mensagem (traduzindo sua lógica Python para JS)
+    const mensagem = formatarMensagem(dadosFiltrados, programaICL);
 
-  let whatsappSend = await fetch('http://localhost:8000/api/whatsapp', {
-    method: 'POST',
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({ 
-      grupo: grupoWhatsapp,
-      audiencia: `${ JSON.stringify(historicoICL) }`,
-      programa: programaICL })
-    })
-
-  let status = await whatsappSend.json();
-  console.log(status.status);
+    // 4. ENVIA DIRETO (Sem fetch, sem servidor python)
+    // O próprio client gerencia a fila interna de mensagens
+    await sendToGroup(grupoAlvo, mensagem);
 }
 
+// Helper para formatar texto (versão JS da sua função python)
+function formatarMensagem(data, programa) {
+    let audiencia_yt = 0;
+    let audiencia_fb = 0;
+    let audiencia_insta = 0;
+
+    data.forEach(canal => {
+        // Assume que a estrutura de dados é a mesma que chega no python
+        // Adapte conforme o retorno real do seu scraper
+        if(canal.plataforma === 'YouTube') audiencia_yt += canal.viewers || 0;
+        if(canal.plataforma === 'Facebook') audiencia_fb += canal.viewers || 0;
+        if(canal.plataforma === 'Instagram') audiencia_insta += canal.viewers || 0;
+        // Nota: simplifiquei aqui, mas se precisar pegar do histórico:
+        // let keys = Object.keys(canal.dadosHistoricos || {});
+        // let lastVal = keys.length ? canal.dadosHistoricos[keys[keys.length-1]] : 0;
+    });
+
+    let total = audiencia_yt + audiencia_fb + audiencia_insta;
+    let hoje = new Date().toLocaleDateString('pt-BR');
+
+    return `*${hoje} - ${programa} - Audiência:*\n\n` +
+           `Facebook: ${audiencia_fb} - YouTube: ${audiencia_yt} - Instagram: ${audiencia_insta}\n\n` +
+           `Total: ${total}`;
+}
 
 app.post('/api/raspar', async (req, res) => {
   let { links, canaisICL, programa, nomePrograma, teste, historicoModular, programacao } = req.body;

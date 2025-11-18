@@ -16,8 +16,8 @@ const programas = [
 ];
 
 const whatsappConst = {
-    grupoTeste: 'JEOSMN0MLKf50GPwhZ1DPO',
-    grupoAudiencia: 'KANTowb8uZiLll43vXJMq8'
+    grupoTeste: '120363400505237092@g.us',
+    grupoAudiencia: '120363029449458777@g.us'
 }
 
 module.exports = { programas, whatsappConst };

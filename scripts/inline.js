@@ -345,7 +345,7 @@ async function consultarAudiencias() {
   }
 
   alertMessageDisplay("Bot Está Raspando a audiencia", "success");
-  let resposta = await fetch("http://localhost:3000/api/raspar", {
+  let resposta = await fetch("/api/raspar", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ links, canaisICL, programa, nomePrograma, teste, historicoModular, programacao})
