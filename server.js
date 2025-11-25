@@ -87,9 +87,9 @@ function formatarMensagem(data, programa) {
     data.forEach(canal => {
         // Assume que a estrutura de dados é a mesma que chega no python
         // Adapte conforme o retorno real do seu scraper
-        if(canal.plataforma === 'YouTube') audiencia_yt += canal.viewers || 0;
-        if(canal.plataforma === 'Facebook') audiencia_fb += canal.viewers || 0;
-        if(canal.plataforma === 'Instagram') audiencia_insta += canal.viewers || 0;
+        if(canal.plataforma === 'YouTube') audiencia_yt += Object.values(canal.dadosHistoricos).at(-1) || 0;
+        if(canal.plataforma === 'Facebook') audiencia_fb += Object.values(canal.dadosHistoricos).at(-1) || 0;
+        if(canal.plataforma === 'Instagram') audiencia_insta += Object.values(canal.dadosHistoricos).at(-1) || 0;
         // Nota: simplifiquei aqui, mas se precisar pegar do histórico:
         // let keys = Object.keys(canal.dadosHistoricos || {});
         // let lastVal = keys.length ? canal.dadosHistoricos[keys[keys.length-1]] : 0;
@@ -158,7 +158,8 @@ app.post('/api/raspar', async (req, res) => {
   }
 
   if (programacao){
-      saveJSON(historicoModular, historicoPrograma);
+    console.log(historicoPrograma);
+    saveJSON(historicoModular, historicoPrograma);
   };
 
   res.json({ historicoModular, programaAtual });

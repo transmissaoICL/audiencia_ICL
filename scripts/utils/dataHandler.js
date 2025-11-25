@@ -75,10 +75,6 @@ function addHistoricoPrograma(data, historicoICL, programa, time, canaisICL){
         total += Object.values(canal.dadosHistoricos).at(-1);
     }
 
-    console.log(total);
-    console.log(apenasICL);
-
-
     if (historicoICL.length != 0){
         for (let prog of historicoICL){
             if (prog.index === programa){
