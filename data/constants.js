@@ -20,4 +20,9 @@ const whatsappConst = {
     grupoAudiencia: '120363029449458777@g.us'
 }
 
-module.exports = { programas, whatsappConst };
+const periodos = {
+    0: 'manha',
+    1: 'tarde'
+}
+
+module.exports = { programas, whatsappConst, periodos };

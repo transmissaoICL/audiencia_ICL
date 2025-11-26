@@ -43,6 +43,18 @@ let interval;
 
 let programacao = false;
 
+let periodo = 0;
+
+const periodoToggle = document.getElementById('periodo');
+periodoToggle.addEventListener('change', function(){
+  if (periodo == 0){
+    periodo = 1;
+  }
+  else{
+    periodo = 0;
+  }
+})
+
 const progToggle = document.getElementById('progToggle');
 progToggle.addEventListener('change', function(){
   programacao = !programacao;
@@ -348,7 +360,7 @@ async function consultarAudiencias() {
   let resposta = await fetch("/api/raspar", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ links, canaisICL, programa, nomePrograma, teste, historicoModular, programacao})
+      body: JSON.stringify({ links, canaisICL, programa, nomePrograma, teste, historicoModular, programacao, periodo})
   });
 
   const data = await resposta.json();

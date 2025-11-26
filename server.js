@@ -104,7 +104,7 @@ function formatarMensagem(data, programa) {
 }
 
 app.post('/api/raspar', async (req, res) => {
-  let { links, canaisICL, programa, nomePrograma, teste, historicoModular, programacao } = req.body;
+  let { links, canaisICL, programa, nomePrograma, teste, historicoModular, programacao, periodo } = req.body;
   
   if (historicoModular === undefined){
     historicoModular = new historicoObj();
@@ -158,8 +158,7 @@ app.post('/api/raspar', async (req, res) => {
   }
 
   if (programacao){
-    console.log(historicoPrograma);
-    saveJSON(historicoModular, historicoPrograma);
+    saveJSON(historicoModular, historicoPrograma, periodo);
   };
 
   res.json({ historicoModular, programaAtual });
