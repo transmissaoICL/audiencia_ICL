@@ -58,7 +58,7 @@ function addHistorico(historico, data, time){
     return historico;
 }
 
-function addHistoricoPrograma(data, historicoICL, programa, time, canaisICL){
+function addHistoricoPrograma(data, historicoICL, programa, time, canaisICL, programaAtual){
     var novoPrograma;
 
     let apenasICL = []
@@ -84,7 +84,7 @@ function addHistoricoPrograma(data, historicoICL, programa, time, canaisICL){
         else{
             novoPrograma = new audienciaPrograma();
             novoPrograma.index = programa;
-            novoPrograma.programa = programas[programa];
+            novoPrograma.programa = programaAtual;
             novoPrograma.dadosHistoricos[time] = total;
             historicoICL.push(novoPrograma);
         }
@@ -92,7 +92,7 @@ function addHistoricoPrograma(data, historicoICL, programa, time, canaisICL){
 
     else{
         novoPrograma = new audienciaPrograma();
-        novoPrograma.programa = programas[programa];
+        novoPrograma.programa = programaAtual;
         novoPrograma.index = programa;
         novoPrograma.dadosHistoricos[time] = total;
         historicoICL.push(novoPrograma);
@@ -114,7 +114,7 @@ function saveJSON(data, dataICL, periodo){
     const path = require('path');
 
     let yearFolder = completo.year;
-    let monthFolder = completo.month;
+    let monthFolder = completo.month + 1;
     let dayFolder = completo.day;
 
     let periodoAtual = periodos[periodo];
@@ -123,7 +123,7 @@ function saveJSON(data, dataICL, periodo){
     if (fs.existsSync(`./data/historicos/${yearFolder}`)){
         if(fs.existsSync(`./data/historicos/${yearFolder}/${monthFolder}`)){
             if (fs.existsSync(`./data/historicos/${yearFolder}/${monthFolder}/${dayFolder}`)){
-                fs.writeFileSync(`./data/historicos/${completo.year}/${completo.month}/${completo.day}/audiencia-${date.toISOString().split('T')[0]}-${periodoAtual}.json`, jsonString);
+                fs.writeFileSync(`./data/historicos/${yearFolder}/${monthFolder}/${dayFolder}/audiencia-${date.toISOString().split('T')[0]}-${periodoAtual}.json`, jsonString);
                 return
             }
             fs.mkdirSync(`./data/historicos/${yearFolder}/${monthFolder}/${dayFolder}`);
@@ -132,10 +132,12 @@ function saveJSON(data, dataICL, periodo){
         fs.mkdirSync(`./data/historicos/${yearFolder}/${monthFolder}/${dayFolder}`);
     }
 
-    fs.mkdirSync(`./data/historicos/${yearFolder}`);
-    fs.mkdirSync(`./data/historicos/${yearFolder}/${monthFolder}`);
-    fs.mkdirSync(`./data/historicos/${yearFolder}/${monthFolder}/${dayFolder}`);
-    fs.writeFileSync(`./data/historicos/${completo.year}/${completo.month}/${completo.day}/audiencia-${date.toISOString().split('T')[0]}-${periodoAtual}.json`, jsonString);
+    else {
+        fs.mkdirSync(`./data/historicos/${yearFolder}`);
+        fs.mkdirSync(`./data/historicos/${yearFolder}/${monthFolder}`);
+        fs.mkdirSync(`./data/historicos/${yearFolder}/${monthFolder}/${dayFolder}`);
+    }
+    fs.writeFileSync(`./data/historicos/${yearFolder}/${completo.month}/${dayFolder}/audiencia-${date.toISOString().split('T')[0]}-${periodoAtual}.json`, jsonString);
 
   
 
@@ -143,7 +145,7 @@ function saveJSON(data, dataICL, periodo){
     //const filePath = path.join(dir, `audiencia-${date.toISOString().split('T')[0]}.json`);
 
     // const jsonString = JSON.stringify(completo, null, 2);
-    fs.writeFileSync(`./data/historicos/${completo.year}/${completo.month}/${completo.day}/audiencia-${date.toISOString().split('T')[0]}-${periodoAtual}.json`, jsonString);
+    fs.writeFileSync(`./data/historicos/${yearFolder}/${monthFolder}/${dayFolder}/audiencia-${date.toISOString().split('T')[0]}-${periodoAtual}.json`, jsonString);
     console.log("Arquivo se audiência salvo.");
 }
 

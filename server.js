@@ -146,7 +146,7 @@ app.post('/api/raspar', async (req, res) => {
 
   historicoModular.resultados = addHistorico(historicoModular.resultados, resultados, timestamp);
 
-  historicoPrograma = addHistoricoPrograma(historicoModular.resultados, historicoPrograma, programa, timestamp, canaisICL);
+  historicoPrograma = addHistoricoPrograma(historicoModular.resultados, historicoPrograma, programa, timestamp, canaisICL, programaAtual);
 
 
   try{
