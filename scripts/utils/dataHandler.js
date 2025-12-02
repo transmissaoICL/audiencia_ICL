@@ -58,14 +58,42 @@ function addHistorico(historico, data, time){
     return historico;
 }
 
+<<<<<<< HEAD
+function addHistoricoPrograma(data, historicoICL, programa, time){
+    console.log(data)
+=======
 function addHistoricoPrograma(data, historicoICL, programa, time, canaisICL, programaAtual){
+>>>>>>> e12e288377906e3e1361b08cdd5c04fdae1dffac
     var novoPrograma;
+    
+    console.log(total);
+    let total = 0;
+    for (let views of data){
+        total += views.dadosHistoricos[Object.keys(views.dadosHistoricos).at(-1)];
+    }
+    console.log(total);
 
+<<<<<<< HEAD
+    if (historicoICL.length != 0){
+        for (let prog of historicoICL){
+            if (prog.index === programa){
+                prog.dadosHistoricos[time] = total;
+            }
+
+            else{
+                novoPrograma = new audienciaPrograma();
+                novoPrograma.index = programa;
+                novoPrograma.programa = programas[programa];
+                novoPrograma.dadosHistoricos[time] = total;
+                historicoICL.push(novoPrograma);
+            }
+=======
     let apenasICL = []
     for (canal of canaisICL){
         let encontrado = data.find(h => h.link === canal)
         if (encontrado){
             apenasICL.push(encontrado);
+>>>>>>> e12e288377906e3e1361b08cdd5c04fdae1dffac
         }
     }
 
@@ -100,12 +128,21 @@ function addHistoricoPrograma(data, historicoICL, programa, time, canaisICL, pro
     return historicoICL;
 }
 
+<<<<<<< HEAD
+function saveJSON(dataCanais, dataPrograma){
+    console.log('Salvando audiencia...')
+    const date = new Date();
+    let completo = new audienciaCompleta();
+    completo.audienciasCanais = [...dataCanais];
+    completo.audienciasProgramas = [...dataPrograma]
+=======
 function saveJSON(data, dataICL, periodo){
     console.log('Salvando audiencia...')
     const date = new Date();
     let completo = new audienciaCompleta();
     completo.audienciasCanais = [...data.resultados];
     completo.audienciasProgramas = dataICL;
+>>>>>>> e12e288377906e3e1361b08cdd5c04fdae1dffac
     completo.year = date.getFullYear();
     completo.month = date.getMonth();
     completo.day = date.getDate();

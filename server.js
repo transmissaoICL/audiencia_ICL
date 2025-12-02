@@ -14,11 +14,16 @@ app.use(express.json());
 // Servir arquivos estáticos, como audiencia.html
 app.use(express.static(path.join(__dirname)));
 
+<<<<<<< HEAD
+let historicoICL = [];
+let historicoCanaisICL = [];
+=======
 startWhatsApp();
 
 let historicoPrograma = [];
 
 let historicoTotal =[];
+>>>>>>> e12e288377906e3e1361b08cdd5c04fdae1dffac
 
 async function rasparTwitch(page, link) {
   let canal = '-';
@@ -146,8 +151,23 @@ app.post('/api/raspar', async (req, res) => {
 
   historicoModular.resultados = addHistorico(historicoModular.resultados, resultados, timestamp);
 
+<<<<<<< HEAD
+
+
+  for (let canal of historicoModular.resultados){
+    let encontrado = canaisICL.find(a => a === canal.link);
+    if (encontrado){
+      historicoCanaisICL.push(canal);
+    }
+  }
+
+  historicoICL = addHistoricoPrograma(historicoCanaisICL, historicoICL, programa, timestamp);
+  
+  console.log(historicoICL);
+=======
   historicoPrograma = addHistoricoPrograma(historicoModular.resultados, historicoPrograma, programa, timestamp, canaisICL, programaAtual);
 
+>>>>>>> e12e288377906e3e1361b08cdd5c04fdae1dffac
 
   try{
     sendWhatsapp(historicoModular.resultados, canaisICL, programaAtual, teste);
@@ -168,6 +188,16 @@ app.listen(3000, () => {
   console.log('Servidor rodando em http://localhost:3000');
 });
 
+<<<<<<< HEAD
+
+
+//setInterval(() => {
+  //  saveJSON(historicoCanaisICL, historicoICL);
+//}, 720000);
+
+
+=======
+>>>>>>> e12e288377906e3e1361b08cdd5c04fdae1dffac
 process.on('SIGINT', async () => {
   console.log('\nEncerrando servidor...');
   server.close(() => {
