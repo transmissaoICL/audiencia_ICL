@@ -6,7 +6,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Monitor de Audiência ao Vivo</title>
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-  <link rel="stylesheet" href="style/style.css">
+  <link rel="stylesheet" href="./style/style.css">
 </head>
 <body>
   <h1>Monitor de Audiência ao Vivo</h1>
@@ -21,6 +21,65 @@
   </div>
   <div id="tabConfiguracoes" class="tabcontent">
     <h3>Configurações</h3>
+    <div class="container">
+      <div style="padding-right: 30px">
+        <h3>Habilitar Consulta</h3>
+        <label class="switch">
+          <input type="checkbox" id="myToggle">
+          <span class="slider round"></span>
+        </label>
+      </div>
+      <div style="padding-right: 30px">
+        <h3>Periodo de Teste</h3>
+        <label class="switch">
+          <input type="checkbox" id="testToggle">
+          <span class="slider round"></span>
+        </label>
+      </div>
+      <div style="padding-right: 30px">
+        <h3>Programação</h3>
+        <label class="switch">
+          <input type="checkbox" id="progToggle">
+          <span class="slider round"></span>
+        </label>
+      </div>
+      <div style="padding-right: 30px">
+        <h3>Período</h3>
+        <div>
+        <span style="margin: 0px 20px 0px 0px;"><b>Manhã</b></span>
+        <label class="switch">
+          <input type="checkbox" id="periodo">
+          <span class="slider round"></span>
+        </label>
+        <span style="margin: 0px 0px 0px 20px;"><b>Tarde</b></span>
+        </div>
+      </div>
+    </div>
+    <div class="container">
+      <div>
+        <h3>Programa Atual</h3>
+        <select name="programaAtual" id="programaDropdown">
+          <option value="0">Desperta</option>
+          <option value="1">ICL Notícias 1</option>
+          <option value="2">Em Detalhes</option>
+          <option value="3">ICL Mercado e Investimentos</option>
+          <option value="4">Role ICL</option>
+          <option value="5">Webcomunistas</option>
+          <option value="6">Espiritualidade na Ação</option>
+          <option value="7">Provocação Histórica</option>
+          <option value="8">Chico Pinheiro Entrevista</option>
+          <option value="9">ICL Entrevista</option>
+          <option value="10">Urgente</option>
+          <option value="11">ICL Notícias 2</option>
+          <option value="12">Precisamos Conversar</option>
+          <option value="13">Outro</option>
+        </select>
+      </div>
+      <div>
+        <h3>Nome do Programa Especial</h3>
+        <input id="nomePrograma" type="text" style="background-color: aliceblue; border: 1px solid black;">
+      </div>
+    </div>
     <div class="container">
       <div class='containerLinks'>
         <h3>Canais concorrência</h3>
@@ -58,45 +117,6 @@
           </div>
         </div>
         <button class="addBtn linkICL" onclick="addLink(this)">&plus;</button>
-      </div>
-    </div>
-    <div class="container">
-      <div style="padding-right: 30px">
-        <h3>Habilitar Consulta</h3>
-        <label class="switch">
-          <input type="checkbox" id="myToggle">
-          <span class="slider round"></span>
-        </label>
-      </div>
-      <div style="padding-right: 30px">
-        <h3>Periodo de Teste</h3>
-        <label class="switch">
-          <input type="checkbox" id="testToggle">
-          <span class="slider round"></span>
-        </label>
-      </div>
-      <div>
-        <h3>Programa Atual</h3>
-        <select name="programaAtual" id="programaDropdown">
-          <option value="0">Desperta</option>
-          <option value="1">ICL Notícias 1</option>
-          <option value="2">Em Detalhes</option>
-          <option value="3">ICL Mercado e Investimentos</option>
-          <option value="4">Role ICL</option>
-          <option value="5">Webcomunistas</option>
-          <option value="6">Espiritualidade na Ação</option>
-          <option value="7">Provocação Histórica</option>
-          <option value="8">Chico Pinheiro Entrevista</option>
-          <option value="9">ICL Entrevista</option>
-          <option value="10">Urgente</option>
-          <option value="11">ICL Notícias 2</option>
-          <option value="12">Precisamos Conversar</option>
-          <option value="13">Outro</option>
-        </select>
-      </div>
-      <div>
-        <h3>Nome do Programa Especial</h3>
-        <input id="nomePrograma" type="text" style="background-color: aliceblue; border: 1px solid black;">
       </div>
     </div>
     <p><em>Audiência será atualizada automaticamente a cada 4 minutos (idealmente).</em></p>

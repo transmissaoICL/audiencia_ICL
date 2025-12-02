@@ -1,8 +1,5 @@
 let historicoModular = undefined;
 
-//TODO: Organizar o projeto mais modularmente
-//TODO: Achar uma forma de pegar a audiencia do Instagram
-//TODO: Fazer com que o bot consiga mandar a audiencia no grupo do Zap
 //TODO: Fazer o bot uma imagem da audiencia e mandar no grupo do zap
 
 const coresPaleta = [
@@ -44,6 +41,25 @@ let teste = false;
 
 let interval;
 
+let programacao = false;
+
+let periodo = 0;
+
+const periodoToggle = document.getElementById('periodo');
+periodoToggle.addEventListener('change', function(){
+  if (periodo == 0){
+    periodo = 1;
+  }
+  else{
+    periodo = 0;
+  }
+})
+
+const progToggle = document.getElementById('progToggle');
+progToggle.addEventListener('change', function(){
+  programacao = !programacao;
+});
+
 const myToggle = document.getElementById('myToggle');
 myToggle.addEventListener('change', function() {
     scrapping = !scrapping;
@@ -73,12 +89,13 @@ programaDropdown.addEventListener('change', function() {
 const newLineInnerText = `
 <input class="linkName" placeholder="Nome do Canal" style="width: 15%;">
 <input class="linkPlataforma" placeholder="Plataforma do Canal" style="width: 15%;">
-<input class="link" placeholder="Link" style="width: 50%; onchange="autoComplete(this)">
+<input class="link" placeholder="Link" style="width: 50%;" onchange="autoComplete(this)">
 <input class="customCheck" type="checkbox" style="height: 15px; width: 45px">
 <span class="closeLinkBtn" onclick="excludeLink(this)">&timesb;</span>
 `
 
 function autoComplete(element){
+  console.log(element);
   if (element.value.includes(' ')){
     let links = (element.value.split(" "));
     let newLine;
@@ -112,11 +129,15 @@ function addLink(element){
   // Get which button is pressed to now which link to create
   if (element.classList.contains("linkConcorrencia")){
     let concorrencia = document.getElementById("urlsConcorrencia");
-    return addLinkLine(concorrencia, "linkConcorrencia");
+    let newLine = addLinkLine(concorrencia, "linkConcorrencia");
+    newLine.getElementsByClassName('link')[0].classList.add('linkConcorrencia');
+    return newLine;
   }
   else{
     let icl = document.getElementById("urlsICL");
-    return addLinkLine(icl, "linkICL");
+    let newLine = addLinkLine(icl, "linkICL");
+    newLine.getElementsByClassName('link')[0].classList.add('linkICL');
+    return newLine;
   }
 }
 
@@ -308,76 +329,76 @@ function atualizarTotal(data) {
 
 async function consultarAudiencias() {
 
-    let urlsConcorrencia = document.getElementById("urlsConcorrencia");
-    let linesConcorrencia = urlsConcorrencia.getElementsByClassName("linkLine");
-    let canaisConcorrencia = []
-    for (let element of linesConcorrencia){
-      let link = element.getElementsByClassName("link")[0].value;
-      if (link == " " || link == "") continue;
-      canaisConcorrencia.push(link);
-    }
+  let urlsConcorrencia = document.getElementById("urlsConcorrencia");
+  let linesConcorrencia = urlsConcorrencia.getElementsByClassName("linkLine");
+  let canaisConcorrencia = []
+  for (let element of linesConcorrencia){
+    let link = element.getElementsByClassName("link")[0].value;
+    if (link == " " || link == "") continue;
+    canaisConcorrencia.push(link);
+  }
 
-    let urlsICL = document.getElementById("urlsICL");
-    let linesICL = urlsICL.getElementsByClassName("linkLine");
-    let canaisICL = [];
-    for (let element of linesICL){
-      let link = element.getElementsByClassName("link")[0].value;
-      canaisICL.push(link);
-    }
+  let urlsICL = document.getElementById("urlsICL");
+  let linesICL = urlsICL.getElementsByClassName("linkLine");
+  let canaisICL = [];
+  for (let element of linesICL){
+    let link = element.getElementsByClassName("link")[0].value;
+    canaisICL.push(link);
+  }
 
-    let links = [...canaisConcorrencia, ...canaisICL];
-    let total = 0;
-    let detalhesHtml = "";
+  let links = [...canaisConcorrencia, ...canaisICL];
+  let total = 0;
+  let detalhesHtml = "";
 
-    let nomePrograma = '';
+  let nomePrograma = '';
 
-    if (programa === 13){
-      nomePrograma = document.getElementById('nomePrograma').value;
-    }
+  if (programa === 13){
+    nomePrograma = document.getElementById('nomePrograma').value;
+  }
 
-    alertMessageDisplay("Bot Está Raspando a audiencia", "success");
-    let resposta = await fetch("/api/raspar", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ links, canaisICL, programa, nomePrograma, teste, historicoModular})
-    });
+  alertMessageDisplay("Bot Está Raspando a audiencia", "success");
+  let resposta = await fetch("/api/raspar", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ links, canaisICL, programa, nomePrograma, teste, historicoModular, programacao, periodo})
+  });
 
-    const data = await resposta.json();
-    historicoModular = data.historicoModular;
-    historicoResultados = historicoModular.resultados;
+  const data = await resposta.json();
+  historicoModular = data.historicoModular;
+  historicoResultados = historicoModular.resultados;
 
-    for (let i = 0; i < data.historicoModular.resultados.length; i++) {
-      resultado = historicoResultados[i];
-      const plataforma = resultado.plataforma;
-      const canal = resultado.canal;
-      let lastKeyConcorrencia = Object.keys(resultado.dadosHistoricos).at(-1);
-      const viewers = resultado.dadosHistoricos[lastKeyConcorrencia];
+  for (let i = 0; i < data.historicoModular.resultados.length; i++) {
+    resultado = historicoResultados[i];
+    const plataforma = resultado.plataforma;
+    const canal = resultado.canal;
+    let lastKeyConcorrencia = Object.keys(resultado.dadosHistoricos).at(-1);
+    const viewers = resultado.dadosHistoricos[lastKeyConcorrencia];
 
-      detalhesHtml += `<tr class=audiencia-line>
-      <td class=audiencia-cell>${plataforma}</td>
-      <td>${canal}</td>
-      <td>${viewers}</td>
-      <td><button class='remove-btn' onclick='this.closest("tr").remove(); atualizarTotal();'>X</button></td>
-      </tr>`;
+    detalhesHtml += `<tr class=audiencia-line>
+    <td class=audiencia-cell>${plataforma}</td>
+    <td>${canal}</td>
+    <td>${viewers}</td>
+    <td><button class='remove-btn' onclick='this.closest("tr").remove(); atualizarTotal();'>X</button></td>
+    </tr>`;
 
-      total += viewers;
-    }
+    total += viewers;
+  }
 
-    const tbody = document.getElementById("auto");
+  const tbody = document.getElementById("auto");
 
-    // Salva linhas manuais
-    const linhasManuais = Array.from(tbody.querySelectorAll("tr"))
-        .filter(tr => tr.querySelector("input"));
+  // Salva linhas manuais
+  const linhasManuais = Array.from(tbody.querySelectorAll("tr"))
+      .filter(tr => tr.querySelector("input"));
 
-    // Limpa e atualiza com dados automáticos
-    tbody.innerHTML = detalhesHtml;
+  // Limpa e atualiza com dados automáticos
+  tbody.innerHTML = detalhesHtml;
 
-    // Reanexa linhas manuais
-    linhasManuais.forEach(tr => tbody.appendChild(tr));
+  // Reanexa linhas manuais
+  linhasManuais.forEach(tr => tbody.appendChild(tr));
 
-    atualizarGraficoAudiencia(historicoResultados);
-    atualizaTabela(historicoResultados, data.programaAtual);
+  atualizarGraficoAudiencia(historicoResultados);
+  atualizaTabela(historicoResultados, data.programaAtual);
 
-    alertMessageDisplay("Audiência Atualizada", "success");
+  alertMessageDisplay("Audiência Atualizada", "success");
 }
 

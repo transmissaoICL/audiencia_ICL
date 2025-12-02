@@ -6,4 +6,5 @@ tmp/*
 tmp/session/*
 data/historicos/*
 PyWhatKit_DB.txt
-PyWhatKit_DB.txt
+.wwebjs_cache
+.wwebjs_auth
