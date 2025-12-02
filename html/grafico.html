@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Monitor de Audiência ao Vivo</title>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <link rel="stylesheet" href="../style/style.css">
+</head>
+<body>
+    <div>
+      <h3>Grafico</h3>
+      <div class="container">
+        <h3>Periodo</h3>
+        <div>
+          <span style="margin: 0px 20px 0px 0px;"><b>Manhã</b></span>
+          <label class="switch">
+            <input type="checkbox" id="progPeriodo">
+            <span class="slider round"></span>
+          </label>
+          <span style="margin: 0px 0px 0px 20px;"><b>Tarde</b></span>
+        </div>
+      </div>
+    </div>
+    <div id="tabGrafico">
+        <h3>Grafico</h3>
+        <canvas id="graficoAudiencia"></canvas>
+      </div>
+    <script src="../scripts/grafico.js"></script>
+</body>

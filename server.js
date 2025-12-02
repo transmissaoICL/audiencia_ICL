@@ -1,5 +1,4 @@
-const puppeteer = require('puppeteer');
-const { Cluster } = require('puppeteer-cluster');
+const { getCluster } = require('./scripts/cluster')
 const express = require('express');
 const cors = require('cors');
 const { timeout } = require('puppeteer');
@@ -7,6 +6,7 @@ const { addHistorico, saveJSON, addHistoricoPrograma, historicoObj } = require('
 const app = express();
 const path = require('path');
 const { programas, whatsappConst } = require('./data/constants');
+const { startWhatsApp, sendToGroup } = require('./scripts/utils/whatsappClient');
 
 app.use(cors());
 app.use(express.json());
@@ -14,136 +14,16 @@ app.use(express.json());
 // Servir arquivos estáticos, como audiencia.html
 app.use(express.static(path.join(__dirname)));
 
+<<<<<<< HEAD
 let historicoICL = [];
 let historicoCanaisICL = [];
+=======
+startWhatsApp();
 
-const account = {
-  username: "celioglicerio",
-  password: "ICL@audiencia123456"
-}
+let historicoPrograma = [];
 
-
-const facebookDict = {
-  'eduardomoreirabrasil': "Eduardo Moreira está ao vivo",
-  'institutoconhecimentoliberta': "Instituto Conhecimento Liberta está ao vivo",
-  'profile.php?id=100083958152654': "ICL Notícias está ao vivo"
-}
-
-const instaElements = {
-  aria_label: 'Ícone do Contador de visualizadores',
-  ao_vivo: 'AO VIVO',
-}
-
-async function rasparYouTube(page, link) {
-  let canal = '-';
-  let viewers = 0;
-
-  try {
-    await page.goto(link, { waitUntil: 'networkidle2', timeout: 60000 });
-
-    // Nome do canal
-    try {
-      const seletor = '#channel-name a';
-      await page.waitForSelector(seletor, { timeout: 10000 });
-      canal = await page.$eval(seletor, el => el.textContent.trim());
-    } catch {
-      console.warn(`Canal YouTube não encontrado via #channel-name. Link: ${link}`);
-    }    
-
-    // Viewers
-    try {
-      await page.waitForSelector(".view-count", { timeout: 5000 });
-
-      const audiencia = await page.evaluate(() => document.querySelector(".view-count").outerText);
-
-      if (audiencia.match("aguardando") || audiencia.match("waiting") || audiencia.match("vizualizações")){
-        console.warn("Live não iniciada");
-      }
-      if (audiencia.match("assistindo") || audiencia.match("watching")){
-        viewers = parseInt(audiencia.split(" ")[0].replace(",", ""));
-      }
-      } catch (err){
-        console.warn(`Falha ao pegar audiencia: ${err.message}`);
-      }
-
-    } catch (err) {
-      console.warn(`Falha ao acessar YouTube: ${err.message}`);
-    }
-    return { plataforma: 'YouTube', canal, viewers, link };  
-  }
-
-
-async function rasparFacebook(page, link) {
-  let canal = '-';
-  let viewers = 0;
-
-  let url = link;
-  let result = url.split('facebook.com/')[1];
-
-  try {
-    // Checa se já está logado
-    await page.goto('https://www.facebook.com/', { waitUntil: 'networkidle2', timeout: 10000 });
-    const isLoggedIn = await page.evaluate(() => !document.querySelector('input[name="email"]'));
-
-    if (!isLoggedIn) {
-      console.log("Fazendo login no Facebook...");
-      await page.goto('https://www.facebook.com/login', { waitUntil: 'networkidle2', timeout: 10000 });
-
-      await page.type('input[name="email"]', 'leonardo.salles@icl.com.br', { delay: 100 });
-      await page.type('input[name="pass"]', 'Lovisquok@33', { delay: 100 });
-
-      await Promise.all([
-        page.click('#loginbutton'),
-        page.waitForNavigation({ waitUntil: 'networkidle2' })
-      ]);
-    }
-
-    await page.goto(link, { waitUntil: 'networkidle2', timeout: 5000 });
-
-    try {
-    await page.click(`a[role="link"][aria-label="${facebookDict[result]}"]`);
-    }
-    catch (err) { console.log(err.message) }
-
-    // Nome do canal
-    try {
-      await page.waitForSelector('h2 strong', { timeout: 5000 });
-      canal = await page.$eval('h2 strong', el => el.textContent.trim());
-    } catch {
-      console.warn(`Nome do canal não encontrado: ${link}`);
-    }
-
-    // Audiência
-    try {
-      await page.waitForFunction(() => {
-        const spans = document.querySelectorAll('div[role="img"] span[dir="auto"]');
-        return Array.from(spans).some(span => span.textContent && /^\d/.test(span.textContent.trim()));
-      }, { timeout: 10000 });
-
-      await sleep(2000);
-
-      const rawViewers = await page.evaluate(() => {
-        const spans = Array.from(document.querySelectorAll('div[role="img"] span[dir="auto"]'));
-        for (const span of spans) {
-          const text = span.textContent.trim();
-          if (/^\d/.test(text)) return text;
-        }
-        return '0';
-      });
-
-      viewers = parseInt(rawViewers.replace(/\./g, '').replace(',', '')) || 0;
-    } catch (err) {
-      console.warn(`Falha ao capturar audiência do Facebook: ${err.message}`);
-    }
-
-  } catch (err) {
-    throw new Error(`Erro ao acessar Facebook: ${err.message}`);
-  }
-
-  return { plataforma: 'Facebook', canal, viewers, link };
-}
-
-
+let historicoTotal =[];
+>>>>>>> e12e288377906e3e1361b08cdd5c04fdae1dffac
 
 async function rasparTwitch(page, link) {
   let canal = '-';
@@ -176,122 +56,61 @@ async function rasparTwitch(page, link) {
   return { plataforma: 'Twitch', canal, viewers, link };
 }
 
-async function sleep(ms) {
-  return new Promise(resolve => setTimeout(resolve, ms));
-}
-
-async function rasparInstagram(page, link) {
-  let canal = '-';
-  let viewers = 0;
-
-  await page.goto('https://www.instagram.com/', { waitUntil: 'networkidle2' });
-
-  try {
-    // Aguarda especificamente os campos certos
-    await page.waitForSelector('input[name="username"]', { timeout: 1000 });
-    await page.waitForSelector('input[name="password"]', { timeout: 1000 });
-
-    await page.type('input[name="username"]', account.username, { delay: 100 });
-    await page.type('input[name="password"]', account.password, { delay: 100 });
-
-    await Promise.all([
-      page.click('button[type="submit"]'),
-      page.waitForNavigation({ waitUntil: 'networkidle2' })
-    ]);
-
-    // Fecha popups se aparecerem
-    try {
-      await page.waitForSelector('button:has-text("Agora não")', { timeout: 5000 });
-      await page.click('button:has-text("Agora não")');
-    } catch {}
-
-    try {
-      await page.waitForSelector('button:has-text("Agora não")', { timeout: 5000 });
-      await page.click('button:has-text("Agora não")');
-    } catch {}
-
-  } catch (err) {
-    console.log("Erro durante login no Instagram:", err.message);
-  }
-
-  try {
-    try{
-      const profilePage = link.slice(0, -5);
-      await page.goto(profilePage, { waitUntil: 'networkidle2' });
-      await sleep(1000);
-      const clickable = await page.$$('span');
-      for (const spans of clickable){
-        const spanText = await (await spans.getProperty('innerText')).jsonValue();
-        if ( spanText.includes('LIVE') || spanText.includes('AO VIVO')){
-          await spans.click();
-          break;
+async function sendWhatsapp(data, linksICL, programaICL, teste) {
+    
+    // 1. Filtra e processa os dados (mantive sua lógica original de filtro)
+    let dadosFiltrados = [];
+    for (let res of data) {
+        let encontrado = linksICL.find(a => a === res.link);
+        if (encontrado) {
+            dadosFiltrados.push(res);
         }
-      }
-    } catch(err){
-      console.warn(`Erro ao entrar na Live: ${err.message}`);
     }
 
-    await sleep(3000);
-
-    // Pega número de viewers
-    const rawViewers = await page.evaluate(() => {
-      const span = document.querySelector('span.html-span');
-      return span?.outerText || '0';
-    }, instaElements.aria_label);
-
-    const cleaned = rawViewers.replace(/[^\d]/g, '');
-    viewers = parseInt(cleaned) || 0;
-
-    // Nome do canal (genérico)
-    try {
-      canal = await page.evaluate(() => {
-        const el = document.querySelector('div[dir="auto"]').outerText;
-        return el ? el.textContent.trim() : '-';
-      });
-    } catch (err){
-      console.warn(`Nome do canal do Instagram não encontrado: ${err.message}`);
+    // 2. Define o grupo
+    let grupoAlvo;
+    if (teste) { 
+        grupoAlvo = whatsappConst['grupoTeste']; // Certifique-se que isso é o Nome ou ID
+    } else { 
+        grupoAlvo = whatsappConst['grupoAudiencia']; 
     }
 
-  } catch (err) {
-    console.warn(`Erro ao raspar Instagram: ${err.message}`);
-  }
+    // 3. Monta a mensagem (traduzindo sua lógica Python para JS)
+    const mensagem = formatarMensagem(dadosFiltrados, programaICL);
 
-  return { plataforma: 'Instagram', canal, viewers, link };
+    // 4. ENVIA DIRETO (Sem fetch, sem servidor python)
+    // O próprio client gerencia a fila interna de mensagens
+    await sendToGroup(grupoAlvo, mensagem);
 }
 
-async function sendWhatsapp(data, linksICL, programaICL, teste){
-  let historicoICL = [];
+// Helper para formatar texto (versão JS da sua função python)
+function formatarMensagem(data, programa) {
+    let audiencia_yt = 0;
+    let audiencia_fb = 0;
+    let audiencia_insta = 0;
 
-  for (let res of data){
-    let encontrado = linksICL.find(a => a === res.link);
-    if (encontrado){
-      historicoICL.push(res);
-    }
-  }
+    data.forEach(canal => {
+        // Assume que a estrutura de dados é a mesma que chega no python
+        // Adapte conforme o retorno real do seu scraper
+        if(canal.plataforma === 'YouTube') audiencia_yt += Object.values(canal.dadosHistoricos).at(-1) || 0;
+        if(canal.plataforma === 'Facebook') audiencia_fb += Object.values(canal.dadosHistoricos).at(-1) || 0;
+        if(canal.plataforma === 'Instagram') audiencia_insta += Object.values(canal.dadosHistoricos).at(-1) || 0;
+        // Nota: simplifiquei aqui, mas se precisar pegar do histórico:
+        // let keys = Object.keys(canal.dadosHistoricos || {});
+        // let lastVal = keys.length ? canal.dadosHistoricos[keys[keys.length-1]] : 0;
+    });
 
-  let grupoWhatsapp;
+    let total = audiencia_yt + audiencia_fb + audiencia_insta;
+    let hoje = new Date().toLocaleDateString('pt-BR');
 
-  if (teste){ grupoWhatsapp = whatsappConst['grupoTeste']; }
-  else { grupoWhatsapp = whatsappConst['grupoAudiencia']; }
-
-  let whatsappSend = await fetch('http://localhost:8000/api/whatsapp', {
-    method: 'POST',
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({ 
-      grupo: grupoWhatsapp,
-      audiencia: `${ JSON.stringify(historicoICL) }`,
-      programa: programaICL })
-    })
-
-  let status = await whatsappSend.json();
-  console.log(status.status);
+    return `*${hoje} - ${programa} - Audiência:*\n\n` +
+           `Facebook: ${audiencia_fb} - YouTube: ${audiencia_yt} - Instagram: ${audiencia_insta}\n\n` +
+           `Total: ${total}`;
 }
-
 
 app.post('/api/raspar', async (req, res) => {
-  let { links, canaisICL, programa, nomePrograma, teste, historicoModular } = req.body;
-  let resultados = [];
-
+  let { links, canaisICL, programa, nomePrograma, teste, historicoModular, programacao, periodo } = req.body;
+  
   if (historicoModular === undefined){
     historicoModular = new historicoObj();
   }
@@ -306,45 +125,33 @@ app.post('/api/raspar', async (req, res) => {
     programaAtual = programas[programa];
   }
 
-  const cluster = await Cluster.launch({
-    concurrency: Cluster.CONCURRENCY_PAGE,  // ou BROWSER para isolamento total
-    maxConcurrency: 2,
-    puppeteerOptions: {
-      headless: false,
-      userDataDir: './tmp/session',
-      args: ['--start-maximized', '--no-sandbox', '--disable-setuid-sandbox', '--window-position=-32000,-32000',]
-    }
-  });
-// '--window-position=-32000,-32000',
-  await cluster.task(async ({ page, data: { link } }) => {
-    let resultado;
-    if (link.includes('youtube.com')) {
-      resultado = await rasparYouTube(page, link);
-    } else if (link.includes('facebook.com')) {
-      resultado = await rasparFacebook(page, link);
-    } else if (link.includes('twitch.tv')) {
-      resultado = await rasparTwitch(page, link);
-    } else if (link.includes('instagram.com')) {
-      resultado = await rasparInstagram(page, link);
+  console.log('Obtendo Cluster...')
+  const cluster = await getCluster();
+  console.log('Cluster Pronto');
+
+  const promessasDeScrape = links.map(link => {
+      return cluster.execute({ link }); 
+    });
+
+  const resultadosSettled = await Promise.allSettled(promessasDeScrape);
+
+  console.log('Scrapes concluídos. Processando sucessos e falhas...');
+
+  const resultados = []; 
+
+  resultadosSettled.forEach(res => {
+    if (res.status === 'fulfilled') {
+      resultados.push(res.value);
     } else {
-      resultado = { plataforma: 'Desconhecida', canal: '-', viewers: 0, link };
+      console.error('Um scrape falhou:', res.reason?.message || res.reason);
     }
-
-    resultados.push(resultado);
   });
-
-  for (const link of links) {
-    await cluster.queue({ link });
-  }
-
-  // Espera tudo terminar
-  await cluster.idle();
-  await cluster.close();
 
   let timestamp = new Date().toLocaleTimeString();
 
   historicoModular.resultados = addHistorico(historicoModular.resultados, resultados, timestamp);
 
+<<<<<<< HEAD
 
 
   for (let canal of historicoModular.resultados){
@@ -357,6 +164,10 @@ app.post('/api/raspar', async (req, res) => {
   historicoICL = addHistoricoPrograma(historicoCanaisICL, historicoICL, programa, timestamp);
   
   console.log(historicoICL);
+=======
+  historicoPrograma = addHistoricoPrograma(historicoModular.resultados, historicoPrograma, programa, timestamp, canaisICL, programaAtual);
+
+>>>>>>> e12e288377906e3e1361b08cdd5c04fdae1dffac
 
   try{
     sendWhatsapp(historicoModular.resultados, canaisICL, programaAtual, teste);
@@ -366,6 +177,10 @@ app.post('/api/raspar', async (req, res) => {
     console.log('Não foi possível mandar mensagem. Ligue a porta do whatsapp');
   }
 
+  if (programacao){
+    saveJSON(historicoModular, historicoPrograma, periodo);
+  };
+
   res.json({ historicoModular, programaAtual });
 });
 
@@ -373,6 +188,7 @@ app.listen(3000, () => {
   console.log('Servidor rodando em http://localhost:3000');
 });
 
+<<<<<<< HEAD
 
 
 //setInterval(() => {
@@ -380,6 +196,8 @@ app.listen(3000, () => {
 //}, 720000);
 
 
+=======
+>>>>>>> e12e288377906e3e1361b08cdd5c04fdae1dffac
 process.on('SIGINT', async () => {
   console.log('\nEncerrando servidor...');
   server.close(() => {

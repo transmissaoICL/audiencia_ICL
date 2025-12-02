@@ -6,7 +6,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Monitor de Audiência ao Vivo</title>
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-  <link rel="stylesheet" href="style/style.css">
+  <link rel="stylesheet" href="./style/style.css">
 </head>
 <body>
   <h1>Monitor de Audiência ao Vivo</h1>
@@ -36,6 +36,26 @@
           <span class="slider round"></span>
         </label>
       </div>
+      <div style="padding-right: 30px">
+        <h3>Programação</h3>
+        <label class="switch">
+          <input type="checkbox" id="progToggle">
+          <span class="slider round"></span>
+        </label>
+      </div>
+      <div style="padding-right: 30px">
+        <h3>Período</h3>
+        <div>
+        <span style="margin: 0px 20px 0px 0px;"><b>Manhã</b></span>
+        <label class="switch">
+          <input type="checkbox" id="periodo">
+          <span class="slider round"></span>
+        </label>
+        <span style="margin: 0px 0px 0px 20px;"><b>Tarde</b></span>
+        </div>
+      </div>
+    </div>
+    <div class="container">
       <div>
         <h3>Programa Atual</h3>
         <select name="programaAtual" id="programaDropdown">
