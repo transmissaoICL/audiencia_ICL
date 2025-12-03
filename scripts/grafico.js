@@ -62,7 +62,7 @@ async function atualizarGraficoAudiencia() {
   chart.data.datasets = historicoTotal.map((canal, index) => {
     const dataPoints = timestampsDisponiveis.map(t => canal.dadosHistoricos[t] || 0);
     return {
-    label: `${canal.canal} (${canal.plataforma})`,
+    label: `${ canal.canal || canal.programa } (${ canal.plataforma || '' })`,
     data: dataPoints,
     borderWidth: 2,
     fill: false,

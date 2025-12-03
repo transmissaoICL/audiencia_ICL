@@ -95,7 +95,6 @@ const newLineInnerText = `
 `
 
 function autoComplete(element){
-  console.log(element);
   if (element.value.includes(' ')){
     let links = (element.value.split(" "));
     let newLine;
@@ -331,7 +330,7 @@ async function consultarAudiencias() {
 
   let urlsConcorrencia = document.getElementById("urlsConcorrencia");
   let linesConcorrencia = urlsConcorrencia.getElementsByClassName("linkLine");
-  let canaisConcorrencia = []
+  let canaisConcorrencia = [];
   for (let element of linesConcorrencia){
     let link = element.getElementsByClassName("link")[0].value;
     if (link == " " || link == "") continue;
@@ -356,6 +355,7 @@ async function consultarAudiencias() {
     nomePrograma = document.getElementById('nomePrograma').value;
   }
 
+  console.log(canaisICL);
   alertMessageDisplay("Bot Está Raspando a audiencia", "success");
   let resposta = await fetch("/api/raspar", {
       method: "POST",
