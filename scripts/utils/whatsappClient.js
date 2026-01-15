@@ -13,7 +13,11 @@ function startWhatsApp() {
         puppeteer: {
             headless: true, // Roda sem abrir janela
             args: ['--no-sandbox', '--disable-setuid-sandbox']
-        }
+        },
+        webVersionCache: {
+            type: 'remote',
+            remotePath: `https://raw.githubusercontent.com/wppconnect-team/wa-version/refs/heads/main/html/2.3000.1031490220-alpha.html`,    
+        },
     });
 
     // Gera o QR Code no terminal na primeira vez
@@ -74,7 +78,7 @@ async function sendToGroup(groupIdentifier, message) {
             chatId = group.id._serialized;
         }
 
-        await client.sendMessage(chatId, message);
+        await client.sendMessage(chatId, message, {sendSeen: false});
         console.log(`Mensagem enviada para ${groupIdentifier}`);
 
     } catch (error) {
