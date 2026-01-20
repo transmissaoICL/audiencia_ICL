@@ -116,7 +116,7 @@ function autoComplete(element){
   }
 }
 
-function addLinkLine(element, className){
+function addLinkLine(element){
   let newLine = document.createElement("div");
   newLine.classList.add("linkLine");
   newLine.innerHTML = newLineInnerText
@@ -259,6 +259,7 @@ function atualizaTabela(data, programaAtual){
         else if(canaisConcorrencia.find(a => a === res.link)) {
             let lastKeyConcorrencia = Object.keys(res.dadosHistoricos).at(-1);
             if (res.dadosHistoricos[lastKeyConcorrencia] != 0){
+              // TODO: CHECA SE O NOME PERSONALIZADO ESTÁ ATIVO
               listaDesordenada.push([res.canal, res.dadosHistoricos[lastKeyConcorrencia]]);
             }
         }
