@@ -35,6 +35,9 @@ const chart = new Chart(ctx, {
   }
 });
 
+// Variável para manter o estado dos dados da tabela de ranking
+let rankingState = [];
+
 let scrapping = false;
 
 let teste = false;
@@ -206,6 +209,7 @@ function atualizarGraficoAudiencia(historico) {
   chart.update();
 }
 
+/*
 //ATUALIZA TABELA DE ACORDO COM OS DADOS HISTORICOS
 function atualizaTabela(data, programaAtual){
 
@@ -282,6 +286,123 @@ function atualizaTabela(data, programaAtual){
     }
 
 }
+*/
+
+// ATUALIZA O ESTADO DOS DADOS (Não desenha mais direto)
+function atualizaTabela(data, programaAtual) {
+    let timestamp = new Date();
+    
+    // Atualiza cabeçalhos de data/hora
+    document.getElementById("date").innerHTML = ` Dia ${timestamp.getDate()}/${timestamp.getMonth() + 1}/${timestamp.getFullYear()}`;
+    document.getElementById("time").innerHTML = `Atualizado em: ${timestamp.toLocaleTimeString()}`;
+
+    // Captura os canais configurados
+    let urlsConcorrencia = document.getElementById("urlsConcorrencia");
+    let linesConcorrencia = urlsConcorrencia.getElementsByClassName("linkLine");
+    let canaisConcorrencia = Array.from(linesConcorrencia).map(el => el.getElementsByClassName("link")[0].value);
+
+    let urlsICL = document.getElementById("urlsICL");
+    let linesICL = urlsICL.getElementsByClassName("linkLine");
+    let canaisICL = Array.from(linesICL).map(el => el.getElementsByClassName("link")[0].value);
+
+    let totalICL = 0;
+    rankingState = []; // Zera o estado para recálculo
+
+    // Processa os dados da API
+    for (let res of data) {
+        let lastKey = Object.keys(res.dadosHistoricos).at(-1);
+        let valorAtual = res.dadosHistoricos[lastKey] || 0;
+
+        // É canal ICL? Soma no total
+        if (canaisICL.includes(res.link)) {
+            totalICL += valorAtual;
+        } 
+        // É concorrência? Adiciona na lista
+        else if (canaisConcorrencia.includes(res.link)) {
+            if (valorAtual !== 0) { // Opcional: manter ou remover a checagem de zero se quiser editar canais zerados
+                rankingState.push({
+                    nome: res.canal,
+                    audiencia: valorAtual,
+                    tipo: 'concorrencia'
+                });
+            }
+        }
+    }
+
+    // Adiciona o total do ICL (Programa Atual)
+    rankingState.push({
+        nome: programaAtual,
+        audiencia: totalICL,
+        tipo: 'icl' // Flag para identificar se é o nosso canal
+    });
+
+    // Chama a renderização
+    renderizarTabelaRanking();
+}
+
+// FUNÇÃO QUE DESENHA A TABELA BASEADA NO ESTADO ATUAL
+function renderizarTabelaRanking() {
+    let tbody = document.getElementById('tabelaBody');
+    
+    // Mantém o cabeçalho fixo e limpa o resto
+    // Nota: Idealmente o cabeçalho deveria estar no <thead> no HTML, mas mantendo sua estrutura:
+    const headerHTML = `
+        <tr class="row-concorrencia row-header" style="background-color: #099ace;">
+            <th style="color: #f0f0f0;"></th>
+            <th id="date" style="color: #f0f0f0; border: 1px solid black">${document.getElementById("date").innerHTML}</th>
+            <th id="time" style="color: #f0f0f0; border: 1px solid black">${document.getElementById("time").innerHTML}</th>
+        </tr>
+        <tr class="row-concorrencia" style="background-color: #099ace;">
+            <th style="color: #f0f0f0; border: 1px solid black">#</th>
+            <th style="color: #f0f0f0; border: 1px solid black">Canal</th>
+            <th style="color: #f0f0f0; border: 1px solid black">Audiencia (Editável)</th>
+        </tr>`;
+
+    tbody.innerHTML = headerHTML;
+
+    // 1. Reordena o array (Maior para o menor)
+    rankingState.sort((a, b) => b.audiencia - a.audiencia);
+
+    // 2. Gera as linhas
+    rankingState.forEach((item, index) => {
+        let linha = document.createElement('tr');
+        
+        // Formata número com pontos (Ex: 1.200)
+        let valorFormatado = item.audiencia.toLocaleString('de-DE');
+
+        linha.innerHTML = `
+            <td class="cell-concorrencia-ranking"><b style="text-align: center">${index + 1}</b></td>
+            <td class="cell-concorrencia">${item.nome}</td>
+            <td class="cell-numero">
+                <input 
+                    type="text" 
+                    class="input-audiencia" 
+                    value="${valorFormatado}" 
+                    onchange="atualizarAudienciaManual(${index}, this.value)"
+                    onkeypress="return event.charCode >= 48 && event.charCode <= 57"
+                >
+            </td>
+        `;
+        tbody.appendChild(linha);
+    });
+}
+
+// FUNÇÃO CHAMADA QUANDO O USUÁRIO EDITA UM VALOR
+function atualizarAudienciaManual(index, novoValor) {
+    // Remove pontos ou caracteres não numéricos para salvar no estado como Inteiro
+    let valorLimpo = parseInt(novoValor.replace(/\./g, '')) || 0;
+
+    // Atualiza o estado global
+    // Nota: O index aqui refere-se à posição no array JÁ ORDENADO. 
+    // Como reordenamos a cada edição, isso funciona para o fluxo imediato.
+    rankingState[index].audiencia = valorLimpo;
+
+    console.log(`Valor alterado manualmente para ${valorLimpo}. Reordenando...`);
+
+    // Re-renderiza a tabela (isso vai disparar o sort novamente)
+    renderizarTabelaRanking();
+}
+
 
 function adicionarLinhaManual() {
     const tbody = document.getElementById("auto");
