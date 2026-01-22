@@ -355,7 +355,7 @@ function renderizarTabelaRanking() {
         <tr class="row-concorrencia" style="background-color: #099ace;">
             <th style="color: #f0f0f0; border: 1px solid black">#</th>
             <th style="color: #f0f0f0; border: 1px solid black">Canal</th>
-            <th style="color: #f0f0f0; border: 1px solid black">Audiencia (Editável)</th>
+            <th style="color: #f0f0f0; border: 1px solid black">Audiencia</th>
         </tr>`;
 
     tbody.innerHTML = headerHTML;
