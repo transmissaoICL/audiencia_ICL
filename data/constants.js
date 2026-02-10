@@ -17,7 +17,8 @@ const programas = [
 
 const whatsappConst = {
     grupoTeste: '120363400505237092@g.us',
-    grupoAudiencia: '120363029449458777@g.us'
+    grupoAudiencia: '120363029449458777@g.us',
+    grupoWebnario: '5511957889599-1623695234@g.us'
 }
 
 const periodos = {

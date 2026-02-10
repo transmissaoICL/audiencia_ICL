@@ -54,7 +54,7 @@ async function rasparTwitch(page, link) {
   return { plataforma: 'Twitch', canal, viewers, link };
 }
 
-async function sendWhatsapp(data, linksICL, programaICL, teste) {
+async function sendWhatsapp(data, linksICL, programaICL, teste, webnario) {
     
     // 1. Filtra e processa os dados (mantive sua lógica original de filtro)
     let dadosFiltrados = [];
@@ -79,6 +79,10 @@ async function sendWhatsapp(data, linksICL, programaICL, teste) {
     // 4. ENVIA DIRETO (Sem fetch, sem servidor python)
     // O próprio client gerencia a fila interna de mensagens
     await sendToGroup(grupoAlvo, mensagem);
+
+    if (!teste && webnario){
+      await sendToGroup(whatsappConst['grupoWebnario'], mensagem)
+    }
 }
 
 // Helper para formatar texto (versão JS da sua função python)
@@ -107,7 +111,7 @@ function formatarMensagem(data, programa) {
 }
 
 app.post('/api/raspar', async (req, res) => {
-  let { links, canaisICL, programa, nomePrograma, teste, historicoModular, programacao, periodo } = req.body;
+  let { links, canaisICL, programa, nomePrograma, teste, historicoModular, programacao, periodo, webnario } = req.body;
   
   if (historicoModular === undefined){
     historicoModular = new historicoObj();
@@ -160,7 +164,7 @@ app.post('/api/raspar', async (req, res) => {
   historicoPrograma = addHistoricoPrograma(historicoModular.resultados, historicoPrograma, programa, timestamp, canaisICL, programaAtual);
 
   try{
-    sendWhatsapp(historicoModular.resultados, canaisICL, programaAtual, teste);
+    sendWhatsapp(historicoModular.resultados, canaisICL, programaAtual, teste, webnario);
   }
   
   catch{

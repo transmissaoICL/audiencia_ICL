@@ -46,6 +46,8 @@ let interval;
 
 let programacao = false;
 
+let webnario = false;
+
 let periodo = 0;
 
 const periodoToggle = document.getElementById('periodo');
@@ -55,6 +57,13 @@ periodoToggle.addEventListener('change', function(){
   }
   else{
     periodo = 0;
+  }
+})
+
+const webnarioToggle = document.getElementById('webnarioToggle');
+webnarioToggle.addEventListener('change', function(){
+  if (webnario == 0){
+    webnario = !webnario;
   }
 })
 
@@ -482,7 +491,7 @@ async function consultarAudiencias() {
   let resposta = await fetch("/api/raspar", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ links, canaisICL, programa, nomePrograma, teste, historicoModular, programacao, periodo})
+      body: JSON.stringify({ links, canaisICL, programa, nomePrograma, teste, historicoModular, programacao, periodo, webnario})
   });
 
   const data = await resposta.json();
