@@ -81,7 +81,7 @@ async function sendWhatsapp(data, linksICL, programaICL, teste, webnario) {
     await sendToGroup(grupoAlvo, mensagem);
 
     if (!teste && webnario){
-      await sendToGroup(whatsappConst['grupoWebnario'], mensagem)
+      await sendToGroup(whatsappConst['grupoWebnario'], mensagem);
     }
 }
 
