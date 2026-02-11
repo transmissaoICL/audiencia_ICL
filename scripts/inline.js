@@ -62,9 +62,8 @@ periodoToggle.addEventListener('change', function(){
 
 const webnarioToggle = document.getElementById('webnarioToggle');
 webnarioToggle.addEventListener('change', function(){
-  if (webnario == 0){
-    webnario = !webnario;
-  }
+  webnario = !webnario;
+  
 })
 
 const progToggle = document.getElementById('progToggle');

@@ -80,7 +80,7 @@ async function sendWhatsapp(data, linksICL, programaICL, teste, webnario) {
     // O próprio client gerencia a fila interna de mensagens
     await sendToGroup(grupoAlvo, mensagem);
 
-    if (!teste && webnario){
+    if (teste == false && webnario == true){
       await sendToGroup(whatsappConst['grupoWebnario'], mensagem);
     }
 }
