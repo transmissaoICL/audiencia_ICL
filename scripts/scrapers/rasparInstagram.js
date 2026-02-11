@@ -68,7 +68,7 @@ async function rasparInstagram(page, link) {
     // Pega número de viewers
     const rawViewers = await page.evaluate(() => {
       const span = document.querySelector('span.html-span');
-      return span?.outerText || '0';
+      return span?.outerText;
     }, instaElements.aria_label);
 
     const cleaned = rawViewers.replace(/[^\d]/g, '');
