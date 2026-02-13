@@ -12,7 +12,7 @@ function startWhatsApp() {
         authStrategy: new LocalAuth(), // Salva a sessão para não pedir QR Code sempre
         puppeteer: {
             headless: true, // Roda sem abrir janela
-            args: ['--no-sandbox', '--disable-setuid-sandbox']
+            args: ['--no-sandbox', '--disable-setuid-sandbox',]
         },
         webVersionCache: {
             type: 'remote',

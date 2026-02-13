@@ -17,9 +17,15 @@ async function getCluster(){
         concurrency: Cluster.CONCURRENCY_PAGE,  // ou BROWSER para isolamento total
         maxConcurrency: 2,
         puppeteerOptions: {
-        headless: false,
+        headless: true,
         userDataDir: './tmp/session',
-        args: ['--start-maximized', '--no-sandbox', '--disable-setuid-sandbox', '--window-position=-32000,-32000',],
+        args: ['--no-sandbox',
+        '--disable-setuid-sandbox',
+        '--disable-dev-shm-usage',
+        '--disable-accelerated-2d-canvas',
+        '--no-first-run',
+        '--no-zygote',
+        '--disable-gpu'],
         },
     });
 
