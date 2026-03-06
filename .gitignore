@@ -1,10 +1,16 @@
 #completle ignore this folders
 
 venv/
-node_modules/
+node_modules
+node_modules/*
 tmp/*
 tmp/session/*
 data/historicos/*
 PyWhatKit_DB.txt
 .wwebjs_cache
-.wwebjs_auth
+.wwebjs_auth_local
+.wwebjs_auth_docker
+.debug_insta
+.dockerignore
+docker
+Dockerfile
