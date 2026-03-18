@@ -2,11 +2,13 @@ const { getCluster } = require('./scripts/cluster')
 const express = require('express');
 const cors = require('cors');
 const { timeout } = require('puppeteer');
-const { addHistorico, saveJSON, addHistoricoPrograma, historicoObj } = require('./scripts/utils/dataHandler')
+const { addHistorico, historicoObj } = require('./scripts/utils/dataHandler')
 const app = express();
 const path = require('path');
-const { programas, whatsappConst } = require('./data/constants');
-const { startWhatsApp, sendToGroup } = require('./scripts/utils/whatsappClient');
+const { programas } = require('./data/constants');
+const { startWhatsApp, sendWhatsapp } = require('./scripts/utils/whatsappClient');
+const { iniciarSessaoDB } = require('./data/db/sessionsRepository');
+const { registraLeituraDB } = require('./data/db/leiturasRepository');
 
 app.use(cors());
 app.use(express.json());
@@ -14,14 +16,9 @@ app.use(express.json());
 // Servir arquivos estáticos, como audiencia.html
 app.use(express.static(path.join(__dirname)));
 
-let historicoICL = [];
-let historicoCanaisICL = [];
 
 startWhatsApp();
 
-let historicoPrograma = [];
-
-let historicoTotal =[];
 
 async function rasparTwitch(page, link) {
   let canal = '-';
@@ -54,68 +51,28 @@ async function rasparTwitch(page, link) {
   return { plataforma: 'Twitch', canal, viewers, link };
 }
 
-async function sendWhatsapp(data, linksICL, programaICL, teste, webnario) {
-    
-    // 1. Filtra e processa os dados (mantive sua lógica original de filtro)
-    let dadosFiltrados = [];
-    for (let res of data) {
-        let encontrado = linksICL.find(a => a === res.link);
-        if (encontrado) {
-            dadosFiltrados.push(res);
-        }
+app.get('api/sessoes/recentes', async (req, res) => {
+    try {
+        // Busca as últimas 10 sessões para o usuário escolher
+        const result = await pool.query(
+            'SELECT id, tipo, criado_em FROM sessoes ORDER BY criado_em DESC LIMIT 10'
+        );
+        return res.json(result.rows);
+    } catch (err) {
+        return res.status(500).json({ error: err.message });
     }
+});
 
-    // 2. Define o grupo
-    let grupoAlvo;
-    if (teste) { 
-        grupoAlvo = whatsappConst['grupoTeste']; // Certifique-se que isso é o Nome ou ID
-    } else { 
-        grupoAlvo = whatsappConst['grupoAudiencia']; 
-    }
-
-    // 3. Monta a mensagem (traduzindo sua lógica Python para JS)
-    const mensagem = formatarMensagem(dadosFiltrados, programaICL);
-
-    // 4. ENVIA DIRETO (Sem fetch, sem servidor python)
-    // O próprio client gerencia a fila interna de mensagens
-    await sendToGroup(grupoAlvo, mensagem);
-
-    if (teste == false && webnario == true){
-      await sendToGroup(whatsappConst['grupoWebnario'], mensagem);
-    }
-}
-
-// Helper para formatar texto (versão JS da sua função python)
-function formatarMensagem(data, programa) {
-    let audiencia_yt = 0;
-    let audiencia_fb = 0;
-    let audiencia_insta = 0;
-
-    data.forEach(canal => {
-        // Assume que a estrutura de dados é a mesma que chega no python
-        // Adapte conforme o retorno real do seu scraper
-        if(canal.plataforma === 'YouTube') audiencia_yt += Object.values(canal.dadosHistoricos).at(-1) || 0;
-        if(canal.plataforma === 'Facebook') audiencia_fb += Object.values(canal.dadosHistoricos).at(-1) || 0;
-        if(canal.plataforma === 'Instagram') audiencia_insta += Object.values(canal.dadosHistoricos).at(-1) || 0;
-        // Nota: simplifiquei aqui, mas se precisar pegar do histórico:
-        // let keys = Object.keys(canal.dadosHistoricos || {});
-        // let lastVal = keys.length ? canal.dadosHistoricos[keys[keys.length-1]] : 0;
-    });
-
-    let total = audiencia_yt + audiencia_fb + audiencia_insta;
-    let hoje = new Date().toLocaleDateString('pt-BR');
-
-    return `*${hoje} - ${programa} - Audiência:*\n\n` +
-           `Facebook: ${audiencia_fb} - YouTube: ${audiencia_yt} - Instagram: ${audiencia_insta}\n\n` +
-           `Total: ${total}`;
-}
+app.post('/api/sessoes/iniciar', async (req, res) =>{
+  const { sessionID, tipo } = req.body;
+  await iniciarSessaoDB(sessionID, tipo);
+  res.json({ success: true });
+})
 
 app.post('/api/raspar', async (req, res) => {
-  let { links, canaisICL, programa, nomePrograma, teste, historicoModular, programacao, periodo, webnario } = req.body;
+  let { sessionID, links, canaisICL, programa, nomePrograma, teste, webnario } = req.body;
   
-  if (historicoModular === undefined){
-    historicoModular = new historicoObj();
-  }
+  historicoModular = new historicoObj();
   
   let programaAtual;
 
@@ -139,7 +96,7 @@ app.post('/api/raspar', async (req, res) => {
 
   console.log('Scrapes concluídos. Processando sucessos e falhas...');
 
-  const resultados = []; 
+  let resultados = []; 
 
   resultadosSettled.forEach(res => {
     if (res.status === 'fulfilled') {
@@ -153,16 +110,6 @@ app.post('/api/raspar', async (req, res) => {
 
   historicoModular.resultados = addHistorico(historicoModular.resultados, resultados, timestamp);
 
-
-  for (let canal of historicoModular.resultados){
-    let encontrado = canaisICL.find(a => a === canal.link);
-    if (encontrado){
-      historicoCanaisICL.push(canal);
-    }
-  }
-  
-  historicoPrograma = addHistoricoPrograma(historicoModular.resultados, historicoPrograma, programa, timestamp, canaisICL, programaAtual);
-
   try{
     sendWhatsapp(historicoModular.resultados, canaisICL, programaAtual, teste, webnario);
   }
@@ -171,15 +118,31 @@ app.post('/api/raspar', async (req, res) => {
     console.log('Não foi possível mandar mensagem. Ligue a porta do whatsapp');
   }
 
-  if (programacao){
-    saveJSON(historicoModular, historicoPrograma, periodo);
-  };
+  // Calcula o total para ser enviado para a DB
+  let dadosFiltrados = [];
+  for (let res of historicoModular.resultados) {
+      let encontrado = canaisICL.find(a => a === res.link);
+      if (encontrado) {
+          dadosFiltrados.push(res);
+      }
+  }
 
-  res.json({ historicoModular, programaAtual });
+  let total = 0;
+  dadosFiltrados.forEach(dado =>{
+    total += Object.values(dado.dadosHistoricos).at(-1) || 0
+  })
+
+  try {
+        await registraLeituraDB(sessionID, total, programaAtual, resultados);
+        console.log("Audiencia Salva com Sucesso!");
+        res.json({ success: true, historicoModular, programaAtual });
+    } catch (err) {
+        res.status(500).json({ error: err.message });
+    }
 });
 
-app.listen(3000, () => {
-  console.log('Servidor rodando em http://localhost:3000');
+app.listen(5000, () => {
+  console.log('Servidor rodando em http://localhost:5000');
 });
 
 process.on('SIGINT', async () => {

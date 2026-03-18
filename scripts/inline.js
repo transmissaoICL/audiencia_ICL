@@ -506,8 +506,8 @@ async function consultarAudiencias() {
 
     detalhesHtml += `<tr class=audiencia-line>
     <td class=audiencia-cell>${plataforma}</td>
-    <td>${canal}</td>
-    <td>${viewers}</td>
+    <td><b>${canal}</b></td>
+    <td><b>${viewers}</b></td>
     <td><button class='remove-btn' onclick='this.closest("tr").remove(); atualizarTotal();'>X</button></td>
     </tr>`;
 

@@ -31,12 +31,13 @@ async function rasparFacebook(page, link) {
       await page.type('input[name="pass"]', 'Lovisquok@33', { delay: 100 });
 
       await Promise.all([
-        page.click('#loginbutton'),
-        page.waitForNavigation({ waitUntil: 'networkidle2' })
+        page.click('div.html-div'),
       ]);
     }
 
-    await page.goto(link, { waitUntil: 'networkidle2', timeout: 5000 });
+    await sleep(5000);
+
+    await page.goto(link, { waitUntil: 'networkidle2', timeout: 50000 });
 
     try {
     await page.click(`a[role="link"][aria-label="${facebookDict[result]}"]`);

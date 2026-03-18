@@ -28,7 +28,7 @@ async function rasparYouTube(page, link) {
         console.warn("Live não iniciada");
       }
       if (audiencia.match("assistindo") || audiencia.match("watching")){
-        viewers = parseInt(audiencia.split(" ")[0].replace(",", ""));
+        viewers = parseInt(audiencia.split(" ")[0].replace(/\D/g, ""));
       }
       } catch (err){
         console.warn(`Falha ao pegar audiencia: ${err.message}`);
