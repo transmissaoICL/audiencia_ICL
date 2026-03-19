@@ -1,4 +1,3 @@
-// scripts/whatsappClient.js
 const { Client, LocalAuth } = require('whatsapp-web.js');
 const qrcode = require('qrcode-terminal');
 const { whatsappConst } = require('../../data/constants');
@@ -8,34 +7,50 @@ let isReady = false;
 
 const sessionPath = process.env.SESSION_PATH || './.wwebjs_auth_local';
 
-// Helper para formatar texto (versão JS da sua função python)
-function formatarMensagem(data, programa) {
+//Helper para calcular o total
+function calcularTotal(dados){
     let audiencia_yt = 0;
     let audiencia_fb = 0;
     let audiencia_insta = 0;
 
-    data.forEach(canal => {
-        // Assume que a estrutura de dados é a mesma que chega no python
-        // Adapte conforme o retorno real do seu scraper
+    dados.forEach(canal => {
+
         if(canal.plataforma === 'YouTube') audiencia_yt += Object.values(canal.dadosHistoricos).at(-1) || 0;
         if(canal.plataforma === 'Facebook') audiencia_fb += Object.values(canal.dadosHistoricos).at(-1) || 0;
         if(canal.plataforma === 'Instagram') audiencia_insta += Object.values(canal.dadosHistoricos).at(-1) || 0;
-        // Nota: simplifiquei aqui, mas se precisar pegar do histórico:
-        // let keys = Object.keys(canal.dadosHistoricos || {});
-        // let lastVal = keys.length ? canal.dadosHistoricos[keys[keys.length-1]] : 0;
+
     });
 
     let total = audiencia_yt + audiencia_fb + audiencia_insta;
+    
+    return { audiencia_yt, audiencia_fb, audiencia_insta, total }
+}
+
+//Helper para formatar texto para o webnario
+function formatarMensagemWebnario(data, programa){
+    const { audiencia_yt, audiencia_fb, audiencia_insta, total } = calcularTotal(data);
     let hoje = new Date().toLocaleDateString('pt-BR');
 
+    let mensagem = `*${hoje} - ${programa}:* \n\n `;
+    data.forEach(canal =>{
+        mensagem += `${canal.canal}: ${Object.values(canal.dadosHistoricos).at(-1)} - `;
+    })
+    mensagem += `Instagram: ${audiencia_insta} - Facebook: ${audiencia_fb} - Total: ${total}`;
+    return mensagem;
+}
+
+// Helper para formatar texto para programação normal
+function formatarMensagemPadrao(data, programa) {
+    
+    const { audiencia_yt, audiencia_fb, audiencia_insta, total } = calcularTotal(data);
+    let hoje = new Date().toLocaleDateString('pt-BR');
     return `*${hoje} - ${programa} - Audiência:*\n\n` +
            `Facebook: ${audiencia_fb} - YouTube: ${audiencia_yt} - Instagram: ${audiencia_insta}\n\n` +
            `Total: ${total}`;
 }
 
 async function sendWhatsapp(data, linksICL, programaICL, teste, webnario) {
-    
-    // 1. Filtra e processa os dados (mantive sua lógica original de filtro)
+    // 1. Filtra e processa os dados
     let dadosFiltrados = [];
     for (let res of data) {
         let encontrado = linksICL.find(a => a === res.link);
@@ -44,24 +59,22 @@ async function sendWhatsapp(data, linksICL, programaICL, teste, webnario) {
         }
     }
 
-    // 2. Define o grupo
+    // 2. Define o grupo e a mensagem que será enviada
+    let mensagem;
     let grupoAlvo;
     if (teste) { 
-        grupoAlvo = whatsappConst['grupoTeste']; // Certifique-se que isso é o Nome ou ID
-    } else { 
+        grupoAlvo = whatsappConst['grupoTeste'];
+        mensagem = formatarMensagemPadrao(dadosFiltrados, programaICL);
+    } else if (teste == false & webnario == true){
+        grupoAlvo = whatsappConst['grupoWebnario'];
+        mensagem = formatarMensagemWebnario(dadosFiltrados, programaICL);
+    }
+    else { 
         grupoAlvo = whatsappConst['grupoAudiencia']; 
+        mensagem = formatarMensagemPadrao(dadosFiltrados, programaICL);
     }
 
-    // 3. Monta a mensagem (traduzindo sua lógica Python para JS)
-    const mensagem = formatarMensagem(dadosFiltrados, programaICL);
-
-    // 4. ENVIA DIRETO (Sem fetch, sem servidor python)
-    // O próprio client gerencia a fila interna de mensagens
-    await sendToGroup(grupoAlvo, mensagem);
-
-    if (teste == false && webnario == true){
-      await sendToGroup(whatsappConst['grupoWebnario'], mensagem);
-    }
+    await sendToGroup(grupoAlvo, mensagem);    
 }
 
 function startWhatsApp() {
@@ -102,7 +115,7 @@ function startWhatsApp() {
     client.initialize();
 }
 
-// Função auxiliar para descobrir IDs dos grupos (útil para configurar suas constantes)
+// Função auxiliar para descobrir IDs dos grupos
 async function listGroups() {
     const chats = await client.getChats();
     const groups = chats.filter(chat => chat.isGroup);

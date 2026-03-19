@@ -90,6 +90,79 @@ td { padding: 1rem; border-bottom: 1px solid var(--border); }
 .input-group label { font-size: 0.85rem; color: var(--text-muted); }
 input[type="text"], select { padding: 0.8rem; border-radius: 8px; border: 1px solid var(--border); background: var(--bg-app); color: var(--text-main); }
 
+/* Container Principal */
+.session-controls {
+    display: flex;
+    align-items: flex-end;
+    gap: 15px;
+    padding: 15px;
+    background: var(--bg-card); /* Usa a variável que você já tem para os cards */
+    border-radius: 8px;
+    margin-bottom: 20px;
+    border: 1px solid rgba(0,0,0,0.1);
+}
+
+.control-group {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+}
+
+.control-group label {
+    font-size: 12px;
+    font-weight: bold;
+    color: var(--text-color);
+    opacity: 0.8;
+}
+
+/* Estilização do Select */
+.custom-select {
+    padding: 8px 12px;
+    border-radius: 5px;
+    border: 1px solid #099ace;
+    background-color: var(--bg-input);
+    color: var(--text-color);
+    font-family: inherit;
+    cursor: pointer;
+    transition: border-color 0.3s;
+}
+
+.custom-select:focus {
+    outline: none;
+    border-color: #0056b3;
+    box-shadow: 0 0 5px rgba(9, 154, 206, 0.3);
+}
+
+/* Botão de Dashboard */
+.btn-dashboard {
+    padding: 10px 18px;
+    border-radius: 5px;
+    border: none;
+    font-weight: bold;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    transition: all 0.3s ease;
+}
+
+.btn-reset {
+    background-color: #d62728; /* Vermelho padrão da sua paleta */
+    color: white;
+}
+
+.btn-reset:hover {
+    background-color: #b01f1f;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+}
+
+/* Ajuste para Modo Escuro se houver */
+[data-theme='dark'] .session-controls {
+    background: #2d2d2d;
+    border-color: #444;
+}
+
 /* Container do Card de Resultados */
 .results-card {
   margin-top: 0;

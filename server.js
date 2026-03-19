@@ -7,7 +7,7 @@ const app = express();
 const path = require('path');
 const { programas } = require('./data/constants');
 const { startWhatsApp, sendWhatsapp } = require('./scripts/utils/whatsappClient');
-const { iniciarSessaoDB } = require('./data/db/sessionsRepository');
+const { iniciarSessaoDB, recuperarSessoes } = require('./data/db/sessionsRepository');
 const { registraLeituraDB } = require('./data/db/leiturasRepository');
 
 app.use(cors());
@@ -51,13 +51,10 @@ async function rasparTwitch(page, link) {
   return { plataforma: 'Twitch', canal, viewers, link };
 }
 
-app.get('api/sessoes/recentes', async (req, res) => {
+app.get('/api/sessoes/recentes', async (req, res) => {
     try {
-        // Busca as últimas 10 sessões para o usuário escolher
-        const result = await pool.query(
-            'SELECT id, tipo, criado_em FROM sessoes ORDER BY criado_em DESC LIMIT 10'
-        );
-        return res.json(result.rows);
+      let sessoes = await recuperarSessoes();
+      return res.json(sessoes);
     } catch (err) {
         return res.status(500).json({ error: err.message });
     }

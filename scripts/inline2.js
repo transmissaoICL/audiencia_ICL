@@ -1,28 +1,39 @@
 window.onload = () => {
-    const IDsNecessarios = ['myToggle', 'programaDropdown', 'urlsConcorrencia'];
-    IDsNecessarios.forEach(id => {
-        if (!document.getElementById(id)) {
-            console.warn(`Atenção: O elemento com ID "${id}" sumiu no novo layout!`);
-        }
-    });
+  const IDsNecessarios = ['myToggle', 'programaDropdown', 'urlsConcorrencia'];
+  IDsNecessarios.forEach(id => {
+      if (!document.getElementById(id)) {
+          console.warn(`Atenção: O elemento com ID "${id}" sumiu no novo layout!`);
+      }
+  });
 };
 
 let CURRENT_SESSION_ID = null;
 
 async function carregarMenuRecuperacao() {
-    const res = await fetch('/api/sessoes/recentes');
-    const sessoes = await res.json();
     const select = document.getElementById('selectSessoesAnteriores');
-    
-    if (sessoes){
-      sessoes.forEach(s => {
-          const opt = document.createElement('option');
-          opt.value = s.id;
-          opt.innerHTML = `${new Date(s.criado_em).toLocaleDateString()} - ${s.id}`;
-          select.appendChild(opt);
-    });
+    try {
+        const res = await fetch('/api/sessoes/recentes');
+        const sessoes = await res.json();
+        
+        // Mantém apenas a primeira opção
+        select.innerHTML = '<option value="">-- Retomar Sessão --</option>';
+        
+        sessoes.forEach(s => {
+            const dataFormatada = new Date(s.criado_em).toLocaleString('pt-BR', {
+                day: '2-digit', month: '2-digit', hour: '2-digit', minute: '2-digit'
+            });
+            const opt = document.createElement('option');
+            opt.value = s.id;
+            opt.innerHTML = `${dataFormatada} | ${s.tipo.toUpperCase()}`;
+            select.appendChild(opt);
+        });
+    } catch (e) {
+        console.error("Erro ao carregar histórico:", e);
+        select.innerHTML = '<option value="">Erro ao carregar</option>';
     }
 }
+
+carregarMenuRecuperacao();
 
 function recuperarSessaoSelecionada(id) {
     if (!id) return;
@@ -53,8 +64,6 @@ async function recuperarIdentidade(){
     CURRENT_SESSION_ID = null; // Mantém nulo para o Toggle saber que precisa criar no banco
   }
 }
-
-let historicoModular = undefined;
 
 //TODO: Fazer o bot uma imagem da audiencia e mandar no grupo do zap
 
@@ -170,23 +179,22 @@ myToggle.addEventListener('change', async function() {
       // Se não temos ID, agora sim criamos e salvamos no Postgres
       if (!CURRENT_SESSION_ID){
         CURRENT_SESSION_ID = gerarNovoID();
-        console.log("🛠️ Gerando novo ID e registrando no banco...");
-
+        console.log("Gerando novo ID e registrando no banco...");
+        
         try {
-          // Adicionada a barra "/" inicial para evitar erros de rota
           const response = await fetch("/api/sessoes/iniciar", {
             method: 'POST',
             headers: { 'Content-Type':  'application/json'},
-            body: JSON.stringify({ sessionID: CURRENT_SESSION_ID, tipo: 'programacao' })
+            body: JSON.stringify({ sessionID: CURRENT_SESSION_ID, tipo: programacao })
           });
           
           if (response.ok) {
-            console.log("✅ Sessão salva no banco com sucesso!");
+            console.log("Sessão salva no banco com sucesso!");
             // Atualiza a URL sem recarregar a página toda
             window.history.pushState({}, '', `?session=${CURRENT_SESSION_ID}`);
           }
         } catch (err) {
-          console.error("❌ Falha ao comunicar com o servidor:", err);
+          console.error("Falha ao comunicar com o servidor:", err);
         }
       }
       

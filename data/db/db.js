@@ -7,7 +7,7 @@ const pool = new Pool({
 
 pool.query('SELECT NOW()', (err, res) => {
   if (err) console.error('Erro de conexão com o Postgres:', err.message);
-  else console.log('✅ Conexão com o banco "audiencia_icl" confirmada!');
+  else console.log('Conexão com o banco "audiencia_icl" confirmada!');
 });
 
 

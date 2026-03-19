@@ -77,9 +77,14 @@
                 <label class="switch"><input type="checkbox" id="progToggle"><span class="slider round"></span></label>
               </div>
             </div>
-            <select id="selectSessoesAnteriores" onchange="recuperarSessaoSelecionada(this.value)">
-                <option value="">-- Recuperar Sessão Anterior --</option>
-            </select>
+            <div class="session-controls">
+              <div class="control-group">
+                <label for="selectSessoesAnteriores"><i class="fa-solid fa-clock-rotate-left"></i> Histórico</label>
+                <select id="selectSessoesAnteriores" class="custom-select" onchange="recuperarSessaoSelecionada(this.value)">
+                    <option value="">-- Retomar Sessão --</option>
+                </select>
+              </div>
+            </div>
 
             <div class="config-card full-width">
               <h4>Horário e Programa</h4>
@@ -142,14 +147,6 @@
         </div>
 
         <div id="tabResultados" class="tabcontent animate-fade">
-          <div class="container-flex">
-            <div class="input-group">
-              <label>Sessão</label>
-              <select name="programaAtual" id="sessaoTableId">
-                <option value="0">Atual</option>
-              </select>
-            </div>
-          </div>
           <div class="results card">
             <h2><i class="fa-solid fa-square-poll-vertical"></i> Tabela de Audiência</h2>
             <div class="table-responsive">
