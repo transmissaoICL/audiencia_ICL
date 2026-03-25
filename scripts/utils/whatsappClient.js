@@ -1,18 +1,91 @@
-// scripts/whatsappClient.js
-const { Client, LocalAuth } = require('whatsapp-web.js');
+const { Client, LocalAuth, MessageMedia } = require('whatsapp-web.js');
 const qrcode = require('qrcode-terminal');
+const { whatsappConst } = require('../../data/constants');
 
 let client = null;
 let isReady = false;
+
+const sessionPath = process.env.SESSION_PATH || './.wwebjs_auth_local';
+
+//Helper para calcular o total
+function calcularTotal(dados){
+    let audiencia_yt = 0;
+    let audiencia_fb = 0;
+    let audiencia_insta = 0;
+
+    dados.forEach(canal => {
+
+        if(canal.plataforma === 'YouTube') audiencia_yt += Object.values(canal.dadosHistoricos).at(-1) || 0;
+        if(canal.plataforma === 'Facebook') audiencia_fb += Object.values(canal.dadosHistoricos).at(-1) || 0;
+        if(canal.plataforma === 'Instagram') audiencia_insta += Object.values(canal.dadosHistoricos).at(-1) || 0;
+
+    });
+
+    let total = audiencia_yt + audiencia_fb + audiencia_insta;
+    
+    return { audiencia_yt, audiencia_fb, audiencia_insta, total }
+}
+
+//Helper para formatar texto para o webnario
+function formatarMensagemWebnario(data, programa){
+    const { audiencia_yt, audiencia_fb, audiencia_insta, total } = calcularTotal(data);
+    let hoje = new Date().toLocaleDateString('pt-BR');
+
+    let mensagem = `*${hoje} - ${programa}:* \n\n `;
+    data.forEach(canal =>{
+        mensagem += `${canal.canal}: ${Object.values(canal.dadosHistoricos).at(-1)} - `;
+    })
+    mensagem += `Instagram: ${audiencia_insta} - Facebook: ${audiencia_fb} - Total: ${total}`;
+    return mensagem;
+}
+
+// Helper para formatar texto para programação normal
+function formatarMensagemPadrao(data, programa) {
+    
+    const { audiencia_yt, audiencia_fb, audiencia_insta, total } = calcularTotal(data);
+    let hoje = new Date().toLocaleDateString('pt-BR');
+    return `*${hoje} - ${programa} - Audiência:*\n\n` +
+           `Facebook: ${audiencia_fb} - YouTube: ${audiencia_yt} - Instagram: ${audiencia_insta}\n\n` +
+           `Total: ${total}`;
+}
+
+async function sendWhatsapp(data, linksICL, programaICL, teste, webnario) {
+    // 1. Filtra e processa os dados
+    let dadosFiltrados = [];
+    for (let res of data) {
+        if (res.icl) {
+            dadosFiltrados.push(res);
+        }
+    }
+
+    // 2. Define o grupo e a mensagem que será enviada
+    let mensagem;
+    let grupoAlvo;
+    if (teste) { 
+        grupoAlvo = whatsappConst['grupoTeste'];
+        mensagem = formatarMensagemPadrao(dadosFiltrados, programaICL);
+    } else if (teste == false & webnario == true){
+        grupoAlvo = whatsappConst['grupoWebnario'];
+        mensagem = formatarMensagemWebnario(dadosFiltrados, programaICL);
+    }
+    else { 
+        grupoAlvo = whatsappConst['grupoAudiencia']; 
+        mensagem = formatarMensagemPadrao(dadosFiltrados, programaICL);
+    }
+
+    await sendToGroup(grupoAlvo, mensagem);
+}
 
 function startWhatsApp() {
     console.log('Iniciando cliente WhatsApp...');
 
     client = new Client({
-        authStrategy: new LocalAuth(), // Salva a sessão para não pedir QR Code sempre
+        authStrategy: new LocalAuth({
+        dataPath: sessionPath
+        }), // Salva a sessão para não pedir QR Code sempre
         puppeteer: {
             headless: true, // Roda sem abrir janela
-            args: ['--no-sandbox', '--disable-setuid-sandbox']
+            args: ['--no-sandbox', '--disable-setuid-sandbox',]
         },
         webVersionCache: {
             type: 'remote',
@@ -41,7 +114,7 @@ function startWhatsApp() {
     client.initialize();
 }
 
-// Função auxiliar para descobrir IDs dos grupos (útil para configurar suas constantes)
+// Função auxiliar para descobrir IDs dos grupos
 async function listGroups() {
     const chats = await client.getChats();
     const groups = chats.filter(chat => chat.isGroup);
@@ -86,4 +159,18 @@ async function sendToGroup(groupIdentifier, message) {
     }
 }
 
-module.exports = { startWhatsApp, sendToGroup };
+async function enviarRelatorioWpp(base64, teste) {
+    const media = new MessageMedia('image/png', base64, 'tabela.png');
+    
+    let grupoAlvo = '';
+    if (teste){
+        grupoAlvo = whatsappConst['grupoTeste']
+    }
+    else {
+        grupoAlvo = whatsappConst['grupoAudiencia']
+    }
+    // Envie para o ID do grupo que você já tem
+    await sendToGroup(grupoAlvo, media);
+}
+
+module.exports = { startWhatsApp, sendWhatsapp, enviarRelatorioWpp };

@@ -18,18 +18,23 @@ async function rasparInstagram(page, link) {
 
   await page.goto('https://www.instagram.com/', { waitUntil: 'networkidle2' });
 
-  try {
-    // Aguarda especificamente os campos certos
-    await page.waitForSelector('input[name="username"]', { timeout: 1000 });
-    await page.waitForSelector('input[name="password"]', { timeout: 1000 });
+  try {    
+    await sleep(1000);
 
-    await page.type('input[name="username"]', account.username, { delay: 100 });
-    await page.type('input[name="password"]', account.password, { delay: 100 });
+    // Aguarda especificamente os campos certos
+    await page.waitForSelector('input[name="email"]', { timeout: 15000 });
+    await page.waitForSelector('input[name="pass"]', { timeout: 15000 });
+
+    await page.type('input[name="email"]', account.username, { delay: 100 });
+    await page.type('input[name="pass"]', account.password, { delay: 100 });
+        
+    await sleep(10000);
 
     await Promise.all([
-      page.click('button[type="submit"]'),
-      page.waitForNavigation({ waitUntil: 'networkidle2' })
+      page.click('div.html-div'),
     ]);
+
+    await sleep(15000);
 
     // Fecha popups se aparecerem
     try {
@@ -48,9 +53,8 @@ async function rasparInstagram(page, link) {
 
   try {
     try{
-      const profilePage = link.slice(0, -5);
-      await page.goto(profilePage, { waitUntil: 'networkidle2' });
-      await sleep(1000);
+      await page.goto(link, { waitUntil: 'networkidle2' });
+      await sleep(10000);
       const clickable = await page.$$('span');
       for (const spans of clickable){
         const spanText = await (await spans.getProperty('innerText')).jsonValue();
@@ -63,12 +67,12 @@ async function rasparInstagram(page, link) {
       console.warn(`Erro ao entrar na Live: ${err.message}`);
     }
 
-    await sleep(3000);
+    await sleep(5000);
 
     // Pega número de viewers
     const rawViewers = await page.evaluate(() => {
       const span = document.querySelector('span.html-span');
-      return span?.outerText;
+      return span?.outerText;$
     }, instaElements.aria_label);
 
     const cleaned = rawViewers.replace(/[^\d]/g, '');

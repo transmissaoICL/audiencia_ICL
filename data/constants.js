@@ -1,5 +1,5 @@
 const programas = [
-    'Despertar',
+    'Desperta',
     'ICL Noticias 1',
     'Em Detalhes',
     'ICL Mercado e Investimentos',

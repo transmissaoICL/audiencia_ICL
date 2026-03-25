@@ -3,8 +3,12 @@ const { Cluster } = require('puppeteer-cluster');
 const { rasparYouTube } = require('./scrapers/rasparYouTube');
 const { rasparFacebook } = require('./scrapers/rasparFacebook');
 const { rasparInstagram } = require('./scrapers/rasparInstagram');
+const fs = require('fs');
+const path = require('path');
 
 let clusterInstance = null;
+
+let DOCKER_SESSION = process.env.DOCKER_SESSION;
 
 async function getCluster(){
     if (clusterInstance){
@@ -13,17 +17,44 @@ async function getCluster(){
 
     console.log('Iniciando Cluser...');
 
+    // Caminho para a pasta de dados do perfil (ajuste conforme seu projeto)
+    const userDataDir = path.join(__dirname, '.wwebjs_auth_docker'); 
+    const lockFile = path.join(userDataDir, 'SingletonLock');
+
+    if (fs.existsSync(lockFile)) {
+        try {
+            fs.unlinkSync(lockFile);
+            console.log("🔓 Arquivo SingletonLock removido com sucesso!");
+        } catch (err) {
+            console.warn("⚠️ Não foi possível remover o SingletonLock, mas o Chrome tentará abrir.");
+        }
+    }
+
     clusterInstance = await Cluster.launch({
+        executablePath: process.env.PUPPETEER_EXECUTABLE_PATH || null,
         concurrency: Cluster.CONCURRENCY_PAGE,  // ou BROWSER para isolamento total
-        maxConcurrency: 2,
+        maxConcurrency: 4,
+        timeout: 60000,
         puppeteerOptions: {
-        headless: false,
-        userDataDir: './tmp/session',
-        args: ['--start-maximized', '--no-sandbox', '--disable-setuid-sandbox', '--window-position=-32000,-32000',],
+        headless: true,
+        userDataDir: process.env.SCRAPER_SESSION_PATH || './tmp/scraper_session',
+        args: ['--no-sandbox',
+        '--disable-setuid-sandbox',
+        '--disable-dev-shm-usage',
+        '--disable-accelerated-2d-canvas',
+        '--no-first-run',
+        '--no-zygote',
+        '--disable-gpu',
+        '--lang=pt-BR,pt',
+        '--disable-process-singleton-dialog'],
         },
     });
 
     await clusterInstance.task(async ({ page, data: { link } }) => {
+
+        await page.setDefaultNavigationTimeout(60000);
+        await page.setDefaultTimeout(60000);
+        
         let resultado;
         if (link.includes('youtube.com')) {
             resultado = await rasparYouTube(page, link);
