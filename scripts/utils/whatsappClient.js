@@ -1,4 +1,4 @@
-const { Client, LocalAuth } = require('whatsapp-web.js');
+const { Client, LocalAuth, MessageMedia } = require('whatsapp-web.js');
 const qrcode = require('qrcode-terminal');
 const { whatsappConst } = require('../../data/constants');
 
@@ -53,8 +53,7 @@ async function sendWhatsapp(data, linksICL, programaICL, teste, webnario) {
     // 1. Filtra e processa os dados
     let dadosFiltrados = [];
     for (let res of data) {
-        let encontrado = linksICL.find(a => a === res.link);
-        if (encontrado) {
+        if (res.icl) {
             dadosFiltrados.push(res);
         }
     }
@@ -74,7 +73,7 @@ async function sendWhatsapp(data, linksICL, programaICL, teste, webnario) {
         mensagem = formatarMensagemPadrao(dadosFiltrados, programaICL);
     }
 
-    await sendToGroup(grupoAlvo, mensagem);    
+    await sendToGroup(grupoAlvo, mensagem);
 }
 
 function startWhatsApp() {
@@ -160,4 +159,18 @@ async function sendToGroup(groupIdentifier, message) {
     }
 }
 
-module.exports = { startWhatsApp, sendWhatsapp };
+async function enviarRelatorioWpp(base64, teste) {
+    const media = new MessageMedia('image/png', base64, 'tabela.png');
+    
+    let grupoAlvo = '';
+    if (teste){
+        grupoAlvo = whatsappConst['grupoTeste']
+    }
+    else {
+        grupoAlvo = whatsappConst['grupoAudiencia']
+    }
+    // Envie para o ID do grupo que você já tem
+    await sendToGroup(grupoAlvo, media);
+}
+
+module.exports = { startWhatsApp, sendWhatsapp, enviarRelatorioWpp };

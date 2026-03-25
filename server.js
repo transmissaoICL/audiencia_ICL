@@ -6,9 +6,12 @@ const { addHistorico, historicoObj } = require('./scripts/utils/dataHandler')
 const app = express();
 const path = require('path');
 const { programas } = require('./data/constants');
-const { startWhatsApp, sendWhatsapp } = require('./scripts/utils/whatsappClient');
-const { iniciarSessaoDB, recuperarSessoes } = require('./data/db/sessionsRepository');
+const { startWhatsApp, sendWhatsapp, enviarRelatorioWpp } = require('./scripts/utils/whatsappClient');
+const { iniciarSessaoDB, recuperarSessoes, loadSessao } = require('./data/db/sessionsRepository');
 const { registraLeituraDB } = require('./data/db/leiturasRepository');
+const { montarHtmlParaPrint } = require('./scripts/utils/tablePrint');
+require('dotenv').config();
+
 
 app.use(cors());
 app.use(express.json());
@@ -50,6 +53,17 @@ async function rasparTwitch(page, link) {
 
   return { plataforma: 'Twitch', canal, viewers, link };
 }
+
+app.post('/api/sessoes/loadSessao', async (req, res) => {
+  try {
+    const { sessionID } = req.body;
+    const rows = await loadSessao(sessionID);
+    res.json(rows);
+  }
+  catch(err){
+
+  }
+});
 
 app.get('/api/sessoes/recentes', async (req, res) => {
     try {
@@ -106,23 +120,47 @@ app.post('/api/raspar', async (req, res) => {
   let timestamp = new Date().toLocaleTimeString();
 
   historicoModular.resultados = addHistorico(historicoModular.resultados, resultados, timestamp);
+  let resultadoHistorico = historicoModular.resultados;
+
+    // Calcula o total para ser enviado para a DB
+  let dadosFiltrados = [];
+  for (let res of resultadoHistorico) {
+      let encontrado = canaisICL.find(a => a === res.link);
+      if (encontrado) {
+        res.icl = true;
+        dadosFiltrados.push(res);
+      }
+  }
 
   try{
-    sendWhatsapp(historicoModular.resultados, canaisICL, programaAtual, teste, webnario);
+    sendWhatsapp(resultadoHistorico, canaisICL, programaAtual, teste, webnario);
   }
   
   catch{
     console.log('Não foi possível mandar mensagem. Ligue a porta do whatsapp');
   }
 
-  // Calcula o total para ser enviado para a DB
-  let dadosFiltrados = [];
-  for (let res of historicoModular.resultados) {
-      let encontrado = canaisICL.find(a => a === res.link);
-      if (encontrado) {
-          dadosFiltrados.push(res);
-      }
-  }
+  // Tarefa específica para gerar o Print
+  const taskGerarPrint = async ({ page, data: { resultadoHistorico, programaAtual } }) => {
+    const html = montarHtmlParaPrint(resultadoHistorico, programaAtual);
+    await page.setContent(html);
+
+    // Seleciona o elemento que você definiu
+    const element = await page.$('#tabelaConcorrencia');
+
+    // Tira o print apenas desse elemento
+    return await element.screenshot({ encoding: 'base64', omitBackground: true });
+  };
+
+ 
+  // O Cluster executa a tarefa sem travar o loop principal
+  cluster.execute({ resultadoHistorico, programaAtual }, taskGerarPrint)
+      .then(base64 => {
+          // Chama o módulo do WhatsApp enviando o base64
+          enviarRelatorioWpp(base64, teste);
+      })
+      .catch(err => console.error("Erro ao gerar print no cluster:", err));
+  
 
   let total = 0;
   dadosFiltrados.forEach(dado =>{
@@ -130,16 +168,16 @@ app.post('/api/raspar', async (req, res) => {
   })
 
   try {
-        await registraLeituraDB(sessionID, total, programaAtual, resultados);
-        console.log("Audiencia Salva com Sucesso!");
-        res.json({ success: true, historicoModular, programaAtual });
-    } catch (err) {
-        res.status(500).json({ error: err.message });
+      await registraLeituraDB(sessionID, total, programaAtual, resultadoHistorico);
+      console.log("Audiencia Salva com Sucesso!");
+      res.json({ success: true, historicoModular, programaAtual });
+  } catch (err) {
+      res.status(500).json({ error: err.message });
     }
 });
 
-app.listen(5000, () => {
-  console.log('Servidor rodando em http://localhost:5000');
+app.listen(3000, () => {
+  console.log('Servidor rodando em http://localhost:3000');
 });
 
 process.on('SIGINT', async () => {

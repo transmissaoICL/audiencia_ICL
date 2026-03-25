@@ -1,8 +1,12 @@
 const { Pool } = require("pg");
+require('dotenv').config();
 
 const pool = new Pool({
-    user: 'postgres', host: 'localhost', database: 'audiencia_icl',
-    password: 'ICLAudiencia@123456', port: 5432,
+    host: process.env.DB_HOST || 'localhost', 
+    user: process.env.DB_USER || 'postgres',
+    database: process.env.DB_NAME || 'audiencia_icl',
+    password: process.env.DB_PASSWORD || 'ICLAudiencia@123456',
+    port: 5432,
 });
 
 pool.query('SELECT NOW()', (err, res) => {

@@ -10,8 +10,8 @@ async function registraLeituraDB(sessionID, totalGeral, programa, detalhes){
     const leituraID = res.rows[0].id;
     for (const d of detalhes){
       await client.query(
-        'INSERT INTO detalhes_canais (leitura_id, plataforma, canal_nome, audiencia) VALUES ($1, $2, $3, $4)',
-        [leituraID, d.plataforma, d.canal, d.viewers]
+        'INSERT INTO detalhes_canais (leitura_id, plataforma, canal_nome, audiencia, link_icl, link_url) VALUES ($1, $2, $3, $4, $5, $6)',
+        [leituraID, d.plataforma, d.canal, Object.values(d.dadosHistoricos).at(-1), d.icl, d.link]
       );
     }
     await client.query('COMMIT');

@@ -6,6 +6,7 @@ function audienciaTemporal() {
     this.canal = '',
     this.link = '',
     this.plataforma = '',
+    this.icl = false;
     this.dadosHistoricos = {}
 };
 

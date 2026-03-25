@@ -3,6 +3,8 @@ const { Cluster } = require('puppeteer-cluster');
 const { rasparYouTube } = require('./scrapers/rasparYouTube');
 const { rasparFacebook } = require('./scrapers/rasparFacebook');
 const { rasparInstagram } = require('./scrapers/rasparInstagram');
+const fs = require('fs');
+const path = require('path');
 
 let clusterInstance = null;
 
@@ -15,6 +17,19 @@ async function getCluster(){
 
     console.log('Iniciando Cluser...');
 
+    // Caminho para a pasta de dados do perfil (ajuste conforme seu projeto)
+    const userDataDir = path.join(__dirname, '.wwebjs_auth_docker'); 
+    const lockFile = path.join(userDataDir, 'SingletonLock');
+
+    if (fs.existsSync(lockFile)) {
+        try {
+            fs.unlinkSync(lockFile);
+            console.log("🔓 Arquivo SingletonLock removido com sucesso!");
+        } catch (err) {
+            console.warn("⚠️ Não foi possível remover o SingletonLock, mas o Chrome tentará abrir.");
+        }
+    }
+
     clusterInstance = await Cluster.launch({
         executablePath: process.env.PUPPETEER_EXECUTABLE_PATH || null,
         concurrency: Cluster.CONCURRENCY_PAGE,  // ou BROWSER para isolamento total
@@ -22,7 +37,7 @@ async function getCluster(){
         timeout: 60000,
         puppeteerOptions: {
         headless: true,
-        userDataDir: DOCKER_SESSION || './tmp/session',
+        userDataDir: process.env.SCRAPER_SESSION_PATH || './tmp/scraper_session',
         args: ['--no-sandbox',
         '--disable-setuid-sandbox',
         '--disable-dev-shm-usage',
@@ -30,7 +45,8 @@ async function getCluster(){
         '--no-first-run',
         '--no-zygote',
         '--disable-gpu',
-        '--lang=pt-BR,pt'],
+        '--lang=pt-BR,pt',
+        '--disable-process-singleton-dialog'],
         },
     });
 

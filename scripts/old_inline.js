@@ -1,69 +1,4 @@
-window.onload = () => {
-  const IDsNecessarios = ['myToggle', 'programaDropdown', 'urlsConcorrencia'];
-  IDsNecessarios.forEach(id => {
-      if (!document.getElementById(id)) {
-          console.warn(`Atenção: O elemento com ID "${id}" sumiu no novo layout!`);
-      }
-  });
-};
-
-let CURRENT_SESSION_ID = null;
-
-async function carregarMenuRecuperacao() {
-    const select = document.getElementById('selectSessoesAnteriores');
-    try {
-        const res = await fetch('/api/sessoes/recentes');
-        const sessoes = await res.json();
-        
-        // Mantém apenas a primeira opção
-        select.innerHTML = '<option value="">-- Retomar Sessão --</option>';
-        
-        sessoes.forEach(s => {
-            const dataFormatada = new Date(s.criado_em).toLocaleString('pt-BR', {
-                day: '2-digit', month: '2-digit', hour: '2-digit', minute: '2-digit'
-            });
-            const opt = document.createElement('option');
-            opt.value = s.id;
-            opt.innerHTML = `${dataFormatada} | ${s.tipo.toUpperCase()}`;
-            select.appendChild(opt);
-        });
-    } catch (e) {
-        console.error("Erro ao carregar histórico:", e);
-        select.innerHTML = '<option value="">Erro ao carregar</option>';
-    }
-}
-
-carregarMenuRecuperacao();
-
-function recuperarSessaoSelecionada(id) {
-    if (!id) return;
-    if (confirm(`Deseja carregar os dados da sessão ${id} e continuar nela?`)) {
-        // Redireciona a página para a URL com o ID da sessão escolhida
-        window.location.href = `?session=${id}`;
-    }
-}
-
-// Logica de Identidade da Sessão
-function gerarNovoID(){
-  const agora = new Date();
-  const ts = agora.toISOString().replace(/[-:T.Z]/g, "").slice(0, 14);
-  const rand = Math.random().toString(36).substring(7);
-  return `SES-${ts}-${rand}`;
-}
-
-async function recuperarIdentidade(){
-  const urlParams = new URLSearchParams(window.location.search);
-  const idURL = urlParams.get('session');
-
-  if (idURL){
-    CURRENT_SESSION_ID = idURL;
-    console.log("📜 Sessão detectada na URL:", CURRENT_SESSION_ID);
-    // Aqui futuramente chamaremos o sincronizarDadosExistentes(idURL);
-  } else {
-    console.log("🆕 Sistema pronto. Aguardando início de nova sessão.");
-    CURRENT_SESSION_ID = null; // Mantém nulo para o Toggle saber que precisa criar no banco
-  }
-}
+let historicoModular = undefined;
 
 //TODO: Fazer o bot uma imagem da audiencia e mandar no grupo do zap
 
@@ -72,15 +7,6 @@ const coresPaleta = [
   '#8c564b', '#e377c2', '#7f7f7f', '#bcbd22', '#17becf',
   '#aec7e8', '#ffbb78', '#98df8a', '#ff9896', '#c5b0d5'
 ];
-
-// Template da linha de link (ID e classes mantidos para seu scraper)
-const newLineInnerText = `
-    <input class="linkName" placeholder="Nome do Canal" style="width: 15%;">
-    <input class="linkPlataforma" placeholder="Plataforma do Canal" style="width: 15%;">
-    <input class="link" placeholder="Link" style="width: 50%;" onchange="autoComplete(this)">
-    <input class="customCheck" type="checkbox" style="height: 15px; width: 45px">
-    <span class="closeLinkBtn" onclick="excludeLink(this)">&times;</span>
-`;
 
 // 🎞️ Setup do Chart.js
 const ctx = document.getElementById('graficoAudiencia').getContext('2d');
@@ -124,41 +50,15 @@ let webnario = false;
 
 let periodo = 0;
 
-const programaDropdown = document.getElementById('programaDropdown');
-let programa = Number(programaDropdown.value);
-
-function alertMessageHide(){
-  alertMessage.style.display = "none";
-}
-
-function alertMessageDisplay(message, alertType){
-  alertMessage.className = `alertmessage ${alertType}`;
-  alertMessage.innerText = message;
-  alertMessage.appendChild(alertCloseBtn);
-  alertMessage.style.display = "block";
-}
-
-// 1. Alternador de Tema
-const themeBtn = document.getElementById('themeToggle');
-themeBtn.addEventListener('click', () => {
-  const currentTheme = document.documentElement.getAttribute('data-theme');
-  const newTheme = currentTheme === 'light' ? 'dark' : 'light';
-  document.documentElement.setAttribute('data-theme', newTheme);
-  themeBtn.innerHTML = newTheme === 'light' ? '<i class="fa-solid fa-moon"></i> Modo Escuro' : '<i class="fa-solid fa-sun"></i> Modo Claro';
-});
-
-// 2. Observador para o Som da Alerta
-const alertBox = document.getElementById('alertMessage');
-const audio = document.getElementById('notificationSound');
-
-const observer = new MutationObserver((mutations) => {
-  mutations.forEach((mutation) => {
-    if (mutation.attributeName === 'style') {
-      audio.play().catch(e => console.log("Som bloqueado pelo navegador até interação do usuário."));
-    }
-  });
-});
-observer.observe(alertBox, { attributes: true });
+const periodoToggle = document.getElementById('periodo');
+periodoToggle.addEventListener('change', function(){
+  if (periodo == 0){
+    periodo = 1;
+  }
+  else{
+    periodo = 0;
+  }
+})
 
 const webnarioToggle = document.getElementById('webnarioToggle');
 webnarioToggle.addEventListener('change', function(){
@@ -172,50 +72,38 @@ progToggle.addEventListener('change', function(){
 });
 
 const myToggle = document.getElementById('myToggle');
-myToggle.addEventListener('change', async function() {
-    scrapping = this.checked; // Usando this.checked para ser mais preciso
-    
+myToggle.addEventListener('change', function() {
+    scrapping = !scrapping;
     if (scrapping){
-      // Se não temos ID, agora sim criamos e salvamos no Postgres
-      if (!CURRENT_SESSION_ID){
-        CURRENT_SESSION_ID = gerarNovoID();
-        console.log("Gerando novo ID e registrando no banco...");
-        
-        try {
-          const response = await fetch("/api/sessoes/iniciar", {
-            method: 'POST',
-            headers: { 'Content-Type':  'application/json'},
-            body: JSON.stringify({ sessionID: CURRENT_SESSION_ID, tipo: programacao })
-          });
-          
-          if (response.ok) {
-            console.log("Sessão salva no banco com sucesso!");
-            // Atualiza a URL sem recarregar a página toda
-            window.history.pushState({}, '', `?session=${CURRENT_SESSION_ID}`);
-          }
-        } catch (err) {
-          console.error("Falha ao comunicar com o servidor:", err);
-        }
-      }
-      
       interval = setInterval(() => {
         consultarAudiencias();
       }, 240000);
       consultarAudiencias();
-    } else {
+    }
+    else {
       alertMessageDisplay("Bot Pausado", "alert");
       clearInterval(interval);
     }
 });
 
-const testeToggle = document.getElementById('testeToggle');
+const testeToggle = document.getElementById('testToggle');
 testeToggle.addEventListener('change', function(){
   teste = !teste;
 })
 
+const programaDropdown = document.getElementById('programaDropdown');
+let programa = Number(programaDropdown.value);
 programaDropdown.addEventListener('change', function() {
   programa = Number(programaDropdown.value);
 })
+
+const newLineInnerText = `
+<input class="linkName" placeholder="Nome do Canal" style="width: 15%;">
+<input class="linkPlataforma" placeholder="Plataforma do Canal" style="width: 15%;">
+<input class="link" placeholder="Link" style="width: 50%;" onchange="autoComplete(this)">
+<input class="customCheck" type="checkbox" style="height: 15px; width: 45px">
+<span class="closeLinkBtn" onclick="excludeLink(this)">&timesb;</span>
+`
 
 function autoComplete(element){
   if (element.value.includes(' ')){
@@ -224,13 +112,13 @@ function autoComplete(element){
     element.value = links.shift();
     for (let link of links){
       if (element.classList.contains("linkConcorrencia")){
-        newLine = addLink(element);
+        newLine = addLink(element, "linkConcorrencia");
         let linkInput = newLine.getElementsByClassName("link")[0];
         linkInput.value = link;
         linkInput.classList.add("linkConcorrencia")
       }
       else {
-        newLine = addLink(element);
+        newLine = addLink(element, "linkICL");
         let linkInput = newLine.getElementsByClassName("link")[0];
         linkInput.value = link;
         linkInput.classList.add("linkICL")
@@ -239,78 +127,35 @@ function autoComplete(element){
   }
 }
 
-// --- FUNÇÕES ORIGINAIS MANTIDAS E MELHORADAS ---
-
-function addLinkLine(element, specificClass) {
+function addLinkLine(element){
   let newLine = document.createElement("div");
-  newLine.classList.add("linkLine", "animate-fade"); // Adiciona a animação de entrada
-  newLine.innerHTML = newLineInnerText;
-  
-  // Adiciona a classe específica (linkConcorrencia ou linkICL) ao input correto
-  const linkInput = newLine.querySelector('.link');
-  if (linkInput && specificClass) {
-    linkInput.classList.add(specificClass);
-  }
-  
+  newLine.classList.add("linkLine");
+  newLine.innerHTML = newLineInnerText
   element.appendChild(newLine);
   return newLine;
 }
 
-function addLink(element) {
-  // Verifica qual botão foi pressionado para saber qual lista atualizar
-  if (element.classList.contains("linkConcorrencia")) {
+function addLink(element){
+  // Get which button is pressed to now which link to create
+  if (element.classList.contains("linkConcorrencia")){
     let concorrencia = document.getElementById("urlsConcorrencia");
-    return addLinkLine(concorrencia, "linkConcorrencia");
-  } else {
+    let newLine = addLinkLine(concorrencia, "linkConcorrencia");
+    newLine.getElementsByClassName('link')[0].classList.add('linkConcorrencia');
+    return newLine;
+  }
+  else{
     let icl = document.getElementById("urlsICL");
-    return addLinkLine(icl, "linkICL");
+    let newLine = addLinkLine(icl, "linkICL");
+    newLine.getElementsByClassName('link')[0].classList.add('linkICL');
+    return newLine;
   }
 }
 
-function excludeLink(element) {
+function excludeLink(element){
   let parent = element.parentNode;
-  // Adiciona animação de saída antes de remover
-  parent.classList.add("animate-fade-out");
-  
-  // Espera a animação terminar (300ms) para remover do DOM
-  setTimeout(() => {
-    parent.remove();
-  }, 300);
+  parent.remove();
+
 }
-
-// --- NOVAS FUNCIONALIDADES (TEMA E SOM) ---
-
-// 1. Alternador de Tema (Modo Claro/Escuro)
-function toggleTheme() {
-  const html = document.documentElement;
-  const currentTheme = html.getAttribute('data-theme');
-  const newTheme = currentTheme === 'light' ? 'dark' : 'light';
-  html.setAttribute('data-theme', newTheme);
-  
-  // Salva a preferência do usuário
-  localStorage.setItem('theme', newTheme);
-}
-
-const notificationSound = new Audio('https://assets.mixkit.co/active_storage/sfx/2869/2869-preview.mp3');
-
-if (alertBox) {
-  const observer = new MutationObserver((mutations) => {
-    mutations.forEach((mutation) => {
-      // Se o estilo mudar e o display não for 'none', toca o som
-      if (mutation.attributeName === 'style' && alertBox.style.display !== 'none') {
-        notificationSound.play().catch(e => console.log("Áudio aguardando interação inicial."));
-      }
-    });
-  });
-  observer.observe(alertBox, { attributes: true });
-}
-
-// 3. Inicialização
-document.addEventListener('DOMContentLoaded', () => {
-  // Carrega o tema salvo
-  const savedTheme = localStorage.getItem('theme') || 'light';
-  document.documentElement.setAttribute('data-theme', savedTheme);
-});
 
 function openPage(pageName, elmnt) {
   // Hide all elements with class="tabcontent" by default */
@@ -338,7 +183,20 @@ document.getElementById("defaultOpen").click();
 const alertMessage = document.getElementById("alertMessage");
 const alertCloseBtn = document.getElementById("closealert");
 
+function alertMessageHide(){
+  alertMessage.style.display = "none";
+}
+
+function alertMessageDisplay(message, alertType){
+  alertMessage.className = `alertmessage ${alertType}`;
+  alertMessage.innerText = message;
+  alertMessage.appendChild(alertCloseBtn);
+  alertMessage.style.display = "block";
+}
+
 function atualizarGraficoAudiencia(historico) {
+  console.log(historico.length);
+  console.log(historico);
   if (historico.length === 0) return;
 
   const timestamps = Object.keys(historico[0].dadosHistoricos);
@@ -358,6 +216,85 @@ function atualizarGraficoAudiencia(historico) {
 
   chart.update();
 }
+
+/*
+//ATUALIZA TABELA DE ACORDO COM OS DADOS HISTORICOS
+function atualizaTabela(data, programaAtual){
+
+    let timestamp = new Date();
+    let urlsConcorrencia = document.getElementById("urlsConcorrencia");
+    let linesConcorrencia = urlsConcorrencia.getElementsByClassName("linkLine");
+    let canaisConcorrencia = []
+    for (let element of linesConcorrencia){
+      let link = element.getElementsByClassName("link")[0].value;
+      canaisConcorrencia.push(link);
+    }
+
+    let urlsICL = document.getElementById("urlsICL");
+    let linesICL = urlsICL.getElementsByClassName("linkLine");
+    let canaisICL = [];
+    for (let element of linesICL){
+      let link = element.getElementsByClassName("link")[0].value;
+      canaisICL.push(link);
+    }
+
+    let tbody = document.getElementById('tabelaBody');
+    tbody.innerHTML = `
+        <tr  class="row-concorrencia row-header" style="background-color: #099ace;">
+        <th style="color: #f0f0f0;"></th>
+        <th id="date" style="color: #f0f0f0; border: 1px solid black"></th>
+        <th id="time" style="color: #f0f0f0; border: 1px solid black"></th>
+        </tr>
+        <tr  class="row-concorrencia" style="background-color: #099ace;">
+        <th style="color: #f0f0f0; border: 1px solid black">#</th>
+        <th style="color: #f0f0f0; border: 1px solid black">Canal</th>
+        <th style="color: #f0f0f0; border: 1px solid black">Audiencia</th>
+        </tr>`;
+    let totalICL = 0;
+    let listaDesordenada = [];
+
+    document.getElementById("date").innerHTML = ` Dia ${timestamp.getDate()}/${timestamp.getMonth() + 1}/${timestamp.getFullYear()}`;
+    document.getElementById("time").innerHTML = `Atualizado em: ${timestamp.toLocaleTimeString()}`;
+    
+    //ITERA SOBRE OS DADOS
+    for (let res of data){
+
+        //VE SE OS DADOS SÃO DO CANAL DO UCL
+        let encontrado = canaisICL.find(a => a === res.link);
+
+        //SE SIM, ELE CONTABILIZA O TOTAL
+        if (encontrado){
+            let lastKeyICL = Object.keys(res.dadosHistoricos).at(-1);
+            totalICL += res.dadosHistoricos[lastKeyICL];
+        }
+        //CASO NÃO, ELE ADICIONA AUTOMATICAMENTE EM UMA LISTA DESORDENADA PARA SER ORDENADA E COLOCADO NA TABELA FUTURAMENTE
+        else if(canaisConcorrencia.find(a => a === res.link)) {
+            let lastKeyConcorrencia = Object.keys(res.dadosHistoricos).at(-1);
+            if (res.dadosHistoricos[lastKeyConcorrencia] != 0){
+              // TODO: CHECA SE O NOME PERSONALIZADO ESTÁ ATIVO
+              listaDesordenada.push([res.canal, res.dadosHistoricos[lastKeyConcorrencia]]);
+            }
+        }
+    }
+
+    //TODO: Atualiza o nome na Tabela para o programa que está no ar no momento
+    //COLOCA O VALOR DO ICL, ORDENA A LISTA E CRIA OS ITENS DA CABELA
+    listaDesordenada.push([programaAtual, totalICL]);
+    listaDesordenada.sort((a, b) => b[1] - a[1]);
+
+    for (let entrie of listaDesordenada){
+        let linha = document.createElement('tr');
+        let numberAudiencia = entrie[1].toLocaleString('de-DE');
+        linha.innerHTML = `
+        <td class="cell-concorrencia-ranking" ><b style: text-align: center>${listaDesordenada.indexOf(entrie) + 1}</b></td>
+        <td class="cell-concorrencia">${entrie[0]}</td>
+        <td class="cell-numero">${numberAudiencia}</td>`
+        ;
+        tbody.appendChild(linha);
+    }
+
+}
+*/
 
 // ATUALIZA O ESTADO DOS DADOS (Não desenha mais direto)
 function atualizaTabela(data, programaAtual) {
@@ -443,16 +380,16 @@ function renderizarTabelaRanking() {
 
         linha.innerHTML = `
             <td class="cell-concorrencia-ranking"><b style="text-align: center">${index + 1}</b></td>
-            <td class="cell-concorrencia"><b>${item.nome}</b></td>
+            <td class="cell-concorrencia">${item.nome}</td>
             <td class="cell-numero">
-                <b><input 
+                <input 
                     type="text" 
                     class="input-audiencia" 
                     value="${valorFormatado}" 
                     onchange="atualizarAudienciaManual(${index}, this.value)"
                     onkeypress="return event.charCode >= 48 && event.charCode <= 57"
                 >
-            </b></td>
+            </td>
         `;
         tbody.appendChild(linha);
     });
@@ -473,6 +410,7 @@ function atualizarAudienciaManual(index, novoValor) {
     // Re-renderiza a tabela (isso vai disparar o sort novamente)
     renderizarTabelaRanking();
 }
+
 
 function adicionarLinhaManual() {
     const tbody = document.getElementById("auto");
@@ -547,18 +485,17 @@ async function consultarAudiencias() {
     nomePrograma = document.getElementById('nomePrograma').value;
   }
 
+  console.log(canaisICL);
+  alertMessageDisplay("Bot Está Raspando a audiencia", "success");
   let resposta = await fetch("/api/raspar", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ sessionID: CURRENT_SESSION_ID, links, canaisICL, programa, nomePrograma, teste, programacao, periodo, webnario})
+      body: JSON.stringify({ links, canaisICL, programa, nomePrograma, teste, historicoModular, programacao, periodo, webnario})
   });
 
   const data = await resposta.json();
   historicoModular = data.historicoModular;
-  console.log(historicoModular);
   historicoResultados = historicoModular.resultados;
-
-  alertMessageDisplay("Audiência Atualizada", "success");
 
   for (let i = 0; i < data.historicoModular.resultados.length; i++) {
     resultado = historicoResultados[i];
@@ -569,17 +506,29 @@ async function consultarAudiencias() {
 
     detalhesHtml += `<tr class=audiencia-line>
     <td class=audiencia-cell>${plataforma}</td>
-    <td>${canal}</td>
-    <td>${viewers}</td>
+    <td><b>${canal}</b></td>
+    <td><b>${viewers}</b></td>
     <td><button class='remove-btn' onclick='this.closest("tr").remove(); atualizarTotal();'>X</button></td>
     </tr>`;
 
     total += viewers;
   }
 
+  const tbody = document.getElementById("auto");
+
+  // Salva linhas manuais
+  const linhasManuais = Array.from(tbody.querySelectorAll("tr"))
+      .filter(tr => tr.querySelector("input"));
+
+  // Limpa e atualiza com dados automáticos
+  tbody.innerHTML = detalhesHtml;
+
+  // Reanexa linhas manuais
+  linhasManuais.forEach(tr => tbody.appendChild(tr));
+
   atualizarGraficoAudiencia(historicoResultados);
   atualizaTabela(historicoResultados, data.programaAtual);
+
+  alertMessageDisplay("Audiência Atualizada", "success");
 }
 
-// Inicialização
-window.onload = recuperarIdentidade;

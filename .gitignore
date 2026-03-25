@@ -17,3 +17,5 @@ docker_session_prod
 docker
 Dockerfile
 audiencia.zip
+.env
+docker-compose.yaml
