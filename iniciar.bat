@@ -25,8 +25,8 @@ docker-compose down --remove-orphans
 
 :: 3. Sobe o banco e o app com build forçado
 :: O Compose ja usa as variaveis do seu .env automaticamente
-echo [INFO] Construindo imagem e subindo containers...
-docker-compose up --build -d
+echo [INFO] Subindo containers...
+docker-compose up -d
 
 :: 4. Ngrok (Inicia em uma nova janela como voce ja fazia)
 echo [INFO] Iniciando Ngrok...
