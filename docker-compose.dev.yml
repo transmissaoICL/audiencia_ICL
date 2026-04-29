@@ -1,0 +1,41 @@
+version: '3.8'
+
+services:
+  # AMBIENTE DE DESENVOLVIMENTO (STAGING)
+  app-dev:
+    build: .
+    container_name: server_icl_dev # Nome diferente para não conflitar
+    restart: always
+    ports:
+      - "3001:${PORT}" # Acessa via porta 3001 no navegador
+    depends_on:
+      - db
+    environment:
+      - DB_HOST=db
+      - DB_USER=${DB_USER}
+      - DB_PASSWORD=${DB_PASSWORD}
+      - DB_NAME=${DB_NAME}
+      - DB_PORT=5432
+      - TZ=America/Sao_Paulo
+      - SESSION_PATH=./.wwebjs_auth_dev # Sessão de WhatsApp separada
+      - PORT=${PORT}
+    shm_size: '2gb'
+    cap_add:
+      - SYS_ADMIN
+    volumes:
+      - .:/app # MAPEAMENTO VIVO: Altere o código no VS Code e o Docker vê na hora
+      - /app/node_modules # Protege as dependências do container
+      - ./.wwebjs_auth_dev:/app/.wwebjs_auth_dev
+      - ./.scraper_data_dev:/app/.scraper_data_dev
+      - /etc/localtime:/etc/localtime:ro
+    hostname: dev-icl-server # Hostname diferente para evitar erro de SingletonLock
+    command: >
+      sh -c "rm -f /app/.wwebjs_auth_dev/SingletonLock && 
+             rm -f /app/.scraper_data_dev/SingletonLock && 
+             npm start"
+
+# Usamos a mesma rede do banco de dados oficial que já está rodando
+networks:
+  default:
+    external:
+      name: projeto-audiencia_default # Verifique o nome da sua rede com 'docker network ls'

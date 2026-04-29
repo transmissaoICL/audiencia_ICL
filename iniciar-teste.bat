@@ -1,55 +1,42 @@
 @echo off
-:: Garante que o script rode a partir da pasta onde ele está salvo
 cd /d "%~dp0"
 
-echo --- INICIANDO AMBIENTE DE TESTE (PORTA 3001) ---
+echo --- INICIANDO AMBIENTE DE TESTES (STAGING) ---
 
-echo --- VERIFICANDO DOCKER DESKTOP ---
-
-:: 1. Tenta abrir o Docker Desktop
-start "" "C:\Program Files\Docker\Docker\Docker Desktop.exe"
-
-echo Aguardando o Docker iniciar...
-
-:: 2. Loop de espera pelo Docker
-:wait_docker
+:: 1. Verifica se o Docker Desktop está aberto
 docker info >nul 2>&1
 if %errorlevel% neq 0 (
-    timeout /t 5 /nobreak >nul
-    goto wait_docker
+    echo [INFO] Abrindo Docker Desktop...
+    start "" "C:\Program Files\Docker\Docker\Docker Desktop.exe"
+    echo Aguardando o Docker iniciar...
+    :wait_docker
+    docker info >nul 2>&1
+    if %errorlevel% neq 0 (
+        timeout /t 5 /nobreak >nul
+        goto wait_docker
+    )
 )
 
-echo.
-echo [OK] Docker esta pronto!
-echo ---------------------------------------
+echo [OK] Docker pronto!
 
-:: 1. Reconstruir a imagem (Ambiente de teste costuma ter mudanças frequentes no código)
-echo Gerando imagem Docker...
-docker build -t bot-audiencia-prod .
+:: 2. Derruba o ambiente de teste antigo (sem tocar no oficial)
+echo [INFO] Limpando ambiente de teste...
+docker-compose -f docker-compose.dev.yml down --remove-orphans
 
-:: 2. Limpar apenas o container de TESTE
-echo Limpando container de teste antigo...
-docker stop bot-teste >nul 2>&1
-docker rm bot-teste >nul 2>&1
+:: 3. Sobe o app de teste com build forçado
+:: Usamos --build para garantir que suas mudanças no Socket.io e SQL entrem em vigor
+echo [INFO] Reconstruindo e subindo container de teste (Porta 3001)...
+docker-compose -f docker-compose.dev.yml up --build -d
 
-:: 3. Iniciar o container de TESTE
-:: Mudamos a porta para 3001 e a pasta de sessao para nao deslogar a producao
-echo Lancando versao de TESTE...
-docker run -d ^
-  --name bot-teste ^
-  -p 3001:3000 ^
-  --shm-size=2gb ^
-  -e SESSION_PATH=./.wwebjs_auth_teste ^
-  -v "%cd%\.wwebjs_auth_teste:/app/.wwebjs_auth_teste" ^
-  bot-audiencia-prod
-
-:: 4. Iniciar o ngrok na porta de teste
-echo Iniciando tunnel de teste (3001)...
+:: 4. Ngrok para Testes (Porta 3001)
+:: Nota: Se você usa o Ngrok gratuito, lembre-se de fechar o túnel da porta 3000 antes!
+echo [INFO] Iniciando Ngrok na porta de testes (3001)...
 start cmd /k "ngrok http 3001"
 
-echo.
-echo Teste rodando em: http://localhost:3001
-echo QR Code de teste em: http://localhost:3001/qr
-echo.
+echo [SUCCESS] Ambiente de TESTE rodando na porta 3001! [cite: 2026-03-27]
+echo Conectando aos logs do servidor de teste (server_icl_dev)...
+echo Pressione Ctrl+C para sair dos logs.
+echo ------------------------------------------------------
 
-docker logs -f bot-teste
+:: Conecta ao log do container de dev
+docker logs -f server_icl_dev

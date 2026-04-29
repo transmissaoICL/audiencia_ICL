@@ -5,6 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Monitor de Audiência | ICL</title>
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <script src="https://cdn.socket.io/4.7.4/socket.io.min.js"></script>
   <link rel="stylesheet" href="./style/style 2.0.css">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
 </head>
@@ -28,6 +29,9 @@
         </button>
         <button class="tablink" onclick="openPage('tabGrafico', this)">
           <i class="fa-solid fa-chart-area"></i> Gráfico
+        </button>
+        <button class="tablink" onclick="openPage('tabPesquisa', this)">
+          <i class="fa-solid fa-magnifying-glass"></i> Pesquisa Avançada
         </button>
         <button class="tablink" onclick="openPage('tabChat', this)">
           <i class="fa-solid fa-comments"></i> Chat Ao Vivo
@@ -149,6 +153,10 @@
         <div id="tabResultados" class="tabcontent animate-fade">
           <div class="results card">
             <h2><i class="fa-solid fa-square-poll-vertical"></i> Tabela de Audiência</h2>
+            <div class="switch-group">
+                <span>Print Automático</span>
+                <label class="switch"><input type="checkbox" id="printToggle"><span class="slider round"></span></label>
+              </div>
             <div class="table-responsive">
                 <table id="tabelaConcorrencia" class="modern-table">
                     <thead class="table-header">
@@ -167,9 +175,113 @@
         </div>
 
         <div id="tabGrafico" class="tabcontent animate-fade">
-          <div class="card chart-container">
-            <canvas id="graficoAudiencia"></canvas>
+          <div class="card chart-card">
+            <div class="card-header">
+              <div class="header-title-group">
+                <h3><i class="fa-solid fa-chart-line"></i> Evolução da Audiência</h3>
+                <p class="text-muted">Dados consolidados em tempo real</p>
+              </div>
+              <div class="header-actions">
+                <div class="status-badge" id="statusBadge">
+                  <span class="status-dot"></span>
+                  <span class="status-text">Monitorando</span>
+                </div>
+              </div>
+            </div>
+            
+            <div class="chart-body">
+              <canvas id="graficoAudiencia"></canvas>
+            </div>
+
+            <div class="chart-footer">
+              <small class="text-muted"><i class="fa-solid fa-circle-info"></i> O gráfico atualiza automaticamente a cada ciclo de consulta.</small>
+            </div>
           </div>
+        </div>
+
+        <div id="tabPesquisa" class="tabcontent animate-fade">
+          <div class="card">
+            <div class="card-header">
+              <div class="header-title-group">
+                <h3><i class="fa-solid fa-magnifying-glass-chart"></i> Pesquisa e Relatórios</h3>
+                <p class="text-muted">Filtre dados históricos por programa, horário ou resolução</p>
+              </div>
+            </div>
+
+            <form id="formPesquisaAvancada" class="card-grid">
+              
+              <div class="input-group">
+                <label for="filtroPrograma">Nome do Programa / Especial</label>
+                <input type="text" id="filtroPrograma" placeholder="Ex: N1, Desperta, Especial Domingo...">
+              </div>
+
+              <div class="input-group">
+                <label>Intervalo de Datas</label>
+                <div class="container-flex">
+                  <input type="date" id="dataInicio" title="Data de Início">
+                  <input type="date" id="dataFim" title="Data de Fim">
+                </div>
+              </div>
+
+              <div class="input-group">
+                <label>Grade Horária (Início - Fim)</label>
+                <div class="container-flex">
+                  <input type="time" id="horaInicio" value="07:00">
+                  <input type="time" id="horaFim" value="23:00">
+                </div>
+              </div>
+
+              <div class="input-group">
+                <label for="intervaloDados">Resolução de Dados</label>
+                <select id="intervaloDados">
+                  <option value="1">Original (Cada raspagem)</option>
+                  <option value="5">A cada 5 minutos</option>
+                  <option value="10">A cada 10 minutos</option>
+                  <option value="15">A cada 15 minutos</option>
+                  <option value="30">A cada 30 minutos</option>
+                  <option value="60">A cada 1 hora</option>
+                </select>
+              </div>
+
+              <div class="input-group full-width">
+                <label for="filtroCanais">Filtrar Canais Específicos (Opcional)</label>
+                <input type="text" id="filtroCanais" placeholder="Ex: ICL Notícias, Jovem Pan, Record (separe por vírgula)">
+                
+                <div class="switch-group" style="margin-top: 15px; background: var(--bg-app); padding: 10px; border-radius: 8px;">
+                  <div class="switch-label">
+                    <span style="font-weight: bold; font-size: 0.9rem;">Consolidar Rede ICL</span>
+                    <p style="font-size: 0.75rem; color: var(--text-muted); margin: 0;">Soma todos os canais ICL em um único dado comparativo</p>
+                  </div>
+                  <label class="switch">
+                    <input type="checkbox" id="consolidarICL">
+                    <span class="slider"></span>
+                  </label>
+                </div>
+              </div>
+
+              <div class="full-width container-flex" style="margin-top: 10px; justify-content: flex-end;">
+                <button type="button" class="btn-dashboard" style="background-color: var(--text-muted); color: white;" onclick="limparFiltros()">
+                  <i class="fa-solid fa-eraser"></i> Limpar
+                </button>
+                <button type="button" class="btn-dashboard btn-primary" onclick="executarPesquisa()">
+                  <i class="fa-solid fa-play"></i> Gerar Relatório
+                </button>
+                <button type="button" id="btnExportarExcel" class="btn-dashboard btn-reset" style="background-color: var(--accent); display: none;" onclick="exportarPesquisaExcel()">
+                  <i class="fa-solid fa-file-excel"></i> Baixar XLSX
+                </button>
+              </div>
+            </form>
+          </div>
+
+          <div id="resultadoPesquisaContainer" class="card full-width animate-fade" style="margin-top: 2rem; display: none;">
+            <div class="card-header">
+              <h4><i class="fa-solid fa-list-check"></i> Resultados da Consulta</h4>
+              <div id="badgeContagem" class="timestamp-badge">0 registros</div>
+            </div>
+            <div class="table-responsive" id="tabelaResultadoArea">
+              </div>
+          </div>
+
         </div>
 
         <div id="tabChat" class="tabcontent animate-fade">
@@ -178,6 +290,8 @@
             <p>Em Breve: Integração de Chat em Tempo Real</p>
           </div>
         </div>
+
+
       </section>
     </main>
   </div>

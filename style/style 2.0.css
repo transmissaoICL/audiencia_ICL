@@ -231,3 +231,80 @@ input[type="text"], select { padding: 0.8rem; border-radius: 8px; border: 1px so
   background-color: var(--bg-sidebar);
   border-bottom: 1px solid var(--primary);
 }
+
+.chart-card {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+  min-height: 500px;
+}
+
+.chart-body {
+  flex: 1;
+  position: relative;
+  min-height: 400px; /* Garante que o gráfico tenha espaço */
+  width: 100%;
+}
+
+.header-title-group h3 {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  color: var(--text-main);
+  margin-bottom: 4px;
+}
+
+.header-title-group p {
+  font-size: 0.85rem;
+}
+
+/* Badge de Status Pulsante (O toque moderno) */
+.status-badge {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  background: var(--bg-app);
+  padding: 6px 12px;
+  border-radius: 20px;
+  border: 1px solid var(--border);
+  font-size: 0.75rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  color: var(--text-muted);
+}
+
+.status-dot {
+  width: 8px;
+  height: 8px;
+  background-color: var(--accent);
+  border-radius: 50%;
+  position: relative;
+}
+
+/* Animação de pulso para quando o bot estiver ativo */
+.status-dot::after {
+  content: '';
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  background: var(--accent);
+  border-radius: 50%;
+  animation: pulse 2s infinite;
+  opacity: 0.5;
+}
+
+@keyframes pulse {
+  0% { transform: scale(1); opacity: 0.5; }
+  100% { transform: scale(3); opacity: 0; }
+}
+
+.chart-footer {
+  padding-top: 1rem;
+  border-top: 1px solid var(--border);
+}
+
+/* Ajuste de responsividade para o Canvas */
+#graficoAudiencia {
+  width: 100% !important;
+  height: 100% !important;
+}

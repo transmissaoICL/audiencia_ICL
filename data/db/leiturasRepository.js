@@ -27,4 +27,26 @@ async function registraLeituraDB(sessionID, totalGeral, programa, detalhes){
   }
 }
 
-module.exports = { registraLeituraDB }
+async function carregaLeituraDB(sessionID){
+  const client = await pool.connect();
+
+  await client.query('BEGIN');
+
+  const query = `
+    SELECT 
+    dc.canal_nome, 
+    dc.plataforma, 
+    dc.audiencia, 
+    to_char(l.timestamp, 'HH24:MI') as hora_minuto
+    FROM detalhes_canais dc
+    INNER JOIN leituras l ON dc.leitura_id = l.id
+    WHERE l.session_id = $1 and dc.audiencia != 0
+    ORDER BY l.timestamp ASC; 
+  `
+  const res = await client.query(query, [sessionID]);
+  
+  return res.rows;
+
+}
+
+module.exports = { registraLeituraDB, carregaLeituraDB }

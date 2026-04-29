@@ -10,3 +10,13 @@ data/historicos/*
 PyWhatKit_DB.txt
 .wwebjs_cache
 .wwebjs_auth
+.dockerignore
+.env
+docker
+docker-compose.yaml
+Dockerfile
+.wwebjs_auth_docker
+.wwebjs_auth_local
+.debug_insta
+.scraper_data
+docker_session_prod

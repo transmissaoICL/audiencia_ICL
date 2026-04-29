@@ -1,3 +1,8 @@
+const socket = io({
+    transports: ['websocket'], // 🚀 FORÇA APENAS WEBSOCKET
+    upgrade: false             // Impede a tentativa de "subida" de polling para ws
+});
+
 document.addEventListener('DOMContentLoaded', async () => {
     console.log("🚀 Sistema Iniciado. Verificando integridade...");
     
@@ -23,6 +28,26 @@ document.addEventListener('DOMContentLoaded', async () => {
 });
 
 let CURRENT_SESSION_ID = null;
+
+// Escutando a atualização em tempo real
+try{
+  socket.on('audiencia_atualizada', (data) => {
+  console.log("⚡ [Socket] Dados recebidos em tempo real!");
+
+  // 1. Atualiza o Gráfico (Usando sua função existente)
+  if (data.historicoModular && data.historicoModular.resultados) {
+      atualizarGraficoAudiencia(data.historicoModular.resultados);
+      
+      // 2. Atualiza a Tabela (Usando sua função existente)
+      atualizaTabela(data.historicoModular.resultados, data.programaAtual);
+      
+      // 3. Mostra o alerta (Para quem não está fazendo o scrap saber que mudou)
+      alertMessageDisplay("Audiência Atualizada via Bot", "success");
+    }
+  });
+}
+
+catch(err){}
 
 async function carregarMenuRecuperacao() {
     const select = document.getElementById('selectSessoesAnteriores');
@@ -164,13 +189,19 @@ observer.observe(alertBox, { attributes: true });
 
 const webnarioToggle = document.getElementById('webnarioToggle');
 webnarioToggle.addEventListener('change', function(){
-  webnario = !webnario;
+  webnario = this.checked;
   
+})
+
+let printToggle = false;
+const printAutomatico = document.getElementById('printToggle');
+printAutomatico.addEventListener('change', function(){
+  printToggle = this.checked;
 })
 
 const progToggle = document.getElementById('progToggle');
 progToggle.addEventListener('change', function(){
-  programacao = !programacao;
+  programacao = this.checked;
 });
 
 const myToggle = document.getElementById('myToggle');
@@ -187,7 +218,7 @@ myToggle.addEventListener('change', async function() {
           const response = await fetch("/api/sessoes/iniciar", {
             method: 'POST',
             headers: { 'Content-Type':  'application/json'},
-            body: JSON.stringify({ sessionID: CURRENT_SESSION_ID, tipo: programacao })
+            body: JSON.stringify({ sessionID: CURRENT_SESSION_ID, tipo: programacao, webnario: webnario })
           });
           
           if (response.ok) {
@@ -212,7 +243,7 @@ myToggle.addEventListener('change', async function() {
 
 const testeToggle = document.getElementById('testeToggle');
 testeToggle.addEventListener('change', function(){
-  teste = !teste;
+  teste = this.checked;
 })
 
 programaDropdown.addEventListener('change', function() {
@@ -280,6 +311,17 @@ function excludeLink(element) {
   }, 300);
 }
 
+async function carregarHistoricoInicial(sessionID) {
+
+    const response = await fetch(`/api/sessoes/historico/${sessionID}`);
+    const dados = await response.json();
+    console.log(dados);
+    if (dados) {
+        atualizarGraficoAudiencia(dados);
+        atualizaTabela(dados, "Carregando...");
+    }
+}
+
 async function recuperarIdentidade() {
     const urlParams = new URLSearchParams(window.location.search);
     const idURL = urlParams.get('session');
@@ -287,6 +329,7 @@ async function recuperarIdentidade() {
     if (idURL) {
         CURRENT_SESSION_ID = idURL;
         console.log("📜 Sessão detectada na URL:", CURRENT_SESSION_ID);
+        socket.emit('join_session', CURRENT_SESSION_ID);
         
         try {
             const response = await fetch('/api/sessoes/loadSessao', {
@@ -309,6 +352,9 @@ async function recuperarIdentidade() {
             } else {
                 console.warn("⚠️ A sessão foi encontrada, mas o banco retornou zero links.");
             }
+
+            carregarHistoricoInicial(idURL);
+
         } catch (err) {
             console.error("❌ Erro fatal ao carregar dados:", err);
         }
@@ -407,24 +453,115 @@ const alertMessage = document.getElementById("alertMessage");
 const alertCloseBtn = document.getElementById("closealert");
 
 function atualizarGraficoAudiencia(historico) {
-  if (historico.length === 0) return;
+  if (!historico || historico.length === 0) return;
 
-  const timestamps = Object.keys(historico[0].dadosHistoricos);
-  chart.data.labels = timestamps;
+  // 1. Capturar todos os timestamps (labels) que chegaram
+  const novosTimestamps = Object.keys(historico[0].dadosHistoricos);
 
-  chart.data.datasets = historico.map((canal, index) => {
-    const dataPoints = timestamps.map(t => canal.dadosHistoricos[t] || 0);
-    return {
-      label: `${canal.canal} (${canal.plataforma})`,
-      data: dataPoints,
-      borderWidth: 2,
-      fill: false,
-      tension: 0.2,
-      borderColor: coresPaleta[index % coresPaleta.length]
-    };
+  // 2. Mesclar com os labels que já existem no gráfico (sem duplicar)
+  novosTimestamps.forEach(t => {
+    if (!chart.data.labels.includes(t)) {
+      chart.data.labels.push(t);
+    }
   });
 
-  chart.update();
+  // Ordenar os labels para garantir que o gráfico siga a linha do tempo
+  chart.data.labels.sort();
+
+  // 3. Atualizar ou Criar os Datasets
+  historico.forEach((canalChegando, index) => {
+    // Procura se esse canal já existe no gráfico
+    let dataset = chart.data.datasets.find(ds => 
+      ds.label === `${canalChegando.canal} (${canalChegando.plataforma})`
+    );
+
+    // Se o canal não existe (ex: um novo concorrente entrou no meio da live), cria ele
+    if (!dataset) {
+      dataset = {
+        label: `${canalChegando.canal} (${canalChegando.plataforma})`,
+        data: new Array(chart.data.labels.length - 1).fill(0), // Preenche o passado com zero
+        borderWidth: 2,
+        fill: false,
+        tension: 0.2,
+        borderColor: coresPaleta[chart.data.datasets.length % coresPaleta.length]
+      };
+      chart.data.datasets.push(dataset);
+    }
+
+    // 4. Mapear os dados para a posição correta dos labels
+    // Isso garante que o ponto 14:00 vá para a coluna 14:00, mesmo que chegue atrasado
+    dataset.data = chart.data.labels.map(t => {
+      // Se temos o dado no histórico que chegou agora, usamos ele
+      if (canalChegando.dadosHistoricos[t] !== undefined) {
+        return canalChegando.dadosHistoricos[t];
+      }
+      // Se não temos no que chegou, mas já tínhamos no gráfico antes, mantemos o valor
+      const idxAntigo = chart.data.labels.indexOf(t);
+      return dataset.data[idxAntigo] !== undefined ? dataset.data[idxAntigo] : 0;
+    });
+  });
+
+  // 5. Renderizar a mudança
+  chart.update('none'); // 'none' evita animações bruscas em cada ponto novo
+}
+
+async function executarPesquisa() {
+    const loader = document.getElementById('resultadoPesquisa');
+    loader.style.display = 'block';
+    loader.innerHTML = '<p class="placeholder">Processando dados históricos...</p>';
+
+    const payload = {
+        sessionID: CURRENT_SESSION_ID,
+        programa: document.getElementById('filtroPrograma').value,
+        dataInicio: document.getElementById('dataInicio').value,
+        dataFim: document.getElementById('dataFim').value,
+        horaInicio: document.getElementById('horaInicio').value,
+        horaFim: document.getElementById('horaFim').value,
+        intervalo: document.getElementById('intervaloDados').value,
+        canais: document.getElementById('filtroCanais').value,
+        consolidarICL: document.getElementById('consolidarICL').checked
+    };
+
+    const response = await fetch('/api/pesquisa-avancada', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(payload)
+    });
+
+    const dados = await response.json();
+    renderizarTabelaPesquisa(dados);
+}
+
+function renderizarTabelaPesquisa(dados) {
+  const container = document.getElementById('resultadoPesquisa');
+  if (dados.length === 0) {
+      container.innerHTML = '<p class="placeholder">Nenhum dado encontrado para este filtro.</p>';
+      return;
+  }
+
+  let tableHtml = `
+      <table class="modern-table">
+          <thead>
+              <tr>
+                  <th>Horário</th>
+                  <th>Canal / Programa</th>
+                  <th>Média Audiência</th>
+                  <th>Pico</th>
+              </tr>
+          </thead>
+          <tbody>
+              ${dados.map(d => `
+                  <tr>
+                      <td>${d.momento}</td>
+                      <td><b>${d.canal}</b></td>
+                      <td>${parseInt(d.media_audiencia).toLocaleString()}</td>
+                      <td class="text-primary">${parseInt(d.pico_audiencia).toLocaleString()}</td>
+                  </tr>
+              `).join('')}
+          </tbody>
+      </table>
+  `;
+  container.innerHTML = tableHtml;
 }
 
 // ATUALIZA O ESTADO DOS DADOS (Não desenha mais direto)
@@ -618,7 +755,7 @@ async function consultarAudiencias() {
   let resposta = await fetch("/api/raspar", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ sessionID: CURRENT_SESSION_ID, links, canaisICL, programa, nomePrograma, teste, programacao, periodo, webnario})
+      body: JSON.stringify({ sessionID: CURRENT_SESSION_ID, links, canaisICL, programa, nomePrograma, teste, programacao, periodo, webnario, printToggle})
   });
 
   const data = await resposta.json();

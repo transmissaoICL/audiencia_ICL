@@ -5,7 +5,7 @@ function montarHtmlParaPrint(resultados, programaAtual) {
 
     // 1. Separar canais ICL da concorrência (Evita o erro do splice no loop)
     const canaisICL = resultados.filter(r => r.icl);
-    const concorrência = resultados.filter(r => !r.icl);
+    const concorrência = resultados.filter(r => !r.icl && Object.values(r.dadosHistoricos).at(-1) > 0);
 
     // 2. Calcular o Total ICL
     const somaTotalICL = canaisICL.reduce((acc, r) => {

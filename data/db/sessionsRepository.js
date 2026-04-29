@@ -1,9 +1,13 @@
 const pool = require("./db");
 
-async function iniciarSessaoDB(id, tipo) {
+async function iniciarSessaoDB(id, tipo, webnario) {
     let prog;
     if (tipo){
         prog = "programação";
+    } 
+    else if (!tipo && webnario)
+    { 
+        prog = "webnario";
     } else { prog = "especial" }
     await pool.query(
         'INSERT INTO sessoes (id, tipo) VALUES ($1, $2) ON CONFLICT (id) DO NOTHING',
